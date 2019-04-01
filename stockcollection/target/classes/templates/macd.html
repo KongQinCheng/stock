@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+
+<div style="width: 90px;float: left;margin-left: 5%">
+    <input style="" id="stockId" name="stockId" placeholder="请输入要查询的股票编码: 如000001" >
+    <button onclick="init()">确定</button>
+</div>
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div id="main" style="height:500px"></div>
+
+<!-- ECharts单文件引入 -->
+<script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+<script type="text/javascript">
+
+
+    window.onload=init();
+
+    function  init() {
+
+        var stockID =$("#stockId").val();
+        console.log(stockID)
+        if (stockID==""||stockID==undefined)
+            stockID= "000001"
+
+
+
+        var str ={"stockCode":stockID,"stockBeginTime":"","stockEndTime":""}
+        // 基于准备好的dom，初始化echarts图表
+        var myChart = echarts.init(document.getElementById('main'));
+
+        var date=[];    //类别数组（实际用来盛放X轴坐标值）
+        var DIF=[];
+        var DEA=[];
+        var MACD=[];
+
+        var minvalue=0;
+        var maxvalue=0
+
+
+        $.ajax({
+            type : "post",
+            async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url : "/getStockMacd",    //请求发送到TestServlet处
+            data : JSON.stringify(str),
+            dataType : "text",        //返回数据形式为json
+            contentType:"application/json",
+            success : function(result) {
+
+                var jsonObj = JSON.parse(result);//转换为json对象
+                for(var i=0;i<jsonObj.length;i++){
+                    date.push(jsonObj[i].stockDate.replace(" 00:00:00","").replace(".0",""));    //挨个取出类别并填入类别数组
+                    DIF.push(jsonObj[i].dIF);    //挨个取出类别并填入类别数组
+                    DEA.push(jsonObj[i].eMAMACD);    //挨个取出类别并填入类别数组
+                    MACD.push(jsonObj[i].bAR);    //挨个取出类别并填入类别数组
+
+                    if (i==1){
+                        minvalue =jsonObj[i].dIF;
+                        maxvalue =jsonObj[i].dIF;
+                    } else {
+                        if (jsonObj[i].dIF<minvalue) {
+                            minvalue =jsonObj[i].dIF;
+                        }
+                        if (jsonObj[i].eMAMACD<minvalue) {
+                            minvalue =jsonObj[i].eMAMACD;
+                        }
+                        if (jsonObj[i].bAR<minvalue) {
+                            minvalue =jsonObj[i].bAR;
+                        }
+
+                        if (jsonObj[i].dIF>maxvalue) {
+                            maxvalue =jsonObj[i].dIF;
+                        }
+
+                        if (jsonObj[i].eMAMACD>maxvalue) {
+                            maxvalue =jsonObj[i].eMAMACD;
+                        }
+                        if (jsonObj[i].bAR>maxvalue) {
+                            maxvalue =jsonObj[i].bAR;
+                        }
+                    }
+
+
+
+                }
+
+                var option = {
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['DIF','DEA','MACD']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            boundaryGap : false,
+                            data :date
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            min:minvalue,
+                            max:maxvalue,
+                            splitNumber:15
+                        }
+                    ],
+                    series : [{
+                        name:'DIF',
+                        type:'line',
+                        stack: '总量',
+                        data:DIF
+                    },
+                        {
+                            name:'DEA',
+                            type:'line',
+                            stack: '总量',
+                            data:DEA
+                        },
+                        {
+                            name:'MACD',
+                            type:'bar',
+                            stack: '总量',
+                            data:MACD
+                        }
+                    ]
+                };
+                // 为echarts对象加载数据
+                myChart.setOption(option);
+
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                myChart.hideLoading();
+            }
+        })
+
+    }
+
+
+
+
+</script>
+</body>

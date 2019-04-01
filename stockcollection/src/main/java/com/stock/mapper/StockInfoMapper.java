@@ -1,0 +1,112 @@
+package com.stock.mapper;
+
+import com.stock.bean.StockInfo;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
+
+
+/**
+ * moduleInfo的持久层接口
+ *
+ * @author chenzuyi
+ * @version Revision 1.0.0
+ * *修改时间         | 修改内容
+ */
+public interface StockInfoMapper {
+
+    //    @Select("select * from stock_info_${stockCode} where 1=1 and Date(stockDate) > '2018-12-10' ORDER BY stockDate ASC ")
+    @Select("select * from stock_info_${stockCode} where 1=1  ORDER BY stockDate ASC ")
+    @Results(id = "stockBeanResults", value = {
+            @Result(column = "stockCode", property = "stockCode"),
+            @Result(column = "kpj", property = "kpj"),
+            @Result(column = "zgj", property = "zgj"),
+            @Result(column = "zdj", property = "zdj"),
+            @Result(column = "spj", property = "spj"),
+            @Result(column = "zde", property = "zde"),
+            @Result(column = "zdf", property = "zdf"),
+            @Result(column = "cjl", property = "cjl"),
+            @Result(column = "cjje", property = "cjje"),
+            @Result(column = "zf", property = "zf"),
+            @Result(column = "hsl", property = "hsl"),
+            @Result(column = "k_value", property = "kValue"),
+            @Result(column = "d_value", property = "dValue"),
+            @Result(column = "j_value", property = "jValue"),
+
+            @Result(column = "EMA12", property = "EMA12"),
+            @Result(column = "EMA26", property = "EMA26"),
+            @Result(column = "DIF", property = "DIF"),
+            @Result(column = "EMAMACD", property = "EMAMACD"),
+            @Result(column = "BAR", property = "BAR"),
+
+            @Result(column = "shareDate", property = "shareDate")})
+    public List<StockInfo> getStockListByShareCode(StockInfo stockInfo);
+
+
+    @Select("select * from  ( select * from stock_info_${stockCode} where 1=1  ORDER BY stockDate DESC limit 100 ) a ORDER BY a.stockDate ")
+    @ResultMap("stockBeanResults")
+    public List<StockInfo> getStockListByShareCodeLimit10(StockInfo stockInfo);
+
+
+
+    @Insert("insert into stock_info_${stockCode} (stockCode,stockDate,kpj,zgj,zdj,spj,zde,zdf,cjl,cjje,zf,hsl) "
+            + "values(${stockCode},'${stockDate}',${kpj},${zgj},${zdj},${spj},${zde},${zdf},${cjl},${cjje},${zf},${hsl})")
+    public void addStockInfo(StockInfo stockCode);
+
+    //------- 创建表----------
+    @Update(" CREATE TABLE  ${tableName} ( " +
+            "`stockCode`  varchar(100) NULL DEFAULT NULL ,\n" +
+            "`stockDate`  datetime NOT NULL ,\n" +
+            "`kpj`  double NULL DEFAULT NULL ,\n" +
+            "`zgj`  double NULL DEFAULT NULL ,\n" +
+            "`zdj`  double NULL DEFAULT NULL ,\n" +
+            "`spj`  double NULL DEFAULT NULL ,\n" +
+            "`zde`  double NULL DEFAULT NULL ,\n" +
+            "`zdf`  double NULL DEFAULT NULL ,\n" +
+            "`cjl`  double NULL DEFAULT NULL ,\n" +
+            "`cjje`  double NULL DEFAULT NULL ,\n" +
+            "`zf`  double NULL DEFAULT NULL ,\n" +
+            "`hsl`  double NULL DEFAULT NULL ,\n" +
+            "`k_value`  double NULL DEFAULT NULL ,\n" +
+            "`d_value`  double NULL DEFAULT NULL ,\n" +
+            "`j_value`  double NULL DEFAULT NULL ,\n" +
+            "`EMA12`  double NULL DEFAULT NULL ,\n" +
+            "`EMA26`  double NULL DEFAULT NULL ,\n" +
+            "`DIF`  double NULL DEFAULT NULL ,\n" +
+            "`EMAMACD`  double NULL DEFAULT NULL ,\n" +
+            "`BAR`  double NULL DEFAULT NULL ," +
+            " PRIMARY KEY (`stockDate`)" +
+            ") " +
+            "ENGINE=InnoDB " +
+            "DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci " +
+            "ROW_FORMAT=COMPACT ;")
+    public void createTableByTableName(@Param("tableName")String tableName);
+
+
+
+    @Select("  SELECT COUNT(*) as count FROM information_schema.TABLES WHERE table_name =#{tableName}")
+    @Results(id = "isTableExistResults", value = {
+            @Result(column = "count", property = "count")})
+    public double isTableExist(String tableName);
+
+
+
+    @Update("update stock_info_${stockCode} set k_value=#{kValue},d_value=#{dValue},j_value=#{jValue} where stockCode =#{stockCode} and  stockDate =#{stockDate}")
+    public void updateStockInfo(StockInfo stockInfo);
+
+
+    @Update("update stock_info_${stockCode} set EMA12=#{EMA12},EMA26=#{EMA26},DIF=#{DIF} ,EMAMACD=#{EMAMACD} ,BAR=#{BAR}  where stockDate =#{stockDate}")
+    public void updateStockInfoMacd(StockInfo stockInfo);
+
+
+
+    @Update("DROP TABLE  stock_info_${stockCode}")
+    public void delTableByStockCode(StockInfo stockInfo);
+
+
+
+    @Select("  SELECT COUNT(*) as count FROM stock_info_${stockCode}  WHERE stockDate =#{stockDate}")
+    @Results(id = "isRoweExistResults", value = {
+            @Result(column = "count", property = "count")})
+    public double isRoweExist( StockInfo stockInfo);
+}

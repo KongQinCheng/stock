@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>详细页面</title>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div>EMA12和EMA26图表</div>
+
+<div style="width: 90px;float: left;margin-left: 5%">
+    <input style="" id="stockId" name="stockId" placeholder="请输入要查询的股票编码: 如000001" >
+    <button onclick="init()">确定</button>
+</div>
+
+<div id="main" style="height:500px"></div>
+<div id="main2" style="height:500px"></div>
+<!-- ECharts单文件引入 -->
+<script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+<script type="text/javascript">
+
+
+
+    window.onload=init();
+
+    function init() {
+        // 基于准备好的dom，初始化echarts图表
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 基于准备好的dom，初始化echarts图表
+        var myChart2 = echarts.init(document.getElementById('main2'));
+
+
+
+        var stockID =$("#stockId").val();
+        console.log(stockID)
+        if (stockID==""||stockID==undefined)
+            stockID= "000001"
+
+
+
+        var str ={"stockCode":stockID,"stockBeginTime":"","stockEndTime":""}
+
+
+        var date=[];    //类别数组（实际用来盛放X轴坐标值）
+        var eMA12=[];
+        var eMA26=[];
+        var spj=[];
+
+        var minEma =0;
+        var maxEma =0;
+
+        var minspj=0;
+        var maxspj=0
+
+        $.ajax({
+            type : "post",
+            async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url : "/getStockMacd",    //请求发送到TestServlet处
+            data : JSON.stringify(str),
+            dataType : "text",        //返回数据形式为json
+            contentType:"application/json",
+            success : function(result) {
+
+                var jsonObj = JSON.parse(result);//转换为json对象
+                for(var i=0;i<jsonObj.length;i++){
+
+                    date.push(jsonObj[i].stockDate.replace(" 00:00:00","").replace(".0",""));    //挨个取出类别并填入类别数组
+                    eMA12.push(jsonObj[i].eMA12);    //挨个取出类别并填入类别数组
+                    eMA26.push(jsonObj[i].eMA26);    //挨个取出类别并填入类别数组
+                    spj.push(jsonObj[i].spj);    //挨个取出类别并填入类别数组
+
+
+                    if (i==1){
+                        minEma =jsonObj[i].eMA12;
+                        maxEma =jsonObj[i].eMA12;
+                        minspj=jsonObj[i].spj;
+                        maxspj=jsonObj[i].spj;
+                    } else {
+                        if (jsonObj[i].eMA12<minEma) {
+                            minEma =jsonObj[i].eMA12;
+                        }
+                        if (jsonObj[i].eMA26<minEma) {
+                            minEma =jsonObj[i].eMA26;
+                        }
+
+                        if (jsonObj[i].eMA12>maxEma) {
+                            maxEma =jsonObj[i].eMA12;
+                        }
+                        if (jsonObj[i].eMA26>maxEma) {
+                            maxEma =jsonObj[i].eMA26;
+                        }
+
+                        if (jsonObj[i].spj<minspj) {
+                            minspj =jsonObj[i].spj;
+                        }
+
+                        if (jsonObj[i].spj>maxspj) {
+                            maxspj =jsonObj[i].spj;
+                        }
+                    }
+
+                }
+                console.log(minEma)
+                console.log(maxEma)
+
+                var option = {
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['ema12','ema26']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            boundaryGap : false,
+                            data :date
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            min:minEma,
+                            max:maxEma,
+                            splitNumber:30
+                        }
+                    ],
+                    series : [
+
+                        {
+                            name:'ema12',
+                            type:'line',
+                            stack: '总量',
+                            data:eMA12
+                        },
+                        {
+                            name:'ema26',
+                            type:'line',
+                            stack: '总量',
+                            data:eMA26
+                        }
+
+
+                    ]
+                };
+                // 为echarts对象加载数据
+                myChart.setOption(option);
+
+
+                var option2 = {
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['收盘价']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            boundaryGap : false,
+                            data :date
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            min:minspj,
+                            max:maxspj,
+                            splitNumber:30
+                        }
+                    ],
+                    series : [{
+                        name:'收盘价',
+                        type:'line',
+                        stack: '总量',
+                        data:spj
+                    }
+                    ]
+                };
+                // 为echarts对象加载数据
+                myChart2.setOption(option2);
+
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                myChart.hideLoading();
+            }
+        })
+
+    }
+
+
+
+
+</script>
+</body>
