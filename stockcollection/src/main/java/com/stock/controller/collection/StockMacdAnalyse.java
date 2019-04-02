@@ -16,11 +16,17 @@ public class StockMacdAnalyse {
 
     public static void main(String[] args)  throws Exception{
 
+        String stockCode ="603383";
+
+        getGoldenCrossOverZero(stockCode,0);
+
     }
 
 
     //获取0上金叉
-    public List<StockInfo> getGoldenCrossOverZero(String stockCode,int type){
+    public static List<StockInfo> getGoldenCrossOverZero(String stockCode,int type){
+
+        //
 
         List<StockInfo> stockListByShareCode = new ArrayList<>();
         if (type==0){
@@ -69,8 +75,9 @@ public class StockMacdAnalyse {
         for (int i = 1; i < stockListByShareCode.size(); i++) {
             if (stockListByShareCode.get(i).getBAR()>0){  //MACD 柱>0 的情况
 
-
                 //统计股价 对比今日收盘价 -昨日的收盘价>0 的数据占所有数据的 百分比
+
+
 
 
             }

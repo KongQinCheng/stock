@@ -10,14 +10,13 @@ import static com.stock.controller.collection.StockMacdCollection.stockMacdInitA
 @Component
 public class TimedTask {
     // 每天的17点、19点、21点都执行一次：0 0 17,19,21 * * ?
-    @Scheduled(cron = "0 0 0,17,18,19 * * ?")
+    @Scheduled(cron = "0 0 0,17,18 * * ?")
     public  static void getStockInfo() throws Exception {
         getWycjSituationAll();
     }
 
     // 每天的18点、20点、22点都执行一次：0 0 18,20,22 * * ?
-    @Scheduled(cron = "0 0 18,19,20 * * ?")
-
+    @Scheduled(cron = "0 0 18,19 * * ?")
     public  static void getStockMacd(){
         stockMacdInitALL();
     }
@@ -26,4 +25,12 @@ public class TimedTask {
 ////    public  static void test(){
 ////        System.out.println("11111111111");
 ////    }
+
+
+    //更新最新的单价到数据库中
+    @Scheduled(cron = "0 0 18,19 * * ?")
+    public  static void getStockNewPrice(){
+        //todo
+    }
+
 }

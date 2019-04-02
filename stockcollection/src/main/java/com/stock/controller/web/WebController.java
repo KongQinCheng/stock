@@ -47,6 +47,12 @@ public class WebController {
     }
 
 
+    @RequestMapping("/toNominate")
+    public String toNominate(){
+        return "nominate";
+    }
+
+
 
 
     @PostMapping(value = "/getStockMacd",consumes = "application/json")
