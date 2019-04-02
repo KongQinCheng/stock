@@ -1,0 +1,58 @@
+
+body, html {
+    margin: 0px;
+    height: 100%;
+}
+
+#div2 {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(top left, white, #00adff); /*渐变从左上角到右下角*/
+    background: -ms-linear-gradient(top left, white, #00adff);
+    background: -webkit-linear-gradient(top left, white, #00adff);
+    background: -moz-linear-gradient(top left, white, #00adff);
+}
+
+.indexButtom {
+    float: left;
+    width: 80%;
+    margin-left: 10%;
+    border: 1px solid white;
+    height: 60px;
+    margin-top: 20px;
+    text-align: center;
+    line-height: 60px;
+    font-size: 20px;
+    border-radius: 10px;
+    color: #444;
+}
+
+.flowDiv {
+    width: 96%;
+    float: left;
+    margin-left: 2%;
+    height: 800px;
+    white-space: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.searchInputDiv {
+    float: left;
+    height: 30px;
+    width: 220px;
+}
+
+.searchInputButton {
+    float: left;
+    height: 34px;
+    margin-left: 20px;
+    border-radius: 5px;
+    width: 100px;
+    border: 1px solid white;
+    line-height: 30px;
+    font-size: 18px;
+    text-align: center;
+    background-color: #00adff;
+    color: white
+}
