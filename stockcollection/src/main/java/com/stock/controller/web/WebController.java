@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.stock.controller.collection.StockKdjCollection.*;
 
-import static com.stock.controller.collection.StockKdjCollection.getStockListByShareCodeLimit10;
 
 
 @Controller
@@ -54,7 +54,7 @@ public class WebController {
     public String getStockMacd( @RequestBody StockInfoVo stockInfoVo  ){
 
         List<StockInfo> stockListByShareCode = new ArrayList<>();
-        stockListByShareCode = getStockListByShareCodeLimit10(stockInfoVo.getStockCode());
+        stockListByShareCode = getStockListByShareCode(stockInfoVo.getStockCode());
 
         String jsonStr = JSON.toJSONString( stockListByShareCode );
 

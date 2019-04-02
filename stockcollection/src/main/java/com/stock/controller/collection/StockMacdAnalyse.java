@@ -67,6 +67,25 @@ public class StockMacdAnalyse {
         }
 
         for (int i = 1; i < stockListByShareCode.size(); i++) {
+            if (stockListByShareCode.get(i).getBAR()>0){  //MACD 柱>0 的情况
+
+
+                //统计股价 对比今日收盘价 -昨日的收盘价>0 的数据占所有数据的 百分比
+
+
+            }
+//            if (stockListByShareCode.get(i).getDIF()<0) {  //DIF 柱>0 的情况
+//                continue;
+//            }
+//            if (stockListByShareCode.get(i).getEMAMACD()<0) {  //DEA 柱>0 的情况
+//                continue;
+//            }
+//
+
+            //获取 0上 金叉的开始点   保存到数据库
+
+
+
 
 
 
