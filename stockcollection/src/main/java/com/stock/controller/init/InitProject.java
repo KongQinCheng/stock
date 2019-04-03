@@ -17,7 +17,7 @@ public class InitProject implements ApplicationRunner {
         try {
 
             //保存最小的信息到 stock_info_new30表中
-            getNewInfoToTable("603383",30);
+//            getNewInfoToTable("603383",30);
 
 
 

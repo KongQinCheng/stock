@@ -24,7 +24,7 @@ public class StockMacdCollection {
 
         DecimalFormat df = new DecimalFormat("#.0000");
         System.out.println(  getEMA12(55.01,53.7));
-        System.out.println(  df.format(getEMA12(55.01,53.7)));
+        System.out.println(  getEMA12(55.01,53.7)));
         System.out.println(getEMA26(55.01,53.7));
         System.out.println(getDIFF(getEMA12(55.01,53.7),getEMA26(55.01,53.7)));
         System.out.println(getDEAMACD(0,getDIFF(getEMA12(55.01,53.7),getEMA26(55.01,53.7))));

@@ -3,6 +3,7 @@ package com.stock.controller.collection;
 import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.stock.bean.StockInfo;
 import com.stock.bean.StockInfoNew;
+import com.stock.bean.StockNominateVo;
 import com.stock.mapper.StockInfoMapper;
 import com.stock.mapper.StockInfoNewMapper;
 import com.stock.util.SpringUtil;
@@ -38,9 +39,11 @@ public class StockNewInfoCollection {
             stockInfoNewMapper.addStockInfoNew(stockInfoNew);
         }
 
+    }
 
 
-
-
+    public static List<StockInfo> getStockListByStockNominateVo(StockNominateVo stockNominateVo) {
+        List<StockInfo> stockListByShareCode = stockInfoNewMapper.getStockListByStockNominateVo(stockNominateVo);
+        return stockListByShareCode;
     }
 }

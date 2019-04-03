@@ -2,6 +2,7 @@ package com.stock.mapper;
 
 import com.stock.bean.StockInfo;
 import com.stock.bean.StockInfoNew;
+import com.stock.bean.StockNominateVo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -53,6 +54,10 @@ public interface StockInfoNewMapper {
     @ResultMap("stockInfoNewResults")
     public List<StockInfo> getStockListByShareCodeLimit(@Param("tempSql")String tempSql);
 
+
+    @Select("  SELECT * from stock_info_new30   where stockCode= ( SELECT a.stockCode from ( SELECT * from stock_info_new30 WHERE stockDate = (SELECT  max(stock_info_new30.stockDate) from stock_info_new30)) a WHERE  a.spj<=#{spjmax} and a.spj >=#{spjmin} ) ORDER BY stockDate DESC")
+    @ResultMap("stockInfoNewResults")
+    public List<StockInfo> getStockListByStockNominateVo(StockNominateVo StockNominateVo);
 
     @Insert("insert into stock_info_new30 (stockCode,stockDate,kpj,zgj,zdj,spj,zde,zdf,cjl,cjje,zf,hsl,EMA12,EMA26,DIF,EMAMACD,BAR) "
             + "values(${stockCode},'${stockDate}',${kpj},${zgj},${zdj},${spj},${zde},${zdf},${cjl},${cjje},${zf},${hsl},${EMA12},${EMA26},${DIF},${EMAMACD},${BAR})")
