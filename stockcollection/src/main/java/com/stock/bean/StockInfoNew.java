@@ -1,12 +1,11 @@
 package com.stock.bean;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
 @Data
-public class StockInfo {
+public class StockInfoNew {
 
+    private int id;
     private String  stockCode ;  //代码
     private String stockDate;  //时间
     private double  kpj ;  //开盘价
@@ -31,6 +30,7 @@ public class StockInfo {
     private  double DIF;
     private  double EMAMACD;
     private  double BAR;
+
 
 
 

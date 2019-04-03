@@ -5,6 +5,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import static com.stock.controller.collection.StockNewInfoCollection.getNewInfoToTable;
+
 @Component
 public class InitProject implements ApplicationRunner {
 
@@ -13,6 +15,13 @@ public class InitProject implements ApplicationRunner {
         //项目初始化执行
 
         try {
+
+            //保存最小的信息到 stock_info_new30表中
+            getNewInfoToTable("603383",30);
+
+
+
+
 //            delStockList();
 
             //获取具体的股票情况

@@ -251,9 +251,9 @@ public class StockInfoCollection {
                     stockInfo.setStockCode(shareCode);
                     stockInfo.setHsl(Double.valueOf(tempStr));
                     try {
-                        stockInfo.setkValue(0);
-                        stockInfo.setdValue(0);
-                        stockInfo.setjValue(0);
+                        stockInfo.setKValue(0);
+                        stockInfo.setDValue(0);
+                        stockInfo.setJValue(0);
 
                         //根据时间 判断数据 是否存在
                         boolean isExist=false;
