@@ -1,14 +1,21 @@
 package com.stock.controller.init;
 
 
+import com.stock.controller.collection.StockInfoCollection;
+import com.stock.controller.collection.StockNewDataCollection;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import static com.stock.controller.collection.StockNewInfoCollection.getNewInfoToTable;
-
 @Component
 public class InitProject implements ApplicationRunner {
+
+    @Autowired
+    StockNewDataCollection stockNewDataCollection;
+
+    @Autowired
+    StockInfoCollection stockInfoCollection;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -16,10 +23,13 @@ public class InitProject implements ApplicationRunner {
 
         try {
 
+
+
+            //查询各个表中最新的30天的数据保存到 stock_new_data表中
+//            stockNewDataCollection.getNewDataToTableThread();
+
             //保存最小的信息到 stock_info_new30表中
 //            getNewInfoToTable("603383",30);
-
-
 
 
 //            delStockList();
@@ -46,6 +56,9 @@ public class InitProject implements ApplicationRunner {
 
             //获取KD值
 //            getKDJValue("600036");
+
+            //更新stockCode 一次性使用
+//            stockInfoCollection.updateStockCode();
 
 
         } catch (Exception e) {

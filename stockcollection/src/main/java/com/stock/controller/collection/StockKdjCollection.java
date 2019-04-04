@@ -1,13 +1,10 @@
 package com.stock.controller.collection;
 
 import com.stock.bean.StockInfo;
-import com.stock.bean.StockInfoNew;
 import com.stock.mapper.StockInfoMapper;
-import com.stock.mapper.StockInfoNewMapper;
+import com.stock.mapper.StockNewDataMapper;
 import com.stock.util.SpringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
 
@@ -15,11 +12,11 @@ public class StockKdjCollection {
 
 
     static StockInfoMapper stockInfoMapper = SpringUtil.getBean(StockInfoMapper.class);
-    static StockInfoNewMapper stockInfoNewMapper = SpringUtil.getBean(StockInfoNewMapper.class);
+
 
     public static void getKDJValue(String stockCode) throws Exception {
 
-        List<StockInfo> stockListByShareCode = getStockListByShareCode(stockCode);
+        List<StockInfo> stockListByShareCode = getStockListByShareCode(stockCode,999999999);
 
         StockInfo stockInfo0 = stockListByShareCode.get(0);
 
@@ -44,10 +41,8 @@ public class StockKdjCollection {
     }
 
 
-    public static List<StockInfo> getStockListByShareCode(String stockCode) {
-        StockInfo stockInfo = new StockInfo();
-        stockInfo.setStockCode(stockCode);
-        List<StockInfo> stockListByShareCode = stockInfoMapper.getStockListByShareCode(stockInfo);
+    public static List<StockInfo> getStockListByShareCode(String stockCode,int limitNum) {
+        List<StockInfo> stockListByShareCode = stockInfoMapper.getStockListByShareCode(stockCode,limitNum);
         return stockListByShareCode;
 
     }
@@ -60,14 +55,8 @@ public class StockKdjCollection {
 
     }
 
-    public static List<StockInfo> getStockListByShareCodeLimit(String stockCode,int  limitNum) {
-        String tempSql = "select * from  ( select * from stock_info_" + stockCode + " where 1=1  ORDER BY stockDate DESC limit " + limitNum + " ) a ORDER BY a.stockDate ";
-        List<StockInfo> stockListByShareCode = stockInfoNewMapper.getStockListByShareCodeLimit (tempSql);
-        return stockListByShareCode;
-    }
 
     //https://zhidao.baidu.com/question/575561429.html
-
     public static int getRSVLase(List<StockInfo> list, int dayNum, double kValue, double dValue) throws Exception {
 
 //        for (int i = 1; i <list.size() ; i++) {  //从第二个数据开始进行处理，第一个已经在最外层进行赋值了

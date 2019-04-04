@@ -30,7 +30,7 @@ public class StockMacdAnalyse {
 
         List<StockInfo> stockListByShareCode = new ArrayList<>();
         if (type==0){
-            stockListByShareCode = getStockListByShareCode(stockCode);
+            stockListByShareCode = getStockListByShareCode(stockCode,999999999);
         }
         if (type==1){
             stockListByShareCode = getStockListByShareCodeLimit10(stockCode);

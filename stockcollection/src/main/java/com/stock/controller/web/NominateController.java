@@ -3,20 +3,19 @@ package com.stock.controller.web;
 
 import com.alibaba.fastjson.JSON;
 import com.stock.bean.StockInfo;
-import com.stock.bean.StockInfoVo;
 import com.stock.bean.StockNominateVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import static com.stock.controller.collection.StockKdjCollection.getStockListByShareCode;
-import static com.stock.controller.collection.StockNewInfoCollection.getStockListByStockNominateVo;
+import static com.stock.controller.collection.StockNoninateCollection.getStockListByStockNominateVo;
 
 
 @Controller
@@ -86,10 +85,15 @@ public class NominateController {
             }
         }
 
-
-        String resultJsonStr="{\"zdf_1\":\""+zdf_1+"\",\"zdf_2\":\""+zdf_2+"\",\"zdf_3\":\""+zdf_3+"\",\"zdf_5\":\""+zdf_5+"\",\"zdf_10\":\""+zdf_10+"\",\"zdf_15\":\""+zdf_15+"\",\"zdf_30\":\""+zdf_30+"\"}";
-
-        String jsonStr = JSON.toJSONString( resultJsonStr );
+        Map<String,Object> map =new HashMap<>();
+        map.put("zdf_1",zdf_1);
+        map.put("zdf_2",zdf_2);
+        map.put("zdf_3",zdf_3);
+        map.put("zdf_5",zdf_5);
+        map.put("zdf_10",zdf_10);
+        map.put("zdf_15",zdf_15);
+        map.put("zdf_30",zdf_30);
+        String jsonStr = JSON.toJSONString( map );
         return  jsonStr.toString();
     }
 }

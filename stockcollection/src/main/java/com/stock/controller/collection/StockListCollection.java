@@ -49,7 +49,7 @@ public class StockListCollection {
                 String tempStockCode = strings2[0];
                 String tempStockName = strings2[1];
 
-                tempStockCode = tempStockCode.replaceAll("\\<.*?>", "");  //去掉所有HTML标签
+                tempStockCode = tempStockCode.replaceAll("\\<.*?>", "").replaceAll("\t","").replaceAll(" ","");  //去掉所有HTML标签
                 tempStockName = tempStockName.replaceAll("\\<.*?>", "");  //去掉所有HTML标签
 
                 try {

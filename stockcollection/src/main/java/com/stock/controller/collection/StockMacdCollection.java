@@ -24,7 +24,7 @@ public class StockMacdCollection {
 
         DecimalFormat df = new DecimalFormat("#.0000");
         System.out.println(  getEMA12(55.01,53.7));
-        System.out.println(  getEMA12(55.01,53.7)));
+        System.out.println(  getEMA12(55.01,53.7));
         System.out.println(getEMA26(55.01,53.7));
         System.out.println(getDIFF(getEMA12(55.01,53.7),getEMA26(55.01,53.7)));
         System.out.println(getDEAMACD(0,getDIFF(getEMA12(55.01,53.7),getEMA26(55.01,53.7))));
@@ -94,7 +94,7 @@ public class StockMacdCollection {
             stockInfo.setStockCode(stockList1.getStockCode().replaceAll("\t","")+"");
 
             try{
-                List<StockInfo> stockInfoList = stockInfoMapper.getStockListByShareCode(stockInfo);
+                List<StockInfo> stockInfoList = stockInfoMapper.getStockListByShareCode(stockInfo.getStockCode() ,999999999);
 
                     if(stockInfoList.get(0).getEMA12()==0){
                         resultlist222.add(stockInfo.getStockCode());
@@ -149,7 +149,7 @@ public class StockMacdCollection {
 
         List<StockInfo> stockListByShareCode = new ArrayList<>();
         if (type==0){
-            stockListByShareCode = getStockListByShareCode(stockCode);
+            stockListByShareCode = getStockListByShareCode(stockCode,999999999);
         }
         if (type==1){
             stockListByShareCode = getStockListByShareCodeLimit10(stockCode);

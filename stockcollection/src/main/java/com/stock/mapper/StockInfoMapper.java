@@ -13,10 +13,11 @@ import java.util.List;
  * @version Revision 1.0.0
  * *修改时间         | 修改内容
  */
+@Mapper
 public interface StockInfoMapper {
 
     //    @Select("select * from stock_info_${stockCode} where 1=1 and Date(stockDate) > '2018-12-10' ORDER BY stockDate ASC ")
-    @Select("select * from stock_info_${stockCode} where 1=1  ORDER BY stockDate ASC ")
+    @Select("select * from stock_info_${stockCode} where 1=1  ORDER BY stockDate ASC limit ${limitNum} ")
     @Results(id = "stockBeanResults", value = {
             @Result(column = "stockCode", property = "stockCode"),
             @Result(column = "kpj", property = "kpj"),
@@ -40,7 +41,13 @@ public interface StockInfoMapper {
             @Result(column = "BAR", property = "BAR"),
 
             @Result(column = "shareDate", property = "shareDate")})
-    public List<StockInfo> getStockListByShareCode(StockInfo stockInfo);
+    public List<StockInfo> getStockListByShareCode(@Param("stockCode")String stockCode,@Param("limitNum") int limitNum);
+
+
+
+    @Select("select b.* from (select * from stock_info_${stockCode} where 1=1  ORDER BY stockDate DESC limit ${limitNum}) b ORDER BY b.stockDate ${sortType} ")
+    @ResultMap("stockBeanResults")
+    public List<StockInfo> getNewStockListByShareCode(@Param("stockCode")String stockCode,@Param("sortType")String sortType, @Param("limitNum") int limitNum);
 
 
     @Select("select * from  ( select * from stock_info_${stockCode} where 1=1  ORDER BY stockDate DESC limit 100 ) a ORDER BY a.stockDate ")
@@ -109,4 +116,10 @@ public interface StockInfoMapper {
     @Results(id = "isRoweExistResults", value = {
             @Result(column = "count", property = "count")})
     public double isRoweExist( StockInfo stockInfo);
+
+
+
+    @Update("UPDATE stock_info_${stockCode} set stockCode =#{stockCode}")
+    public void updateStockCode(@Param("stockCode")String stockCode);
+
 }
