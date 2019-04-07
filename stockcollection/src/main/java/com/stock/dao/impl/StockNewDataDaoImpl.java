@@ -1,8 +1,10 @@
 package com.stock.dao.impl;
 
 import com.stock.bean.StockInfo;
+import com.stock.bean.StockNewData;
 import com.stock.dao.IStockNewDataDao;
 import com.stock.mapper.StockNewDataMapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,4 +25,11 @@ public class StockNewDataDaoImpl implements IStockNewDataDao {
     public void deleteAll() {
         stockNewDataMapper.deleteAll();
     }
+
+    @Override
+    public List<StockNewData> getStockListByStockCode(String stockCode, int limitNum) {
+        return stockNewDataMapper.getStockListByStockCode(stockCode, limitNum);
+    }
+
+
 }

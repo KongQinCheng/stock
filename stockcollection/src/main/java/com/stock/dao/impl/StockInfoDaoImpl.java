@@ -16,9 +16,15 @@ public class StockInfoDaoImpl implements IStockInfoDao {
     StockInfoMapper stockInfoMapper;
 
     @Override
-    public List<StockInfo> getNewStockListByShareCode(String stockCode, String sortType ,int limitNum) {
-        List<StockInfo> stockListByShareCode = stockInfoMapper.getNewStockListByShareCode(stockCode,sortType,limitNum);
-        return stockListByShareCode;
+    public List<StockInfo> getStockListByStockCode(String stockCode ,int limitNum) {
+        List<StockInfo> stockListByStockCode = stockInfoMapper.getStockListByStockCode(stockCode,limitNum);
+        return stockListByStockCode;
+    }
+
+    @Override
+    public List<StockInfo> getNewStockListByStockCode(String stockCode, String sortType ,int limitNum) {
+        List<StockInfo> stockListByStockCode = stockInfoMapper.getNewStockListByStockCode(stockCode,sortType,limitNum);
+        return stockListByStockCode;
     }
 
 

@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 import static com.stock.controller.collection.StockListCollection.getStockList;
 
 @Component
-public class StockNewDataCollection {
+public class StockIncreaseAnalyzeCollection {
 
     @Autowired
     IStockListDao iStockListDao;
@@ -31,7 +31,7 @@ public class StockNewDataCollection {
      * 根据数据库中保存的 股票编号 获取股票的历史信息
      * @throws Exception
      */
-    public  void getNewDataToTableThread( ) throws Exception {
+    public  void getStockIncreaseAnalyzeToTableThread( ) throws Exception {
 
         //清空表的内容
         IStockNewDataDao.deleteAll();
@@ -76,7 +76,7 @@ public class StockNewDataCollection {
         public void run() {
             for (int i = 0; i <listInput.size() ; i++) {
                 try {
-                    getNewDataToTable(listInput.get(i).getStockCode().replaceAll("\t","")+"");
+                    getStockIncreaseAnalyzeToTable(listInput.get(i).getStockCode().replaceAll("\t","")+"");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -86,7 +86,7 @@ public class StockNewDataCollection {
     }
 
 
-    public  void  getNewDataToTable(String stockCode){
+    public  void getStockIncreaseAnalyzeToTable(String stockCode){
         List<StockInfo> newStockListByStockCode = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 30);
             for (int j = 0; j < newStockListByStockCode.size(); j++) {
                 StockInfo stockInfo=newStockListByStockCode.get(j);

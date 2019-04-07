@@ -66,17 +66,17 @@ public class StockListCollection {
 
     /***
      * 获取 具体的 股票的历史信息
-     * @param shareCode
+     * @param StockCode
      * @return
      * @throws ParseException
      */
-    public static List<String> getURLbyShareCode(String shareCode) throws ParseException {
+    public static List<String> getURLbyStockCode(String StockCode) throws ParseException {
 
         String tempURL = "";
         List<String> urlList = new ArrayList<>();
         for (int year = 2002; year < 2020; year++) {
             for (int season = 1; season < 5; season++) {
-                tempURL = "http://quotes.money.163.com/trade/lsjysj_" + shareCode + ".html?year=" + year + "&season=" + season;
+                tempURL = "http://quotes.money.163.com/trade/lsjysj_" + StockCode + ".html?year=" + year + "&season=" + season;
                 urlList.add(tempURL);
             }
         }

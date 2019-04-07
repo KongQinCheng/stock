@@ -3,7 +3,7 @@ package com.stock.bean;
 import lombok.Data;
 
 @Data
-public class StockInfoNew {
+public class StockNewData {
 
     private int id;
     private String  stockCode ;  //代码

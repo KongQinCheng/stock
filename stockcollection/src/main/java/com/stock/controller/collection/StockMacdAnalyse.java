@@ -7,8 +7,8 @@ import com.stock.util.SpringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.stock.controller.collection.StockKdjCollection.getStockListByShareCode;
-import static com.stock.controller.collection.StockKdjCollection.getStockListByShareCodeLimit10;
+import static com.stock.controller.collection.StockKdjCollection.getStockListByStockCode;
+import static com.stock.controller.collection.StockKdjCollection.getStockListByStockCodeLimit10;
 
 public class StockMacdAnalyse {
 
@@ -28,12 +28,12 @@ public class StockMacdAnalyse {
 
         //
 
-        List<StockInfo> stockListByShareCode = new ArrayList<>();
+        List<StockInfo> stockListByStockCode = new ArrayList<>();
         if (type==0){
-            stockListByShareCode = getStockListByShareCode(stockCode,999999999);
+            stockListByStockCode = getStockListByStockCode(stockCode,999999999);
         }
         if (type==1){
-            stockListByShareCode = getStockListByShareCodeLimit10(stockCode);
+            stockListByStockCode = getStockListByStockCodeLimit10(stockCode);
         }
 
 
@@ -48,10 +48,10 @@ public class StockMacdAnalyse {
 
         //获取第一天的数据 判断 DIF DEA MACD的值
 
-        if (stockListByShareCode.size()>0){
-            DIFvalue= stockListByShareCode.get(0).getDIF();
-            DEAvalue=stockListByShareCode.get(0).getEMAMACD();
-            MACDvalue=stockListByShareCode.get(0).getBAR();
+        if (stockListByStockCode.size()>0){
+            DIFvalue= stockListByStockCode.get(0).getDIF();
+            DEAvalue=stockListByStockCode.get(0).getEMAMACD();
+            MACDvalue=stockListByStockCode.get(0).getBAR();
 
             if (DIFvalue>0){
                 DIFtype=1;
@@ -72,8 +72,8 @@ public class StockMacdAnalyse {
             }
         }
 
-        for (int i = 1; i < stockListByShareCode.size(); i++) {
-            if (stockListByShareCode.get(i).getBAR()>0){  //MACD 柱>0 的情况
+        for (int i = 1; i < stockListByStockCode.size(); i++) {
+            if (stockListByStockCode.get(i).getBAR()>0){  //MACD 柱>0 的情况
 
                 //统计股价 对比今日收盘价 -昨日的收盘价>0 的数据占所有数据的 百分比
 
@@ -81,10 +81,10 @@ public class StockMacdAnalyse {
 
 
             }
-//            if (stockListByShareCode.get(i).getDIF()<0) {  //DIF 柱>0 的情况
+//            if (stockListByStockCode.get(i).getDIF()<0) {  //DIF 柱>0 的情况
 //                continue;
 //            }
-//            if (stockListByShareCode.get(i).getEMAMACD()<0) {  //DEA 柱>0 的情况
+//            if (stockListByStockCode.get(i).getEMAMACD()<0) {  //DEA 柱>0 的情况
 //                continue;
 //            }
 //

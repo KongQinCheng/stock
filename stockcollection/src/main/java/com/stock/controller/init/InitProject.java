@@ -3,6 +3,7 @@ package com.stock.controller.init;
 
 import com.stock.controller.collection.StockInfoCollection;
 import com.stock.controller.collection.StockNewDataCollection;
+import com.stock.services.IStockIncreaseAnalyzeServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -17,12 +18,18 @@ public class InitProject implements ApplicationRunner {
     @Autowired
     StockInfoCollection stockInfoCollection;
 
+
+    @Autowired
+    IStockIncreaseAnalyzeServices iStockIncreaseAnalyzeServices;
+
     @Override
     public void run(ApplicationArguments args) {
         //项目初始化执行
 
         try {
 
+
+            iStockIncreaseAnalyzeServices.getStockIncreaseAnalyzeToTable("000001");
 
 
             //查询各个表中最新的30天的数据保存到 stock_new_data表中

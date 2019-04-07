@@ -16,9 +16,9 @@ public class StockKdjCollection {
 
     public static void getKDJValue(String stockCode) throws Exception {
 
-        List<StockInfo> stockListByShareCode = getStockListByShareCode(stockCode,999999999);
+        List<StockInfo> stockListByStockCode = getStockListByStockCode(stockCode,999999999);
 
-        StockInfo stockInfo0 = stockListByShareCode.get(0);
+        StockInfo stockInfo0 = stockListByStockCode.get(0);
 
         double kValue = 0;
         double dValue = 0;
@@ -35,23 +35,23 @@ public class StockKdjCollection {
         }
 
         int dayNum = 9;  //9日RSV=（C－L9）÷（H9－L9）×100
-        getRSVLase(stockListByShareCode, dayNum, kValue, dValue);
+        getRSVLase(stockListByStockCode, dayNum, kValue, dValue);
 
 
     }
 
 
-    public static List<StockInfo> getStockListByShareCode(String stockCode,int limitNum) {
-        List<StockInfo> stockListByShareCode = stockInfoMapper.getStockListByShareCode(stockCode,limitNum);
-        return stockListByShareCode;
+    public static List<StockInfo> getStockListByStockCode(String stockCode,int limitNum) {
+        List<StockInfo> stockListByStockCode = stockInfoMapper.getStockListByStockCode(stockCode,limitNum);
+        return stockListByStockCode;
 
     }
 
-    public static List<StockInfo> getStockListByShareCodeLimit10(String stockCode) {
+    public static List<StockInfo> getStockListByStockCodeLimit10(String stockCode) {
         StockInfo stockInfo = new StockInfo();
         stockInfo.setStockCode(stockCode);
-        List<StockInfo> stockListByShareCode = stockInfoMapper.getStockListByShareCodeLimit10(stockInfo);
-        return stockListByShareCode;
+        List<StockInfo> stockListByStockCode = stockInfoMapper.getStockListByStockCodeLimit10(stockInfo);
+        return stockListByStockCode;
 
     }
 

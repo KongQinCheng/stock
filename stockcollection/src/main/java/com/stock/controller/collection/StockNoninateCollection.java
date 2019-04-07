@@ -28,10 +28,10 @@ public class StockNoninateCollection {
     //获取0上金叉
     public  void  getNewInfoToTable(String stockCode,int limitNum){
 
-        List<StockInfo> stockListByShareCode = iStockInfoDao.getNewStockListByShareCode(stockCode, SortType.ASC.toString(),limitNum);
-        for (int i = 0; i <stockListByShareCode.size() ; i++) {
-//            StockInfoNew stockInfoNew =new StockInfoNew();
-//            BeanUtils.copyProperties(stockListByShareCode.get(i),stockInfoNew);
+        List<StockInfo> stockListByStockCode = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(),limitNum);
+        for (int i = 0; i <stockListByStockCode.size() ; i++) {
+//            StockNewData stockInfoNew =new StockNewData();
+//            BeanUtils.copyProperties(stockListByStockCode.get(i),stockInfoNew);
 //            stockInfoNewMapper.addStockInfoNew(stockInfoNew);
         }
     }

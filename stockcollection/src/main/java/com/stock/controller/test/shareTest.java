@@ -19,8 +19,8 @@ public class shareTest{
     public static void main(String[] args)  throws Exception{
 
 
-        List<String> urLbyShareCode = getURLbyShareCode("600036");
-        for (int i = 0; i <urLbyShareCode.size() ; i++) {
+        List<String> urLbyStockCode = getURLbyStockCode("600036");
+        for (int i = 0; i <urLbyStockCode.size() ; i++) {
 
             String html= getHtmlByURL("http://quotes.money.163.com/trade/lsjysj_600036.html?year=2017&season=1");
 
@@ -41,13 +41,13 @@ public class shareTest{
 
     }
 
-    public static List<String>  getURLbyShareCode(String shareCode) throws ParseException {
+    public static List<String>  getURLbyStockCode(String StockCode) throws ParseException {
 
         String tempURL="";
         List<String> urlList =new ArrayList<>();
         for (int year = 2002; year <2020 ; year++) {
             for (int season = 1; season <5 ; season++) {
-                tempURL="http://quotes.money.163.com/trade/lsjysj_"+shareCode+".html?year="+year+"&season="+season;
+                tempURL="http://quotes.money.163.com/trade/lsjysj_"+StockCode+".html?year="+year+"&season="+season;
                 urlList.add(tempURL);
             }
         }
@@ -114,7 +114,7 @@ public class shareTest{
         return "";
     }
     static class  ShareBean{
-        private String shareCode ;  //代码
+        private String StockCode ;  //代码
         private String shareName;   //名称
         private Date   shareDate;  //时间
         private String  kpj ;  //开盘价
@@ -128,12 +128,12 @@ public class shareTest{
         private String  zf ;  //振幅(%)
         private String  hsl ;  //换手率(%)
 
-        public String getShareCode() {
-            return shareCode;
+        public String getStockCode() {
+            return StockCode;
         }
 
-        public void setShareCode(String shareCode) {
-            this.shareCode = shareCode;
+        public void setStockCode(String StockCode) {
+            this.StockCode = StockCode;
         }
 
         public String getShareName() {
@@ -235,7 +235,7 @@ public class shareTest{
         @Override
         public String toString() {
             return "ShareBean{" +
-                    "shareCode='" + shareCode + '\'' +
+                    "StockCode='" + StockCode + '\'' +
                     ", shareName='" + shareName + '\'' +
                     ", shareDate=" + shareDate +
                     ", kpj='" + kpj + '\'' +

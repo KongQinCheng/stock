@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.stock.controller.collection.StockKdjCollection.getStockListByShareCode;
-import static com.stock.controller.collection.StockKdjCollection.getStockListByShareCodeLimit10;
+import static com.stock.controller.collection.StockKdjCollection.getStockListByStockCode;
+import static com.stock.controller.collection.StockKdjCollection.getStockListByStockCodeLimit10;
 import static com.stock.controller.collection.StockListCollection.getStockList;
 
 public class StockMacdCollection {
@@ -94,7 +94,7 @@ public class StockMacdCollection {
             stockInfo.setStockCode(stockList1.getStockCode().replaceAll("\t","")+"");
 
             try{
-                List<StockInfo> stockInfoList = stockInfoMapper.getStockListByShareCode(stockInfo.getStockCode() ,999999999);
+                List<StockInfo> stockInfoList = stockInfoMapper.getStockListByStockCode(stockInfo.getStockCode() ,999999999);
 
                     if(stockInfoList.get(0).getEMA12()==0){
                         resultlist222.add(stockInfo.getStockCode());
@@ -147,12 +147,12 @@ public class StockMacdCollection {
 
     public static  void stockMacdInit(String stockCode ,int type){
 
-        List<StockInfo> stockListByShareCode = new ArrayList<>();
+        List<StockInfo> stockListByStockCode = new ArrayList<>();
         if (type==0){
-            stockListByShareCode = getStockListByShareCode(stockCode,999999999);
+            stockListByStockCode = getStockListByStockCode(stockCode,999999999);
         }
         if (type==1){
-            stockListByShareCode = getStockListByShareCodeLimit10(stockCode);
+            stockListByStockCode = getStockListByStockCodeLimit10(stockCode);
         }
 
         double lastDayEma12 =0;
@@ -161,8 +161,8 @@ public class StockMacdCollection {
         double todayDif=0;
         double todayBar=0;
 
-        for (int i = 0; i <stockListByShareCode.size() ; i++) {
-            StockInfo stockInfo =stockListByShareCode.get(i);
+        for (int i = 0; i <stockListByStockCode.size() ; i++) {
+            StockInfo stockInfo =stockListByStockCode.get(i);
 
             if (type ==1){
                 if (stockInfo.getEMA12()!=0) {

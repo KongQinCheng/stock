@@ -26,10 +26,10 @@ public class MacdController {
     @ResponseBody
     public String getStockMacd( @RequestBody StockInfoVo stockInfoVo  ){
 
-        List<StockInfo> stockListByShareCode = new ArrayList<>();
-        stockListByShareCode = iStockInfoDao.getNewStockListByShareCode(stockInfoVo.getStockCode(), SortType.ASC.toString(),1000);
+        List<StockInfo> stockListByStockCode = new ArrayList<>();
+        stockListByStockCode = iStockInfoDao.getNewStockListByStockCode(stockInfoVo.getStockCode(), SortType.ASC.toString(),1000);
 
-        String jsonStr = JSON.toJSONString( stockListByShareCode );
+        String jsonStr = JSON.toJSONString( stockListByStockCode );
 
         return  jsonStr.toString();
     }

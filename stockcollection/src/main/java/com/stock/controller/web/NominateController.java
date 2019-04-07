@@ -28,7 +28,7 @@ public class NominateController {
     @ResponseBody
     public String getStockMacd( @RequestBody StockNominateVo stockNominateVo  ){
 
-        List<StockInfo> stockListByShareCode = new ArrayList<>();
+        List<StockInfo> stockListByStockCode = new ArrayList<>();
 
 
         double zdf_1 =0;
@@ -42,44 +42,44 @@ public class NominateController {
         double zdf_count=0;
 
         //根据价格区间获取股票
-        stockListByShareCode = getStockListByStockNominateVo(stockNominateVo);
+        stockListByStockCode = getStockListByStockNominateVo(stockNominateVo);
 
-        if (stockListByShareCode.size()<=0){  //无数据
+        if (stockListByStockCode.size()<=0){  //无数据
             return null;
         }
 
-        for (int i = 0; i < stockListByShareCode.size(); i++) {
-            zdf_count =zdf_count+stockListByShareCode.get(i).getZdf();
+        for (int i = 0; i < stockListByStockCode.size(); i++) {
+            zdf_count =zdf_count+stockListByStockCode.get(i).getZdf();
 
-            if (stockListByShareCode.size()>0 &&i==0){ //获取上一日 涨幅
-                zdf_1 =stockListByShareCode.get(i).getZdf();
+            if (stockListByStockCode.size()>0 &&i==0){ //获取上一日 涨幅
+                zdf_1 =stockListByStockCode.get(i).getZdf();
                 continue;
             }
 
-            if (stockListByShareCode.size()>1 &&i==1){ //获取上两日 涨幅
-                zdf_2 =stockListByShareCode.get(i).getZdf();
+            if (stockListByStockCode.size()>1 &&i==1){ //获取上两日 涨幅
+                zdf_2 =stockListByStockCode.get(i).getZdf();
                 continue;
             }
-            if (stockListByShareCode.size()>2 &&i==2){ //获取上三日 涨幅
-                zdf_3 =stockListByShareCode.get(i).getZdf();
+            if (stockListByStockCode.size()>2 &&i==2){ //获取上三日 涨幅
+                zdf_3 =stockListByStockCode.get(i).getZdf();
                 continue;
             }
 
-            if (stockListByShareCode.size()>4 &&i==4){ //获取五日平均 涨幅
+            if (stockListByStockCode.size()>4 &&i==4){ //获取五日平均 涨幅
                 zdf_5 = zdf_count/5;
                 continue;
             }
-            if (stockListByShareCode.size()>9 &&i==9){   //获取十日平均 涨幅
+            if (stockListByStockCode.size()>9 &&i==9){   //获取十日平均 涨幅
                 zdf_10 = zdf_count/10;
                 continue;
             }
 
-            if (stockListByShareCode.size()>14 &&i==14){ //获取十五日平均 涨幅
+            if (stockListByStockCode.size()>14 &&i==14){ //获取十五日平均 涨幅
                 zdf_15 = zdf_count/15;
                 continue;
             }
 
-            if (stockListByShareCode.size()>29 &&i==29){  //获取三十日平均 涨幅
+            if (stockListByStockCode.size()>29 &&i==29){  //获取三十日平均 涨幅
                 zdf_30 = zdf_count/30;
                 continue;
             }

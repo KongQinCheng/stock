@@ -41,18 +41,18 @@ public interface StockInfoMapper {
             @Result(column = "BAR", property = "BAR"),
 
             @Result(column = "shareDate", property = "shareDate")})
-    public List<StockInfo> getStockListByShareCode(@Param("stockCode")String stockCode,@Param("limitNum") int limitNum);
+    public List<StockInfo> getStockListByStockCode(@Param("stockCode")String stockCode,@Param("limitNum") int limitNum);
 
 
 
     @Select("select b.* from (select * from stock_info_${stockCode} where 1=1  ORDER BY stockDate DESC limit ${limitNum}) b ORDER BY b.stockDate ${sortType} ")
     @ResultMap("stockBeanResults")
-    public List<StockInfo> getNewStockListByShareCode(@Param("stockCode")String stockCode,@Param("sortType")String sortType, @Param("limitNum") int limitNum);
+    public List<StockInfo> getNewStockListByStockCode(@Param("stockCode")String stockCode,@Param("sortType")String sortType, @Param("limitNum") int limitNum);
 
 
     @Select("select * from  ( select * from stock_info_${stockCode} where 1=1  ORDER BY stockDate DESC limit 100 ) a ORDER BY a.stockDate ")
     @ResultMap("stockBeanResults")
-    public List<StockInfo> getStockListByShareCodeLimit10(StockInfo stockInfo);
+    public List<StockInfo> getStockListByStockCodeLimit10(StockInfo stockInfo);
 
 
 

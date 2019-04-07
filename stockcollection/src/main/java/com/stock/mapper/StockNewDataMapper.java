@@ -1,8 +1,7 @@
 package com.stock.mapper;
 
 import com.stock.bean.StockInfo;
-import com.stock.bean.StockInfoNew;
-import com.stock.bean.StockNominateVo;
+import com.stock.bean.StockNewData;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -25,6 +24,34 @@ public interface StockNewDataMapper {
 
     @Delete("DELETE from stock_new_data WHERE 1=1")
     public void deleteAll();
+
+
+
+    @Select("select * from stock_new_data where 1=1  ORDER BY stockDate ASC limit ${limitNum} ")
+    @Results(id = "stockNewDataResults", value = {
+            @Result(column = "id", property = "id"),
+            @Result(column = "stockCode", property = "stockCode"),
+            @Result(column = "stockDate", property = "stockDate"),
+            @Result(column = "kpj", property = "kpj"),
+            @Result(column = "zgj", property = "zgj"),
+            @Result(column = "zdj", property = "zdj"),
+            @Result(column = "spj", property = "spj"),
+            @Result(column = "zde", property = "zde"),
+            @Result(column = "zdf", property = "zdf"),
+            @Result(column = "cjl", property = "cjl"),
+            @Result(column = "cjje", property = "cjje"),
+            @Result(column = "zf", property = "zf"),
+            @Result(column = "hsl", property = "hsl"),
+            @Result(column = "k_value", property = "kValue"),
+            @Result(column = "d_value", property = "dValue"),
+            @Result(column = "j_value", property = "jValue"),
+            @Result(column = "EMA12", property = "EMA12"),
+            @Result(column = "EMA26", property = "EMA26"),
+            @Result(column = "DIF", property = "DIF"),
+            @Result(column = "EMAMACD", property = "EMAMACD"),
+            @Result(column = "BAR", property = "BAR"),
+            @Result(column = "shareDate", property = "shareDate")})
+    public List<StockNewData> getStockListByStockCode(@Param("stockCode")String stockCode, @Param("limitNum") int limitNum);
 
 
 
