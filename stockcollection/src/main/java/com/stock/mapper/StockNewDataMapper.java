@@ -2,6 +2,8 @@ package com.stock.mapper;
 
 import com.stock.bean.StockInfo;
 import com.stock.bean.StockNewData;
+import com.stock.bean.StockNewDataVo;
+import com.stock.sqlProvider.StockNewDataSqlProvider;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -26,12 +28,10 @@ public interface StockNewDataMapper {
     public void deleteAll();
 
 
-
-    @Select("select * from stock_new_data where 1=1  ORDER BY stockDate ASC limit ${limitNum} ")
+    @Select("select * from stock_new_data ")
     @Results(id = "stockNewDataResults", value = {
             @Result(column = "id", property = "id"),
             @Result(column = "stockCode", property = "stockCode"),
-            @Result(column = "stockDate", property = "stockDate"),
             @Result(column = "kpj", property = "kpj"),
             @Result(column = "zgj", property = "zgj"),
             @Result(column = "zdj", property = "zdj"),
@@ -51,7 +51,24 @@ public interface StockNewDataMapper {
             @Result(column = "EMAMACD", property = "EMAMACD"),
             @Result(column = "BAR", property = "BAR"),
             @Result(column = "shareDate", property = "shareDate")})
-    public List<StockNewData> getStockListByStockCode(@Param("stockCode")String stockCode, @Param("limitNum") int limitNum);
+    public  List<StockNewData> getNewDataAll(StockNewDataVo stockNewDataVo);
+
+
+    @SelectProvider(type = StockNewDataSqlProvider.class,method = "getStockNewDataListByVo")
+    @ResultMap("stockNewDataResults")
+    public  List<StockNewData> getStockNewDataListByVo(StockNewDataVo stockNewDataVo);
+
+
+//    @SelectProvider(type = cn.anicert.maintenance.common.sqlProvider.StockNewDataSqlProvider.class, method = "updateGroupInfo")
+//    public void updateGroupInfo(GroupInfo groupInfo);
+
+//    @SelectProvider()
+
+
+
+    @Select("select * from stock_new_data where 1=1  ORDER BY stockDate ASC limit ${limitNum} ")
+    @ResultMap("stockNewDataResults")
+    public List<StockNewData> getStockListByStockCode(@Param("stockCode") String stockCode, @Param("limitNum") int limitNum);
 
 
 

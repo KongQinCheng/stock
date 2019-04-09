@@ -2,6 +2,8 @@ package com.stock.dao.impl;
 
 import com.stock.bean.StockInfo;
 import com.stock.bean.StockNewData;
+
+import com.stock.bean.StockNewDataVo;
 import com.stock.dao.IStockNewDataDao;
 import com.stock.mapper.StockNewDataMapper;
 import org.apache.ibatis.annotations.Param;
@@ -27,9 +29,11 @@ public class StockNewDataDaoImpl implements IStockNewDataDao {
     }
 
     @Override
+    public List<StockNewData> getStockNewDataListByVo(StockNewDataVo stockNewDataVo) {
+        return stockNewDataMapper.getStockNewDataListByVo(stockNewDataVo);
+    }
+    @Override
     public List<StockNewData> getStockListByStockCode(String stockCode, int limitNum) {
         return stockNewDataMapper.getStockListByStockCode(stockCode, limitNum);
     }
-
-
 }

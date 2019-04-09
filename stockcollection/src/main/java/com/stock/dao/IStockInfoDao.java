@@ -15,7 +15,7 @@ public interface IStockInfoDao {
      * @param limitNum
      * @return
      */
-    public  List<StockInfo> getStockListByStockCode(String stockCode , int limitNum);
+    public  List<StockInfo> getStockListByStockCode(String stockCode, int limitNum);
 
     /***
      * 获取最新的的股票信息，按照
@@ -24,7 +24,7 @@ public interface IStockInfoDao {
      * @param limitNum
      * @return
      */
-    public  List<StockInfo> getNewStockListByStockCode(String stockCode, String sortType , int limitNum);
+    public  List<StockInfo> getNewStockListByStockCode(String stockCode, String sortType, int limitNum);
 
     /***
      * 一次性使用，将stockCode更新

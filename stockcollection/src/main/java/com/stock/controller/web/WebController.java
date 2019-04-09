@@ -39,12 +39,17 @@ public class WebController {
 
     @RequestMapping("/toNominate")
     public String toNominate(){
-        return "nominate";
+        return "stock_nominate_info";
     }
 
     @RequestMapping("/toNewStock")
     public String toNewStock(){
         return "stock_new_list";
+    }
+
+    @RequestMapping("/toNominateList")
+    public String toNominateList(){
+        return "stock_nominate_list";
     }
 
 

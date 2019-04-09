@@ -41,13 +41,13 @@ public interface StockInfoMapper {
             @Result(column = "BAR", property = "BAR"),
 
             @Result(column = "shareDate", property = "shareDate")})
-    public List<StockInfo> getStockListByStockCode(@Param("stockCode")String stockCode,@Param("limitNum") int limitNum);
+    public List<StockInfo> getStockListByStockCode(@Param("stockCode") String stockCode, @Param("limitNum") int limitNum);
 
 
 
     @Select("select b.* from (select * from stock_info_${stockCode} where 1=1  ORDER BY stockDate DESC limit ${limitNum}) b ORDER BY b.stockDate ${sortType} ")
     @ResultMap("stockBeanResults")
-    public List<StockInfo> getNewStockListByStockCode(@Param("stockCode")String stockCode,@Param("sortType")String sortType, @Param("limitNum") int limitNum);
+    public List<StockInfo> getNewStockListByStockCode(@Param("stockCode") String stockCode, @Param("sortType") String sortType, @Param("limitNum") int limitNum);
 
 
     @Select("select * from  ( select * from stock_info_${stockCode} where 1=1  ORDER BY stockDate DESC limit 100 ) a ORDER BY a.stockDate ")
@@ -87,7 +87,7 @@ public interface StockInfoMapper {
             "ENGINE=InnoDB " +
             "DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci " +
             "ROW_FORMAT=COMPACT ;")
-    public void createTableByTableName(@Param("tableName")String tableName);
+    public void createTableByTableName(@Param("tableName") String tableName);
 
 
 
@@ -115,11 +115,11 @@ public interface StockInfoMapper {
     @Select("  SELECT COUNT(*) as count FROM stock_info_${stockCode}  WHERE stockDate =#{stockDate}")
     @Results(id = "isRoweExistResults", value = {
             @Result(column = "count", property = "count")})
-    public double isRoweExist( StockInfo stockInfo);
+    public double isRoweExist(StockInfo stockInfo);
 
 
 
     @Update("UPDATE stock_info_${stockCode} set stockCode =#{stockCode}")
-    public void updateStockCode(@Param("stockCode")String stockCode);
+    public void updateStockCode(@Param("stockCode") String stockCode);
 
 }

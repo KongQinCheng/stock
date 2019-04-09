@@ -24,14 +24,14 @@ public interface StockListMapper {
 
     @Select("select * from stock_list where 1=1 limit #{limitNum}")
     @ResultMap("stockListResults")
-    public List<StockList> getStockListLimit(@Param("limitNum")int  limitNum);
+    public List<StockList> getStockListLimit(@Param("limitNum") int limitNum);
 
     @Insert("insert into stock_list(stockCode,stockName) values (#{stockCode},#{stockName})")
-    public void addStockList(@Param("stockCode")String  stockCode,@Param("stockName")String stockName);
+    public void addStockList(@Param("stockCode") String stockCode, @Param("stockName") String stockName);
 
 
     @Delete("DELETE from stock_list WHERE stockCode =#{stockCode}")
-    public void delStockList(@Param("stockCode")String  stockCode);
+    public void delStockList(@Param("stockCode") String stockCode);
 
 
 

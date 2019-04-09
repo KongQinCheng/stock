@@ -50,7 +50,7 @@ public class HtmlUtil   {
         StringBuilder htmlStr =new StringBuilder();
         URL url = new URL(u);// 根据链接（字符串格式），生成一个URL对象
 
-        java.net.HttpURLConnection urlConnection = (HttpURLConnection) url
+        HttpURLConnection urlConnection = (HttpURLConnection) url
                 .openConnection();// 打开URL
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(

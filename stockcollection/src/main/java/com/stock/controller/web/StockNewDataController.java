@@ -3,11 +3,14 @@ package com.stock.controller.web;
 
 import com.alibaba.fastjson.JSON;
 import com.stock.bean.StockInfo;
+import com.stock.bean.StockNewData;
 import com.stock.bean.StockNewDataVo;
-import com.stock.bean.StockNominateVo;
+import com.stock.dao.IStockNewDataDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.DecimalFormat;
@@ -20,14 +23,18 @@ import static com.stock.controller.collection.StockNoninateCollection.getStockLi
 
 
 @Controller
-public class NominateController {
+@RequestMapping("/stock/stockNewDataController")
+public class StockNewDataController {
+
+    @Autowired
+    IStockNewDataDao iStockNewDataDao;
 
     DecimalFormat df = new DecimalFormat("#.00");
 
 
     @PostMapping(value = "/getNomainate",consumes = "application/json")
     @ResponseBody
-    public String getStockMacd( @RequestBody StockNewDataVo stockNewDataVo  ){
+    public String getNomainate( @RequestBody StockNewDataVo stockNewDataVo){
 
         List<StockInfo> stockListByStockCode = new ArrayList<>();
 
@@ -97,4 +104,23 @@ public class NominateController {
         String jsonStr = JSON.toJSONString( map );
         return  jsonStr.toString();
     }
+
+
+
+
+
+
+    @PostMapping(value = "/getNomainateList",consumes = "application/json")
+    @ResponseBody
+    public List<StockNewData> getNomainateList( @RequestBody StockNewDataVo stockNewDataVo){
+        List<StockNewData> list = getStockNewDataListByVo(stockNewDataVo);
+        return  list;
+    }
+
+
+    public List<StockNewData> getStockNewDataListByVo(@RequestBody StockNewDataVo stockNewDataVo){
+        //根据收盘价的区间，获取所有股票
+        return iStockNewDataDao.getStockNewDataListByVo(stockNewDataVo);
+    }
+
 }
