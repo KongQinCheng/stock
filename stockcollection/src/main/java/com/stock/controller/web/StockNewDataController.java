@@ -2,9 +2,9 @@ package com.stock.controller.web;
 
 
 import com.alibaba.fastjson.JSON;
-import com.stock.bean.StockInfo;
-import com.stock.bean.StockNewData;
-import com.stock.bean.StockNewDataVo;
+import com.stock.bean.po.StockInfo;
+import com.stock.bean.po.StockNewData;
+import com.stock.bean.vo.StockNewDataVo;
 import com.stock.dao.IStockNewDataDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.stock.controller.collection.StockNoninateCollection.getStockListByStockNominateVo;
+import static com.stock.controller.collection.StockNominateCollection.getStockListByStockNominateVo;
 
 
 @Controller

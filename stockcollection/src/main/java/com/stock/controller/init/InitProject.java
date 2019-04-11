@@ -3,6 +3,7 @@ package com.stock.controller.init;
 
 import com.stock.controller.collection.StockInfoCollection;
 import com.stock.controller.collection.StockNewDataCollection;
+import com.stock.controller.collection.StockNominateCollection;
 import com.stock.services.IStockIncreaseAnalyzeServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -22,14 +23,20 @@ public class InitProject implements ApplicationRunner {
     @Autowired
     IStockIncreaseAnalyzeServices iStockIncreaseAnalyzeServices;
 
+
+
+    @Autowired
+    StockNominateCollection stockNoninateCollection;
+
     @Override
     public void run(ApplicationArguments args) {
         //项目初始化执行
 
         try {
 
+            stockNoninateCollection.getStockNoninate("603383",10);
 
-            iStockIncreaseAnalyzeServices.getStockIncreaseAnalyzeToTable("000001");
+//            iStockIncreaseAnalyzeServices.getStockIncreaseAnalyzeToTable("000001");
 
 
             //查询各个表中最新的30天的数据保存到 stock_new_data表中
@@ -42,7 +49,7 @@ public class InitProject implements ApplicationRunner {
 //            delStockList();
 
             //获取具体的股票情况
-//            getWycjSituationAll();
+//            stockInfoCollection.getWycjSituationAll();
 
             //查找空表
 //            findTable();

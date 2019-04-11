@@ -59,7 +59,7 @@ public class shareTest{
     public static String insertDb(ShareBean shareBean ) throws ParseException {
 
         System.out.println(shareBean.toString());
-        System.out.println("-------------");
+        System.out.println("--------");
         return  shareBean.toString();
     }
 
@@ -267,8 +267,8 @@ public class shareTest{
     public static String replaceHtml(String oldChar ,String html)   {
         StringBuilder htmlStr =new StringBuilder();
         html=html.replace(oldChar,"");
-        System.out.println(html);
-        System.out.println("--------");
+       // System.out.println(html);
+       // System.out.println("--------");
         return html;
     }
 
@@ -283,7 +283,7 @@ public class shareTest{
             htmlStr.append(matcher.group());
         }
         System.out.println(htmlStr.toString());
-        System.out.println("------------");
+        System.out.println("--------");
         return htmlStr.toString();
     }
     public static String getHtmlByURL(String u) throws Exception {
@@ -301,7 +301,7 @@ public class shareTest{
             htmlStr.append(line);
         }
         System.out.println(htmlStr.toString());
-        System.out.println("------------------");
+        System.out.println("--------");
         return  htmlStr.toString();
     }
 }

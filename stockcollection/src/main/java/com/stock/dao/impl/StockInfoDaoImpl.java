@@ -1,6 +1,6 @@
 package com.stock.dao.impl;
 
-import com.stock.bean.StockInfo;
+import com.stock.bean.po.StockInfo;
 import com.stock.dao.IStockInfoDao;
 import com.stock.mapper.StockInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;

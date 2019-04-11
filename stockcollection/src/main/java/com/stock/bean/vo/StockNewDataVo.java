@@ -1,4 +1,4 @@
-package com.stock.bean;
+package com.stock.bean.vo;
 
 import lombok.Data;
 
@@ -10,6 +10,8 @@ public class StockNewDataVo {
 
     private double spjmin;
     private double spjmax;
+
+    private int dayNum;
 
     private double zdf_1 ;
     private double zdf_2 ;

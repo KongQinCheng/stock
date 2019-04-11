@@ -1,8 +1,6 @@
 package com.stock.mapper;
 
-import com.stock.bean.StockIncreaseAnalyze;
-import com.stock.bean.StockInfo;
-import org.apache.ibatis.annotations.Delete;
+import com.stock.bean.po.StockIncreaseAnalyze;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 

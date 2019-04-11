@@ -1,7 +1,6 @@
 package com.stock.dao;
 
-import com.stock.bean.StockInfo;
-import com.stock.bean.StockList;
+import com.stock.bean.po.StockList;
 
 import java.util.List;
 

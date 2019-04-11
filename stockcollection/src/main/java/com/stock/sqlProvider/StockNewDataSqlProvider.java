@@ -1,8 +1,7 @@
 package com.stock.sqlProvider;
 
-import com.stock.bean.StockNewDataVo;
+import com.stock.bean.vo.StockNewDataVo;
 import org.apache.ibatis.jdbc.SQL;
-
 public class StockNewDataSqlProvider {
     
     public String getStockNewDataListByVo(StockNewDataVo stockNewDataVo) {

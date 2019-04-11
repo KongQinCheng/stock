@@ -39,18 +39,26 @@ public class WebController {
 
     @RequestMapping("/toNominate")
     public String toNominate(){
-        return "stock_nominate_info";
+        return "nominate/stock_nominate_info";
     }
 
     @RequestMapping("/toNewStock")
     public String toNewStock(){
-        return "stock_new_list";
+        return "nominate/stock_new_list";
     }
 
     @RequestMapping("/toNominateList")
     public String toNominateList(){
-        return "stock_nominate_list";
+        return "nominate/stock_nominate_list";
     }
+
+
+    @RequestMapping("/toNominateCross")
+    public String toNominateCross(String searchType){
+        return "nominate/stock_nominate_cross";
+    }
+
+
 
 
 

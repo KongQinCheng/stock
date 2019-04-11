@@ -1,8 +1,8 @@
 package com.stock.mapper;
 
-import com.stock.bean.StockInfo;
-import com.stock.bean.StockNewData;
-import com.stock.bean.StockNewDataVo;
+import com.stock.bean.po.StockInfo;
+import com.stock.bean.po.StockNewData;
+import com.stock.bean.vo.StockNewDataVo;
 import com.stock.sqlProvider.StockNewDataSqlProvider;
 import org.apache.ibatis.annotations.*;
 

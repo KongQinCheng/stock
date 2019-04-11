@@ -1,15 +1,12 @@
 package com.stock.controller.collection;
 
 
-import com.stock.bean.StockInfo;
-import com.stock.bean.StockList;
+import com.stock.bean.po.StockList;
 import com.stock.mapper.StockListMapper;
 import com.stock.util.HtmlUtil;
 import com.stock.util.SpringUtil;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,12 +1,11 @@
 package com.stock.dao.impl;
 
-import com.stock.bean.StockInfo;
-import com.stock.bean.StockNewData;
+import com.stock.bean.po.StockInfo;
+import com.stock.bean.po.StockNewData;
 
-import com.stock.bean.StockNewDataVo;
+import com.stock.bean.vo.StockNewDataVo;
 import com.stock.dao.IStockNewDataDao;
 import com.stock.mapper.StockNewDataMapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

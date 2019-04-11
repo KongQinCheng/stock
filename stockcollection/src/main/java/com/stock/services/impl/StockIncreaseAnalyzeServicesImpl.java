@@ -1,6 +1,6 @@
 package com.stock.services.impl;
 
-import com.stock.bean.StockInfo;
+import com.stock.bean.po.StockInfo;
 import com.stock.dao.IStockIncreaseAnalyzeDao;
 import com.stock.dao.IStockInfoDao;
 import com.stock.dao.IStockNewDataDao;

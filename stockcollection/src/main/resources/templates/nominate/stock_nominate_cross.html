@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>金叉死叉推荐</title>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/common.js"></script>
+    <link rel="stylesheet" href="../css/style.css" type="text/css"/>
+</head>
+
+<body>
+
+<div class="main" id="div2">
+
+    <a href="/toNominate">
+        <div class="indexButtom">
+            金叉死叉
+        </div>
+    </a>
+
+
+    <div class="indexButtom" style="height: 250px">
+        <div style="width: 100%;height: 50px;">
+          <label>收盘最低价</label>  <input type="text" id="spjmin" placeholder="收盘最低价" value="300"><br>
+            <label>收盘最高价</label>  <input type="text" id="spjmax" placeholder="收盘最高价" value="3300">
+            <br>
+            <label>查询时间周期</label> <input type="text" id="dayNum" placeholder="" value="15">
+
+            <input type="button" value="查询"  onclick="search()">
+
+        </div>
+    </div>
+    <div class="indexButtom" style="height: 500px">
+        <table id="innerTable">
+            <tr>
+                <td>股票编码</td>
+                <td>当前价格</td>
+                <td>交叉出现时间</td>
+                <td>操作</td>
+            </tr>
+            <tr id="">
+
+            </tr>
+
+        </table>
+    </div>
+
+    <script>
+        window.onload = search;
+
+
+
+        function search() {
+
+            getUrlParam("searchType");
+
+            var str = {"spjmin": $("#spjmin").val(), "spjmax": $("#spjmax").val(),"dayNum": $("#dayNum").val()}
+            $.ajax({
+                type: "post",
+                async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                url: "/getNomainateCross?",    //请求发送到TestServlet处
+                data: JSON.stringify(str),
+                dataType: "text",        //返回数据形式为json
+                contentType: "application/json",
+                success: function (result) {
+
+                    console.log("请求成功")
+                    console.log(result)
+
+                    var tempHtml = "";
+                    var jsonObj = JSON.parse(result);//转换为json对象
+
+                    console.log(jsonObj.length)
+
+                    for (var i = 0; i < jsonObj.length; i++) {
+                        tempHtml += "<tr>";
+                        tempHtml += "<td>" + jsonObj[i].stockCode + "</td>";
+                        tempHtml += "<td>" + jsonObj[i].spj + "</td>";
+                        tempHtml += "<td>" + jsonObj[i].stockDate + "</td>";
+                        tempHtml += "<td><a href='/toMacd'>操作</a></td>";
+                        tempHtml += "</tr>";
+                    }
+                    $("#innerTable").append(tempHtml);
+
+
+                },
+                error: function (errorMsg) {
+                    //请求失败时执行该函数
+                    alert("图表请求数据失败!");
+                }
+            })
+        }
+
+    </script>
+
+</div>
+</body>
+</html>

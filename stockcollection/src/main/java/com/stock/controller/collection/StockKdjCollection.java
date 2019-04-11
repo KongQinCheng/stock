@@ -1,8 +1,7 @@
 package com.stock.controller.collection;
 
-import com.stock.bean.StockInfo;
+import com.stock.bean.po.StockInfo;
 import com.stock.mapper.StockInfoMapper;
-import com.stock.mapper.StockNewDataMapper;
 import com.stock.util.SpringUtil;
 
 import java.util.List;

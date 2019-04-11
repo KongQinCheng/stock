@@ -1,4 +1,4 @@
-package com.stock.bean;
+package com.stock.bean.vo;
 
 import lombok.Data;
 

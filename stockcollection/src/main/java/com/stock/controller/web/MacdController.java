@@ -3,8 +3,8 @@ package com.stock.controller.web;
 
 import com.alibaba.fastjson.JSON;
 import com.stock.Enum.SortType;
-import com.stock.bean.StockInfo;
-import com.stock.bean.StockInfoVo;
+import com.stock.bean.po.StockInfo;
+import com.stock.bean.vo.StockInfoVo;
 import com.stock.dao.IStockInfoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

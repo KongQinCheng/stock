@@ -1,8 +1,8 @@
 package com.stock.controller.collection;
 
 import com.stock.Enum.SortType;
-import com.stock.bean.StockInfo;
-import com.stock.bean.StockList;
+import com.stock.bean.po.StockInfo;
+import com.stock.bean.po.StockList;
 import com.stock.dao.IStockInfoDao;
 import com.stock.dao.IStockListDao;
 import com.stock.dao.IStockNewDataDao;
@@ -86,6 +86,10 @@ public class StockNewDataCollection {
     }
 
 
+    /***
+     * 从每张表中拷贝最新的数据保存的数据库中
+     * @param stockCode
+     */
     public  void  getNewDataToTable(String stockCode){
         List<StockInfo> newStockListByStockCode = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 30);
             for (int j = 0; j < newStockListByStockCode.size(); j++) {

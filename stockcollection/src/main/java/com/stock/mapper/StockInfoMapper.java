@@ -1,6 +1,6 @@
 package com.stock.mapper;
 
-import com.stock.bean.StockInfo;
+import com.stock.bean.po.StockInfo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

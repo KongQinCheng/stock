@@ -1,8 +1,8 @@
 package com.stock.dao;
 
-import com.stock.bean.StockInfo;
-import com.stock.bean.StockNewData;
-import com.stock.bean.StockNewDataVo;
+import com.stock.bean.po.StockInfo;
+import com.stock.bean.po.StockNewData;
+import com.stock.bean.vo.StockNewDataVo;
 
 import java.util.List;
 

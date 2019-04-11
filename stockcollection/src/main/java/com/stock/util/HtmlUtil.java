@@ -26,8 +26,8 @@ public class HtmlUtil   {
     public static String replaceHtml(String oldChar ,String html)   {
         StringBuilder htmlStr =new StringBuilder();
         html=html.replace(oldChar,"");
-        System.out.println(html);
-        System.out.println("--------");
+       // System.out.println(html);
+       // System.out.println("--------");
         return html;
     }
 
@@ -41,8 +41,8 @@ public class HtmlUtil   {
         while(matcher.find()) {
             htmlStr.append(matcher.group());
         }
-        System.out.println(htmlStr.toString());
-        System.out.println("------------");
+       // System.out.println(htmlStr.toString());
+       // System.out.println("--------");
         return htmlStr.toString();
     }
     public static String getHtmlByURL(String u,String charsetName ) throws Exception {
@@ -59,8 +59,8 @@ public class HtmlUtil   {
         while ((line = reader.readLine()) != null) {
             htmlStr.append(line);
         }
-        System.out.println(htmlStr.toString());
-        System.out.println("------------------");
+       // System.out.println(htmlStr.toString());
+       // System.out.println("--------");
         return  htmlStr.toString();
     }
 }

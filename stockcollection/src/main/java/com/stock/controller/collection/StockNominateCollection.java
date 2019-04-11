@@ -3,9 +3,9 @@ package com.stock.controller.collection;
 import com.stock.Enum.SortType;
 import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockList;
+import com.stock.bean.vo.StockNewDataVo;
 import com.stock.dao.IStockInfoDao;
-import com.stock.dao.IStockListDao;
-import com.stock.dao.IStockNewDataDao;
+import com.stock.services.IStockNoninateServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,30 +16,27 @@ import java.util.concurrent.Executors;
 import static com.stock.controller.collection.StockListCollection.getStockList;
 
 @Component
-public class StockIncreaseAnalyzeCollection {
-
-    @Autowired
-    IStockListDao iStockListDao;
+public class StockNominateCollection {
 
     @Autowired
     IStockInfoDao iStockInfoDao;
 
     @Autowired
-    IStockNewDataDao IStockNewDataDao;
+    IStockNoninateServices iStockNoninateServices;
 
-    /***
-     * 根据数据库中保存的 股票编号 获取股票的历史信息
-     * @throws Exception
-     */
-    public  void getStockIncreaseAnalyzeToTableThread( ) throws Exception {
+    public static void main(String[] args)  throws Exception{
 
-        //清空表的内容
-        IStockNewDataDao.deleteAll();
+        String stockCode ="603383";
+
+//        getNewInfoToTable(stockCode,30);
+
+    }
+
+
+    public  void getStockNoninateThread( ) throws Exception {
 
         List<StockList> stockList = getStockList();
-
         double threadCount =100.0 ; //使用 20个线程处理
-
         ExecutorService executor = Executors.newFixedThreadPool((int)threadCount);
         int listSize = stockList.size() ;
         //将总数分成 多个线程之后，每个线程需要处理的数据为： listSize/threadCount
@@ -55,7 +52,7 @@ public class StockIncreaseAnalyzeCollection {
                     end = listSize;
                 }
                 List<StockList> subList = stockList.subList(j*divNum, end);
-                ThreadRunnable threadRunnable = new ThreadRunnable(subList);
+                StockNominateCollection.ThreadRunnable threadRunnable = new StockNominateCollection.ThreadRunnable(subList);
                 executor.execute(threadRunnable);
             }
         }
@@ -76,7 +73,7 @@ public class StockIncreaseAnalyzeCollection {
         public void run() {
             for (int i = 0; i <listInput.size() ; i++) {
                 try {
-                    getStockIncreaseAnalyzeToTable(listInput.get(i).getStockCode().replaceAll("\t","")+"");
+                    getStockNoninate(listInput.get(i).getStockCode().replaceAll("\t","")+"",0);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -86,13 +83,17 @@ public class StockIncreaseAnalyzeCollection {
     }
 
 
-    public  void getStockIncreaseAnalyzeToTable(String stockCode){
-        List<StockInfo> newStockListByStockCode = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 30);
-            for (int j = 0; j < newStockListByStockCode.size(); j++) {
-                StockInfo stockInfo=newStockListByStockCode.get(j);
-                stockInfo.setStockCode(stockCode);
-                IStockNewDataDao.insert(stockInfo);
-            }
 
+
+    //获取0上金叉
+    public  void  getStockNoninate(String stockCode,int limitNum){
+
+        List<StockInfo> stockListByStockCode = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(),limitNum);
+        iStockNoninateServices.getStockNoninateCross(stockListByStockCode,300);
+    }
+
+
+    public static List<StockInfo> getStockListByStockNominateVo(StockNewDataVo stockNewDataVo) {
+        return null;
     }
 }

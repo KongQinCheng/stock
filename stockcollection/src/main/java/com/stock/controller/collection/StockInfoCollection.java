@@ -1,12 +1,11 @@
 package com.stock.controller.collection;
 
-import com.stock.bean.StockInfo;
-import com.stock.bean.StockList;
+import com.stock.bean.po.StockInfo;
+import com.stock.bean.po.StockList;
 import com.stock.dao.IStockInfoDao;
 import com.stock.dao.IStockListDao;
 import com.stock.mapper.StockInfoMapper;
 import com.stock.util.HtmlUtil;
-import com.stock.util.SpringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -100,6 +99,7 @@ public class StockInfoCollection {
         createTableByTableName(stockCode);
 
         List<String> urlList = getURLbyStockCode(stockCode);
+        System.out.println("获取数据成功，股票编号为："+stockCode);
         for (int i = 0; i <urlList.size() ; i++) {
 
             String html= htmlUtil.getHtmlByURL(urlList.get(i),"UTF-8");
@@ -299,6 +299,7 @@ public class StockInfoCollection {
 //                stockInfoMapper.delTableByStockCode(stockInfo);
                     resultlist222.add(stockInfo.getStockCode());
 
+
             }
             }
             catch (Exception e){
@@ -306,7 +307,6 @@ public class StockInfoCollection {
             }
 
         }
-        System.out.println(resultlist222);
 
     }
 
@@ -330,7 +330,7 @@ public class StockInfoCollection {
             }
         }
 
-        System.out.println(rrrr);
+        //System.out.println(rrrr);
 
 
     }
@@ -349,7 +349,7 @@ public class StockInfoCollection {
                 break;
             }
             iStockInfoDao.updateStockCode(stockCode);
-            System.out.println("更新stockCode="+ stockCode);
+           System.out.println("更新stockCode="+ stockCode);
         }
     }
 

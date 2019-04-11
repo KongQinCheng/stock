@@ -2,9 +2,8 @@ package com.stock.controller.web;
 
 
 import com.alibaba.fastjson.JSON;
-import com.stock.bean.StockInfo;
-import com.stock.bean.StockNewDataVo;
-import com.stock.bean.StockNominateVo;
+import com.stock.bean.po.StockInfo;
+import com.stock.bean.vo.StockNewDataVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.stock.controller.collection.StockNoninateCollection.getStockListByStockNominateVo;
+import static com.stock.controller.collection.StockNominateCollection.getStockListByStockNominateVo;
 
 
 @Controller
@@ -45,7 +44,7 @@ public class NominateController {
         //根据价格区间获取股票
         stockListByStockCode = getStockListByStockNominateVo(stockNewDataVo);
 
-        if (stockListByStockCode.size()<=0){  //无数据
+        if (stockListByStockCode ==null ||stockListByStockCode.size()<=0){  //无数据
             return null;
         }
 
