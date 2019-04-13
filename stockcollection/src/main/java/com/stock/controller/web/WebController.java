@@ -36,32 +36,10 @@ public class WebController {
         return "macd";
     }
 
-
-    @RequestMapping("/toNominate")
-    public String toNominate(){
-        return "nominate/stock_nominate_info";
-    }
-
     @RequestMapping("/toNewStock")
     public String toNewStock(){
         return "nominate/stock_new_list";
     }
-
-    @RequestMapping("/toNominateList")
-    public String toNominateList(){
-        return "nominate/stock_nominate_list";
-    }
-
-
-    @RequestMapping("/toNominateCross")
-    public String toNominateCross(String searchType){
-        return "nominate/stock_nominate_cross";
-    }
-
-
-
-
-
 
 
 }

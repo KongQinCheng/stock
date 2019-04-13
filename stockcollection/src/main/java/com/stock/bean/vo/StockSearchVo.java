@@ -13,12 +13,6 @@ public class StockSearchVo {
 
     private int dayNum;
 
-    private double zdf_1 ;
-    private double zdf_2 ;
-    private double zdf_3 ;
-    private double zdf_5 ;
-    private double zdf_10 ;
-    private double zdf_15 ;
-    private double zdf_30 ;
+    private String  crossType ; //金叉 死叉类型。
 
 }

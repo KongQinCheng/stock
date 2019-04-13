@@ -54,13 +54,11 @@
 
         function search() {
 
-            getUrlParam("searchType");
-
-            var str = {"spjmin": $("#spjmin").val(), "spjmax": $("#spjmax").val(),"dayNum": $("#dayNum").val()}
+            var str = {"spjmin": $("#spjmin").val(), "spjmax": $("#spjmax").val(),"dayNum": $("#dayNum").val(),"crossType": getUrlParam("crossType")}
             $.ajax({
                 type: "post",
                 async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
-                url: "/getNomainateCross?",    //请求发送到TestServlet处
+                url: "/getNominateCross",    //请求发送到TestServlet处
                 data: JSON.stringify(str),
                 dataType: "text",        //返回数据形式为json
                 contentType: "application/json",

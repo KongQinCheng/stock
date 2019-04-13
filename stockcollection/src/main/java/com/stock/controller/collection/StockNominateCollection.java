@@ -87,13 +87,8 @@ public class StockNominateCollection {
 
     //获取0上金叉
     public  void  getStockNoninate(String stockCode,int limitNum){
-
         List<StockInfo> stockListByStockCode = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(),limitNum);
         iStockNoninateServices.getStockNoninateCross(stockListByStockCode,300);
     }
 
-
-    public static List<StockInfo> getStockListByStockNominateVo(StockNewDataVo stockNewDataVo) {
-        return null;
-    }
 }

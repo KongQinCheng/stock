@@ -4,7 +4,7 @@ package com.stock.bean.to;
 import lombok.Data;
 
 @Data
-public class StockNimateTo {
+public class StockNominateTo {
     private  String stockCode;
     private  String stockDate;
     private  String spj;
