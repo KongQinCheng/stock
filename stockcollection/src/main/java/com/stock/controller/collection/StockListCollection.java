@@ -2,25 +2,35 @@ package com.stock.controller.collection;
 
 
 import com.stock.bean.po.StockList;
-import com.stock.mapper.StockListMapper;
+import com.stock.services.IStockListServices;
 import com.stock.util.HtmlUtil;
 import com.stock.util.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+@Component
 public class StockListCollection {
 
-    static HtmlUtil htmlUtil = new HtmlUtil();
 
-    static StockListMapper stockListMapper = SpringUtil.getBean(StockListMapper.class);
+    @Autowired
+    IStockListServices iStockListServices;
 
+    @Autowired
+    StockInfoCollection stockInfoCollection;
+
+    @Autowired
+    HtmlUtil htmlUtil;
 
     /***
      * 循环获取 网易的股票列表
      */
-    public static void getWycjStockList() throws Exception {
+    public  void getWycjStockList() throws Exception {
 
         for (int i = 0; i < 94; i++) {
 
@@ -50,7 +60,7 @@ public class StockListCollection {
                 tempStockName = tempStockName.replaceAll("\\<.*?>", "");  //去掉所有HTML标签
 
                 try {
-                    stockListMapper.addStockList(tempStockCode, tempStockName);
+                    iStockListServices.addStockList(tempStockCode, tempStockName);
                 }catch (Exception e){
                     continue;
                 }
@@ -85,8 +95,8 @@ public class StockListCollection {
      * 获取数据库中 股票的列表
      * @return
      */
-    public static List<StockList> getStockList()   {
-        List<StockList> list  = stockListMapper.getStockList();
+    public  List<StockList> getStockList()   {
+        List<StockList> list  = iStockListServices.getStockList();
         return list;
     }
 
@@ -113,7 +123,71 @@ public class StockListCollection {
     }
 
 
+    /***
+     * 获取最新上市的股票的信息
+     */
+    public  List<Map<String,String>> getStockNewListCode() throws Exception {
+
+        List<Map<String,String>>  resultList= new ArrayList<>();
+
+        String tempURL = "http://vip.stock.finance.sina.com.cn/corp/go.php/vRPD_NewStockIssue/page/1.phtml?page=1&cngem=0&orderBy=NetDate&orderType=desc";
+        String html = htmlUtil.getHtmlByURL(tempURL, "GBK");
+
+        //获取需要的正文
+        html = htmlUtil.getHtmlByExpression("<table id=\"NewStockTable\">[\\s\\S]*</table>", html);
+
+//        String  temphtml = htmlUtil.getHtmlByExpression("<thead>[\\s\\S]*</thead>", html);
+//        html =html.replaceAll(temphtml,"");
+        html =html.replaceAll(" class=\"tr_2\"","");
+
+        html = htmlUtil.getHtmlByExpression("<tr>[\\s\\S]*</tr>", html);
+        String[] strings = htmlUtil.splitByExpression("</tr>", html);
+
+        String namehtml="";
+        for (int i = 0; i < strings.length; i++) {
+
+            html = strings[i];
+
+            String[] strings2 = htmlUtil.splitByExpression("</td>", html);
+            html = strings2[0];
 
 
+            html = htmlUtil.getHtmlByExpression("<div align=\"center\">[\\s\\S]*</div>", html);
+            html=html.replaceAll("<div align=\"center\">","").replaceAll("</div>","");
+            if (html.length()!=6){
+                continue;
+            }
+            Map<String,String> resultmap = new HashMap<>();
+            resultmap.put("stockCode",html);
+
+            namehtml = strings2[2];
+            namehtml = htmlUtil.getHtmlByExpression("<div align=\"center\">[\\s\\S]*</div>", namehtml);
+            namehtml=namehtml.replaceAll("<div[^>]*>", "");
+            namehtml=namehtml.replaceAll("</div>", "");
+            namehtml=namehtml.replaceAll("<a[^>]*>", "");
+            namehtml=namehtml.replaceAll("</a>", "");
+            namehtml=namehtml.replaceAll("\t", "");
+            namehtml=namehtml.replaceAll(" ", "");
+            resultmap.put("stockName",namehtml);
+            resultList.add(resultmap);
+        }
+        return resultList;
+    }
+
+
+    public void getStockNewList() throws Exception {
+        List<Map<String,String>> stockNewList = getStockNewListCode();
+        for (int i = 0; i <stockNewList.size() ; i++) {
+            if(!iStockListServices.isExitStockList(stockNewList.get(i).get("stockCode").toString())){
+                //保存到列表中
+                iStockListServices.addStockList(stockNewList.get(i).get("stockCode").toString(),stockNewList.get(i).get("stockName").toString());
+
+                //查询股票相关的历史数据保存到新表中。
+                stockInfoCollection.getWycjSituation(stockNewList.get(i).get("stockCode").toString());
+            }
+        }
+
+
+    }
 
 }

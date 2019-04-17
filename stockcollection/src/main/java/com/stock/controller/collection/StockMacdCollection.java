@@ -2,8 +2,11 @@ package com.stock.controller.collection;
 
 import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockList;
-import com.stock.mapper.StockInfoMapper;
+import com.stock.services.IStockInfoServices;
+import com.stock.services.IStockListServices;
 import com.stock.util.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -13,11 +16,16 @@ import java.util.concurrent.Executors;
 
 import static com.stock.controller.collection.StockKdjCollection.getStockListByStockCode;
 import static com.stock.controller.collection.StockKdjCollection.getStockListByStockCodeLimit10;
-import static com.stock.controller.collection.StockListCollection.getStockList;
 
+@Component
 public class StockMacdCollection {
 
-    static StockInfoMapper stockInfoMapper = SpringUtil.getBean( StockInfoMapper.class);
+
+    @Autowired
+    IStockInfoServices  iStockInfoServices ;
+
+    @Autowired
+    IStockListServices iStockListServices;
 
 
     public static void main(String[] args)  throws Exception{
@@ -35,8 +43,8 @@ public class StockMacdCollection {
     /***
      * 计算所有 股票的  MACD值
      */
-    public static  void stockMacdInitALL( ){
-        List<StockList> stockList = getStockList();
+    public   void stockMacdInitALL( ){
+        List<StockList> stockList = iStockListServices.getStockList();
 
         double threadCount =200.0 ; //使用 20个线程处理
 
@@ -66,10 +74,10 @@ public class StockMacdCollection {
     /**
      * 查找数据库中 MACD值 为空的表
      */
-    public static  void findMACDNullTable(){
+    public   void findMACDNullTable(){
 
         //获取列表
-        List<StockList> stockList = getStockList();
+        List<StockList> stockList = iStockListServices.getStockList();
 
         StockInfo stockInfo =new StockInfo();
 
@@ -85,7 +93,7 @@ public class StockMacdCollection {
             stockInfo.setStockCode(stockList1.getStockCode().replaceAll("\t","")+"");
 
             try{
-                List<StockInfo> stockInfoList = stockInfoMapper.getStockListByStockCode(stockInfo.getStockCode() ,999999999);
+                List<StockInfo> stockInfoList = iStockInfoServices.getStockListByStockCode(stockInfo.getStockCode() ,999999999);
 
                     if(stockInfoList.get(0).getEMA12()==0){
                         resultlist222.add(stockInfo.getStockCode());
@@ -103,7 +111,7 @@ public class StockMacdCollection {
     /**
      * 开启多线程 计算MACD值
      */
-    static class ThreadRunnable implements Runnable{
+     class ThreadRunnable implements Runnable{
         private List<StockList> listInput;
         public ThreadRunnable(List<StockList> temp){
             this.listInput= temp;
@@ -136,7 +144,7 @@ public class StockMacdCollection {
      * @param type  0: 初始化， 1： 有新数据进行更新
      */
 
-    public static  void stockMacdInit(String stockCode ,int type){
+    public   void stockMacdInit(String stockCode ,int type){
 
         List<StockInfo> stockListByStockCode = new ArrayList<>();
         if (type==0){
@@ -177,7 +185,7 @@ public class StockMacdCollection {
             stockInfo.setEMAMACD(lastDEAMACD);
             stockInfo.setDIF(todayDif);
             stockInfo.setBAR(todayBar);
-            stockInfoMapper.updateStockInfoMacd(stockInfo);
+            iStockInfoServices.updateStockInfoMacd(stockInfo);
         }
 
     }

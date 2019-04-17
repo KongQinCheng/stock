@@ -5,6 +5,7 @@ import com.stock.bean.po.StockList;
 import com.stock.dao.IStockInfoDao;
 import com.stock.dao.IStockListDao;
 import com.stock.mapper.StockInfoMapper;
+import com.stock.services.IStockListServices;
 import com.stock.util.HtmlUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.stock.controller.collection.StockListCollection.getStockList;
 
 @Component
 public class StockInfoCollection {
@@ -35,6 +35,9 @@ public class StockInfoCollection {
     @Autowired
     StockInfoMapper stockInfoMapper;
 
+    @Autowired
+    IStockListServices iStockListServices;
+
 
     /***
      * 根据数据库中保存的 股票编号 获取股票的历史信息
@@ -42,7 +45,7 @@ public class StockInfoCollection {
      */
     public  void getWycjSituationAll( ) throws Exception {
 
-        List<StockList> stockList = getStockList();
+        List<StockList> stockList = iStockListServices.getStockList();
 
         double threadCount =100.0 ; //使用 20个线程处理
 
@@ -72,7 +75,7 @@ public class StockInfoCollection {
     /***
      *  开启多线程进行数据处理
      */
-     class ThreadRunnable implements Runnable{
+     public class ThreadRunnable implements Runnable{
         private List<StockList> listInput;
         public ThreadRunnable(List<StockList> temp){
             this.listInput= temp;
@@ -276,7 +279,7 @@ public class StockInfoCollection {
      */
     public  void delNullTable( ) throws Exception {
         //获取列表
-        List<StockList> stockList = getStockList();
+        List<StockList> stockList = iStockListServices.getStockList();
 
         StockInfo stockInfo =new StockInfo();
 

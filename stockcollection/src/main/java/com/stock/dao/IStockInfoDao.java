@@ -1,6 +1,7 @@
 package com.stock.dao;
 
 import com.stock.bean.po.StockInfo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -30,5 +31,11 @@ public interface IStockInfoDao {
      * @param stockCode
      */
     public void updateStockCode(String stockCode);
+
+    public void createTableByTableName(String tableName);
+
+    public void updateStockInfoMacd(StockInfo stockInfo);
+
+
 
 }

@@ -5,6 +5,7 @@ import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockList;
 import com.stock.bean.vo.StockNewDataVo;
 import com.stock.dao.IStockInfoDao;
+import com.stock.services.IStockListServices;
 import com.stock.services.IStockNoninateServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,8 +13,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import static com.stock.controller.collection.StockListCollection.getStockList;
 
 @Component
 public class StockNominateCollection {
@@ -23,6 +22,10 @@ public class StockNominateCollection {
 
     @Autowired
     IStockNoninateServices iStockNoninateServices;
+
+
+    @Autowired
+    IStockListServices iStockListServices;
 
     public static void main(String[] args)  throws Exception{
 
@@ -35,7 +38,7 @@ public class StockNominateCollection {
 
     public  void getStockNoninateThread( ) throws Exception {
 
-        List<StockList> stockList = getStockList();
+        List<StockList> stockList = iStockListServices.getStockList();
         double threadCount =100.0 ; //使用 20个线程处理
         ExecutorService executor = Executors.newFixedThreadPool((int)threadCount);
         int listSize = stockList.size() ;

@@ -63,6 +63,16 @@ public class WebStockController {
         return "nominate/stock_nominate_cross";
     }
 
+    /***
+     * 查看涨跌幅
+     * @param searchType
+     * @return
+     */
+    @RequestMapping("/toStockZdf")
+    public String toStockZdf(String searchType){
+        return "stock/stock_zdf";
+    }
+
 
 
 }

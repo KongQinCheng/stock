@@ -1,39 +1,39 @@
-package com.stock.dao.impl;
+package com.stock.services.impl;
 
+import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockList;
+import com.stock.dao.IStockInfoDao;
 import com.stock.dao.IStockListDao;
-import com.stock.mapper.StockListMapper;
+import com.stock.services.IStockInfoServices;
+import com.stock.services.IStockListServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
-public class StockListDaoImpl implements IStockListDao {
+public class StockListServicesImpl implements IStockListServices {
 
     @Autowired
-    StockListMapper stockListMapper;
+    IStockListDao iStockListDao;
 
     @Override
     public List<StockList> getStockList() {
-        return  stockListMapper.getStockList();
+        return iStockListDao.getStockList();
     }
 
     @Override
     public List<StockList> getStockListLimit(int limit) {
-        return  stockListMapper.getStockListLimit(limit);
+        return iStockListDao.getStockListLimit(limit);
     }
 
     @Override
     public boolean isExitStockList(String stockCode) {
-        if (stockListMapper.isExitStockList(stockCode)>0)
-            return true;
-        return false;
+        return iStockListDao.isExitStockList(stockCode);
     }
 
     @Override
     public void addStockList(String stockCode, String stockName) {
-         stockListMapper.addStockList(stockCode,stockName);
+         iStockListDao.addStockList(stockCode,stockName);
     }
 }

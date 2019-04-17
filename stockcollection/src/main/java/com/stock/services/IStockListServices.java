@@ -1,10 +1,11 @@
-package com.stock.dao;
+package com.stock.services;
 
+import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockList;
 
 import java.util.List;
 
-public interface IStockListDao {
+public interface IStockListServices {
 
 
     /***
@@ -21,17 +22,18 @@ public interface IStockListDao {
     public  List<StockList> getStockListLimit(int limit);
 
     /***
-     * 判断该股票编码是否存在于股票列表
+     * 判断该股票是否存在
      * @param stockCode
      * @return
      */
-    public  boolean isExitStockList(String stockCode);
+     boolean isExitStockList(String stockCode);
 
     /***
-     * 现在股票编号
+     * 判断该股票是否存在
      * @param stockCode
-     * @param StockName
      * @return
      */
-    void addStockList(String stockCode, String StockName);
+    void addStockList(String stockCode ,String StockName);
+
+
 }

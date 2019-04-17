@@ -33,6 +33,10 @@ public interface StockListMapper {
     public void delStockList(@Param("stockCode") String stockCode);
 
 
+    @Select("  SELECT COUNT(*) as count FROM stock_list  WHERE stockCode =#{stockCode}")
+    @Results(id = "isTableExistResults2", value = {
+            @Result(column = "count", property = "count")})
+    public double isExitStockList(String stockCode);
 
 
 }

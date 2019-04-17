@@ -33,4 +33,15 @@ public class StockInfoDaoImpl implements IStockInfoDao {
         stockInfoMapper.updateStockCode(stockCode);
     }
 
+    @Override
+    public void createTableByTableName(String tableName) {
+        stockInfoMapper.createTableByTableName(tableName);
+    }
+
+    @Override
+    public void updateStockInfoMacd(StockInfo stockInfo) {
+        stockInfoMapper.updateStockInfoMacd(stockInfo);
+    }
+
+
 }

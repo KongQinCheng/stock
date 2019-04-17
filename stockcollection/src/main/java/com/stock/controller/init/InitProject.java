@@ -1,9 +1,12 @@
 package com.stock.controller.init;
 
 
+import com.stock.bean.po.StockList;
 import com.stock.controller.collection.StockInfoCollection;
+import com.stock.controller.collection.StockListCollection;
 import com.stock.controller.collection.StockNewDataCollection;
 import com.stock.controller.collection.StockNominateCollection;
+import com.stock.controller.test.CountDownLatchTest;
 import com.stock.services.IStockIncreaseAnalyzeServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -19,20 +22,26 @@ public class InitProject implements ApplicationRunner {
     @Autowired
     StockInfoCollection stockInfoCollection;
 
-
     @Autowired
     IStockIncreaseAnalyzeServices iStockIncreaseAnalyzeServices;
 
-
-
     @Autowired
     StockNominateCollection stockNoninateCollection;
+
+    @Autowired
+    StockListCollection stockListCollection;
+
 
     @Override
     public void run(ApplicationArguments args) {
         //项目初始化执行
 
         try {
+
+//            stockListCollection.addStockNewList();
+
+            //CountDownLatchTest 测试
+//            CountDownLatchTest.getWycjSituationAll();
 
             //查找金叉死叉
 //            stockNoninateCollection.getStockNoninate("603383",10);

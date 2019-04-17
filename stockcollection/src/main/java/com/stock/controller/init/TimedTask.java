@@ -1,17 +1,31 @@
 package com.stock.controller.init;
 
+import com.stock.bean.po.StockList;
 import com.stock.controller.collection.StockInfoCollection;
+import com.stock.controller.collection.StockListCollection;
+import com.stock.controller.collection.StockMacdCollection;
 import com.stock.controller.collection.StockNewDataCollection;
 import com.stock.dao.IStockInfoDao;
+import com.stock.services.IStockListServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import static com.stock.controller.collection.StockMacdCollection.stockMacdInitALL;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 @Component
 public class TimedTask {
+
+
+    @Autowired
+    StockListCollection stockListCollection;
+
+    @Autowired
+    IStockListServices iStockListServices;
 
     @Autowired
     StockInfoCollection stockInfoCollection;
@@ -19,30 +33,90 @@ public class TimedTask {
     @Autowired
     StockNewDataCollection stockNewDataCollection;
 
-    // 每天的17点、19点、21点都执行一次：0 0 17,19,21 * * ?
+    @Autowired
+    StockMacdCollection stockMacdCollection;
+
+
+
     @Scheduled(cron = "0 0 0,17 * * ?")
     public   void getStockInfo() throws Exception {
-        stockInfoCollection.getWycjSituationAll();
+      initStep();
     }
 
-    // 每天的18点、20点、22点都执行一次：0 0 18,20,22 * * ?
-    @Scheduled(cron = "0 0 18 * * ?")
-    public  static void getStockMacd(){
-        stockMacdInitALL();
+
+    public void initStep() throws Exception {
+
+        //获取新上市的新股票
+        stockListCollection.getStockNewList();
+
+        //获取每一只最新的股票信息
+        getStockNewData();
+
+        //计算MACD值 保存到表中
+        stockMacdCollection.stockMacdInitALL();
+
+        //将最新的30天的的数据保存到独立的表中
+        stockNewDataCollection.getNewDataToTableThread();
+
     }
 
-//    @Scheduled(cron = "* * * * * ?")
-////    public  static void web(){
-////        System.out.println("11111111111");
-////    }
+    private static final double THREAD_NUMBER = 100.0;
 
+    public void getStockNewData() {
+        List<StockList> stockList = iStockListServices.getStockList();
+        CountDownLatch CountDownLatch_getStockNewData = new CountDownLatch((int) THREAD_NUMBER);
+        ExecutorService fixedThreadPool = Executors.newFixedThreadPool((int) THREAD_NUMBER);
+        int listSize = stockList.size();
 
-    //更新最新的单价到数据库中
-    //时间具体在决定
-//    @Scheduled(cron = "0 0 18,19 * * ?")
-    public   void getStockNewPrice() throws Exception {
-        //查询各个表中最新的30天的数据保存到 stock_new_data表中
-            stockNewDataCollection.getNewDataToTableThread();
+        //将总数分成 多个线程之后，每个线程需要处理的数据为： listSize/threadCount
+        double divNumd = Math.ceil(listSize / THREAD_NUMBER);
+        int divNum = (int) divNumd;
+
+        if (listSize > 0) {
+            int batch = listSize % divNum == 0 ? listSize / divNum : listSize / divNum + 1;
+            for (int j = 0; j < batch; j++) {
+                int end = (j + 1) * divNum;
+                if (end > listSize) {
+                    end = listSize;
+                }
+                List<StockList> subList = stockList.subList(j * divNum, end);
+                StockNewDataRunnable threadRunnable = new StockNewDataRunnable("getStockNewData", subList, CountDownLatch_getStockNewData);
+                fixedThreadPool.execute(threadRunnable);
+            }
+        }
+        try {
+            CountDownLatch_getStockNewData.await();
+            System.out.println("getStockNewData 执行结束。开始继续执行主线程");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public class StockNewDataRunnable implements Runnable {
+        private String mName;
+        private CountDownLatch countDownLatch;
+        private List<StockList> listInput;
+
+        public StockNewDataRunnable(String name, List<StockList> temp, CountDownLatch countDownLatch) {
+            this.mName = name;
+            this.listInput = temp;
+            this.countDownLatch = countDownLatch;
+        }
+
+        public void run() {
+            try {
+                for (int i = 0; i < listInput.size(); i++) {
+                    try {
+                        stockInfoCollection.getWycjSituation(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                countDownLatch.countDown();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

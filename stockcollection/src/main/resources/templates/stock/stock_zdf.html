@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
-    <title>MACD预览</title>
+    <title>涨跌幅柱形图</title>
     <script src="/js/jquery-3.3.1.min.js"></script>
     <link rel="stylesheet" href="../css/style.css" type="text/css"/>
 </head>
@@ -38,14 +38,13 @@ x
         $("#stockCode").val(getUrlParam("stockCode"));
         init()
     }
-    function init() {
 
+    function init() {
 
         var stockCode = $("#stockCode").val();
 
         if (stockCode == "" || stockCode == undefined)
             stockCode = "000001"
-
 
         var limitnum =$("#limitNum").val();
         var str = {"stockCode": stockCode,"limitNum":limitnum, "stockBeginTime": "", "stockEndTime": ""}
@@ -53,12 +52,7 @@ x
         var myChart = echarts.init(document.getElementById('main'));
 
         var date = [];    //类别数组（实际用来盛放X轴坐标值）
-        var DIF = [];
-        var DEA = [];
-        var MACD = [];
-
-        var minvalue = 0;
-        var maxvalue = 0
+        var zdf = [];
 
 
         $.ajax({
@@ -73,37 +67,7 @@ x
                 var jsonObj = JSON.parse(result);//转换为json对象
                 for (var i = 0; i < jsonObj.length; i++) {
                     date.push(jsonObj[i].stockDate.replace(" 00:00:00", "").replace(".0", ""));    //挨个取出类别并填入类别数组
-                    DIF.push(jsonObj[i].dIF);    //挨个取出类别并填入类别数组
-                    DEA.push(jsonObj[i].eMAMACD);    //挨个取出类别并填入类别数组
-                    MACD.push(jsonObj[i].bAR);    //挨个取出类别并填入类别数组
-
-                    if (i == 1) {
-                        minvalue = jsonObj[i].dIF;
-                        maxvalue = jsonObj[i].dIF;
-                    } else {
-                        if (jsonObj[i].dIF < minvalue) {
-                            minvalue = jsonObj[i].dIF;
-                        }
-                        if (jsonObj[i].eMAMACD < minvalue) {
-                            minvalue = jsonObj[i].eMAMACD;
-                        }
-                        if (jsonObj[i].bAR < minvalue) {
-                            minvalue = jsonObj[i].bAR;
-                        }
-
-                        if (jsonObj[i].dIF > maxvalue) {
-                            maxvalue = jsonObj[i].dIF;
-                        }
-
-                        if (jsonObj[i].eMAMACD > maxvalue) {
-                            maxvalue = jsonObj[i].eMAMACD;
-                        }
-                        if (jsonObj[i].bAR > maxvalue) {
-                            maxvalue = jsonObj[i].bAR;
-                        }
-                    }
-
-
+                    zdf.push(jsonObj[i].zdf);    //挨个取出类别并填入类别数组
                 }
 
                 var option = {
@@ -111,7 +75,7 @@ x
                         trigger: 'axis'
                     },
                     legend: {
-                        data: ['DIF', 'DEA', 'MACD']
+                        data: ['zdf']
                     },
                     toolbox: {
                         show: true,
@@ -133,26 +97,16 @@ x
                     ],
                     yAxis: [
                         {
-                            min: minvalue,
-                            max: maxvalue,
-                            splitNumber: 15
+                            min: -10,
+                            max: 10,
+                            splitNumber: 40
                         }
                     ],
                     series: [
                         {
-                            name: 'DIF',
-                            type: 'line',
-                            data: DIF
-                        },
-                        {
-                            name: 'DEA',
-                            type: 'line',
-                            data: DEA
-                        },
-                        {
-                            name: 'MACD',
+                            name: 'zdf',
                             type: 'bar',
-                            data: MACD
+                            data: zdf
                         }
                     ]
                 };

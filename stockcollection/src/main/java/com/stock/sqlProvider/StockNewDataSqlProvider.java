@@ -1,8 +1,6 @@
 package com.stock.sqlProvider;
 
-import com.alibaba.druid.sql.ast.SQLLimit;
 import com.stock.bean.vo.StockNewDataVo;
-import com.sun.org.apache.xerces.internal.utils.XMLSecurityManager;
 import org.apache.ibatis.jdbc.SQL;
 public class StockNewDataSqlProvider {
     

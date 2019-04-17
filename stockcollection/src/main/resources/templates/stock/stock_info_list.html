@@ -35,6 +35,22 @@
         </div>
     </footer>
 
+
+    <footer class="col-md-12 content" >
+        <div class="col-lg-6 col-md-6 last">
+            <img src="../web/image/5.jpg" alt="Image" class="tm-image">
+        </div>
+        <div class="col-lg-6 col-md-6 background last ">
+            <h2 class="section-title">涨跌幅柱状图</h2>
+            <p class="about-text">实时查看涨跌幅度</p>
+            <p class="about-text"></p>
+            <div>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex3()">查看</button>
+            </div>
+        </div>
+    </footer>
+
+
     <footer class="col-md-12 content" >
         <div class="col-lg-6 col-md-6 last">
             <img src="../web/image/5.jpg" alt="Image" class="tm-image">
@@ -91,6 +107,9 @@
 
     function toIndex2() {
         window.open("/stock/toNominateCross?stockCode="+getUrlParam("stockCode"));
+    }
+    function toIndex3() {
+        window.open("/stock/toStockZdf?stockCode="+getUrlParam("stockCode"));
     }
 
 

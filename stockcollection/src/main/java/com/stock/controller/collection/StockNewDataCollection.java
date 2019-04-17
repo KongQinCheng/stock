@@ -6,14 +6,13 @@ import com.stock.bean.po.StockList;
 import com.stock.dao.IStockInfoDao;
 import com.stock.dao.IStockListDao;
 import com.stock.dao.IStockNewDataDao;
+import com.stock.services.IStockListServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import static com.stock.controller.collection.StockListCollection.getStockList;
 
 @Component
 public class StockNewDataCollection {
@@ -27,6 +26,9 @@ public class StockNewDataCollection {
     @Autowired
     IStockNewDataDao IStockNewDataDao;
 
+    @Autowired
+    IStockListServices iStockListServices;
+
     /***
      * 根据数据库中保存的 股票编号 获取股票的历史信息
      * @throws Exception
@@ -36,7 +38,7 @@ public class StockNewDataCollection {
         //清空表的内容
         IStockNewDataDao.deleteAll();
 
-        List<StockList> stockList = getStockList();
+        List<StockList> stockList = iStockListServices.getStockList();
 
         double threadCount =100.0 ; //使用 20个线程处理
 

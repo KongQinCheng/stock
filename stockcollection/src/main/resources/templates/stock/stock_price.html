@@ -31,15 +31,13 @@ x
 <script src="../js/common.js"></script>
 <script type="text/javascript">
 
-
-
-    window.onload=init();
+    window.onload = f();
+    function f() {
+        $("#stockCode").val(getUrlParam("stockCode"));
+        init()
+    }
 
     function init() {
-        // limitNum
-
-
-        $("#stockCode").val(getUrlParam("stockCode"));
 
         // 基于准备好的dom，初始化echarts图表
         var myChart2 = echarts.init(document.getElementById('main2'));

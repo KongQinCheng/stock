@@ -15,4 +15,10 @@ public interface IStockInfoServices {
      */
     public  List<StockInfo> getNewStockListByStockCode(String stockCode, String sortType, int limitNum);
 
+    public  List<StockInfo> getStockListByStockCode(String stockCode, int limitNum);
+
+    public void createTableByTableName(String tableName);
+
+    void updateStockInfoMacd(StockInfo stockInfo);
+
 }
