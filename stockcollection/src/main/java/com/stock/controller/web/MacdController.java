@@ -27,7 +27,8 @@ public class MacdController {
     public String getStockMacd( @RequestBody StockInfoVo stockInfoVo  ){
 
         List<StockInfo> stockListByStockCode = new ArrayList<>();
-        stockListByStockCode = iStockInfoDao.getNewStockListByStockCode(stockInfoVo.getStockCode(), SortType.ASC.toString(),1000);
+
+        stockListByStockCode = iStockInfoDao.getNewStockListByStockCode(stockInfoVo.getStockCode(), SortType.ASC.toString(),stockInfoVo.getLimitNum());
 
         String jsonStr = JSON.toJSONString( stockListByStockCode );
 

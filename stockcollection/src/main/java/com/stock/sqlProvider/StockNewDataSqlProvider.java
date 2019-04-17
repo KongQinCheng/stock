@@ -1,6 +1,8 @@
 package com.stock.sqlProvider;
 
+import com.alibaba.druid.sql.ast.SQLLimit;
 import com.stock.bean.vo.StockNewDataVo;
+import com.sun.org.apache.xerces.internal.utils.XMLSecurityManager;
 import org.apache.ibatis.jdbc.SQL;
 public class StockNewDataSqlProvider {
     
@@ -17,6 +19,8 @@ public class StockNewDataSqlProvider {
                 if (stockNewDataVo.getSpjmax() != 0.0) {
                     WHERE(" a.spj <= "+stockNewDataVo.getSpjmax());
                 }
+                ORDER_BY("a.zdf desc limit 30");
+
             }
         }.toString();
     }

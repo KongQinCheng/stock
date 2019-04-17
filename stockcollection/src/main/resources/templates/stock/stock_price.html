@@ -8,15 +8,19 @@
 <body>
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
 <div style="width: 96%;margin-left:2%;float: left;height: 50px;margin-top: 10px;">
-    <input class="searchInputDiv" id="stockId" name="stockId" placeholder="请输入要查询的股票编码: 如000001">
+    <input class="searchInputDiv" id="stockCode" name="stockCode" placeholder="请输入要查询的股票编码: 如000001">
+   <select id="limitNum" class="searchInputDiv" onchange="init()">
+       <option value="100" selected="selected">100</option>
+       <option value="200">200</option>
+       <option value="300">300</option>
+       <option value="500">500</option>
+       <option value="1000">1000</option>
+       <option value="2000">2000</option>
+       <option value="999999">All</option>
+   </select>
     <div class="searchInputButton" id="searchInputButton" onclick="init()">确定</div>
 </div>
 
-<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-<div class="flowDiv">
-    <div id="main" style="height:800px;width: 2000px;"></div>
-</div>
-x
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
 <div class="flowDiv">
     <div id="main2" style="height:800px;width: 2000px;"></div>
@@ -24,6 +28,7 @@ x
 x
 <!-- ECharts单文件引入 -->
 <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+<script src="../js/common.js"></script>
 <script type="text/javascript">
 
 
@@ -31,32 +36,25 @@ x
     window.onload=init();
 
     function init() {
-        // 基于准备好的dom，初始化echarts图表
-        var myChart = echarts.init(document.getElementById('main'));
+        // limitNum
+
+
+        $("#stockCode").val(getUrlParam("stockCode"));
 
         // 基于准备好的dom，初始化echarts图表
         var myChart2 = echarts.init(document.getElementById('main2'));
 
+        var stockCode =$("#stockCode").val();
 
+        if (stockCode==""||stockCode==undefined)
+            stockCode= "000001"
 
-        var stockID =$("#stockId").val();
-        console.log(stockID)
-        if (stockID==""||stockID==undefined)
-            stockID= "000001"
+        var limitnum =$("#limitNum").val();
 
-
-
-        var str ={"stockCode":stockID,"stockBeginTime":"","stockEndTime":""}
-
+        var str ={"stockCode":stockCode,"limitNum":limitnum,"stockBeginTime":"","stockEndTime":""}
 
         var date=[];    //类别数组（实际用来盛放X轴坐标值）
-        var eMA12=[];
-        var eMA26=[];
         var spj=[];
-
-        var minEma =0;
-        var maxEma =0;
-
         var minspj=0;
         var maxspj=0
 
@@ -73,30 +71,13 @@ x
                 for(var i=0;i<jsonObj.length;i++){
 
                     date.push(jsonObj[i].stockDate.replace(" 00:00:00","").replace(".0",""));    //挨个取出类别并填入类别数组
-                    eMA12.push(jsonObj[i].eMA12);    //挨个取出类别并填入类别数组
-                    eMA26.push(jsonObj[i].eMA26);    //挨个取出类别并填入类别数组
                     spj.push(jsonObj[i].spj);    //挨个取出类别并填入类别数组
 
-
                     if (i==1){
-                        minEma =jsonObj[i].eMA12;
-                        maxEma =jsonObj[i].eMA12;
+
                         minspj=jsonObj[i].spj;
                         maxspj=jsonObj[i].spj;
                     } else {
-                        if (jsonObj[i].eMA12<minEma) {
-                            minEma =jsonObj[i].eMA12;
-                        }
-                        if (jsonObj[i].eMA26<minEma) {
-                            minEma =jsonObj[i].eMA26;
-                        }
-
-                        if (jsonObj[i].eMA12>maxEma) {
-                            maxEma =jsonObj[i].eMA12;
-                        }
-                        if (jsonObj[i].eMA26>maxEma) {
-                            maxEma =jsonObj[i].eMA26;
-                        }
 
                         if (jsonObj[i].spj<minspj) {
                             minspj =jsonObj[i].spj;
@@ -108,59 +89,8 @@ x
                     }
 
                 }
-                console.log(minEma)
-                console.log(maxEma)
-
-                var option = {
-                    tooltip : {
-                        trigger: 'axis'
-                    },
-                    legend: {
-                        data:['ema12','ema26']
-                    },
-                    toolbox: {
-                        show : true,
-                        feature : {
-                            mark : {show: true},
-                            dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-                            restore : {show: true},
-                            saveAsImage : {show: true}
-                        }
-                    },
-                    calculable : true,
-                    xAxis : [
-                        {
-                            type : 'category',
-                            boundaryGap : false,
-                            data :date
-                        }
-                    ],
-                    yAxis : [
-                        {
-                            min:minEma,
-                            max:maxEma,
-                            splitNumber:30
-                        }
-                    ],
-                    series : [
-
-                        {
-                            name:'ema12',
-                            type:'line',
-                            data:eMA12
-                        },
-                        {
-                            name:'ema26',
-                            type:'line',
-                            data:eMA26
-                        }
 
 
-                    ]
-                };
-                // 为echarts对象加载数据
-                myChart.setOption(option);
 
 
                 var option2 = {
@@ -216,7 +146,7 @@ x
     }
 
 
-    $('#stockId').bind('keyup', function(event) {
+    $('#stockCode').bind('keyup', function(event) {
         if (event.keyCode == "13") {
             //回车执行查询
             $('#searchInputButton').click();

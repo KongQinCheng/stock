@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../web/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../web/css/templatemo-style.css">
+    <title>有你的世界</title>
+</head>
+
+<body>
+<div class="fixed-header">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">有你的世界</a>
+        </div>
+        <nav class="main-menu">
+            <ul>
+                <li><a href="#diary">相思</a></li>
+                <li><a href="#memory">回忆</a></li>
+                <li><a href="#food">养你</a></li>
+                <li><a href="#future">期许</a></li>
+                <li><a href="#strive">前行</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<div class="container">
+    <section class="col-md-12 content" id="home"></section>
+    <section class="col-md-12 content" id="diary">
+        <div class="col-lg-6 col-md-6 content-item">
+            <img src="../web/image/1.jpg" alt="Image" class="tm-image">
+        </div>
+        <div class="col-lg-6 col-md-6 content-item content-item-1 background flexbox">
+            <h2 class="section-title">相思</h2>
+            <p>玲珑骰子安红豆，入骨相思知不知。</p>
+            <p>我不断的问自己，爱到底是什么。</p>
+            <p>也许找到的那一天，我就站在你身旁。</p>
+            <div>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex1()">最思念</button>
+            </div>
+        </div>
+    </section>
+    <section class="col-md-12 content padding" id="memory">
+        <div class="col-lg-6 col-md-6 col-md-push-6 content-item">
+            <img src="../web/image/2.jpg" alt="Image" class="tm-image">
+        </div>
+        <div class="col-lg-6 col-md-6 col-md-pull-6 content-item background flexbox">
+            <h2 class="section-title">回忆</h2>
+            <p>回忆是一座桥，却是通往寂寞的牢。</p>
+            <p>你闯进我的生活，让平淡如水的一切泛起连游</p>
+            <p>我却没有好好的将你珍惜...</p>
+            <div>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex2()">监牢</button>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="col-md-12 content" id="food">
+        <div class="col-lg-6 col-md-6 content-item">
+            <img src="../web/image/3.jpg" alt="Image" class="tm-image">
+        </div>
+        <div class="col-lg-6 col-md-6 content-item background flexbox">
+            <h2 class="section-title">食谱</h2>
+            <p>离开你的日子，我选择了拿起厨具。</p>
+            <p>我在尝试着各种办法，我想：抓住一个人的胃，也许可行。</p>
+            <div>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex3()">最食记</button>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="col-md-12 content" id="future">
+        <div class="col-lg-6 col-md-6 col-md-push-6 content-item">
+            <img src="../web/image/4.jpg" alt="Image" class="tm-image">
+        </div>
+        <div class="col-lg-6 col-md-6 col-md-pull-6 content-item background flexbox">
+            <h2 class="section-title">期许</h2>
+            <p>未来什么样的生活，能让我们相处的愉快呢。</p>
+            <p>爱也是一门艺术。</p>
+            <div>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex4()">最美好</button>
+            </div>
+        </div>
+
+    </section>
+
+
+
+    <footer class="col-md-12 content" id="strive">
+        <div class="col-lg-6 col-md-6 last">
+            <img src="../web/image/5.jpg" alt="Image" class="tm-image">
+        </div>
+        <div class="col-lg-6 col-md-6 background last ">
+            <h2 class="section-title">前行</h2>
+            <p class="about-text">思念是分开后已经停止，那思念变成了永恒。</p>
+            <p class="about-text">不曾停止的是前行的脚步。</p>
+            <div>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex5()">最美好</button>
+            </div>
+        </div>
+    </footer>
+
+
+</div>
+
+<div class="text-center footer">
+    <div class="container">@
+    </div>
+</div>
+
+<script src="../web/js/jquery.min.js"></script>
+<script src="../web/js/bootstrap.min.js"></script>
+<script src="../web/js/jquery.singlePageNav.min.js"></script>
+
+<script>
+
+    function toIndex1() {
+        window.location.href = "/web/toDiaryList"
+    }
+
+    function toIndex2() {
+        window.location.href = ""
+    }
+
+    function toIndex3() {
+        window.location.href = ""
+    }
+
+    function toIndex4() {
+        window.location.href = ""
+    }
+
+    function toIndex5() {
+        window.location.href = "/stock/toIndex"
+    }
+
+    // Check scroll position and add/remove background to navbar
+    function checkScrollPosition() {
+        if ($(window).scrollTop() > 50) {
+            $(".fixed-header").addClass("scroll");
+        } else {
+            $(".fixed-header").removeClass("scroll");
+        }
+    }
+
+    $(document).ready(function () {
+// Single page nav
+        $('.fixed-header').singlePageNav({
+            offset: 59,
+            filter: ':not(.external)',
+            updateHash: true
+        });
+
+        checkScrollPosition();
+
+// nav bar
+        $('.navbar-toggle').click(function () {
+            $('.main-menu').toggleClass('show');
+        });
+
+        $('.main-menu a').click(function () {
+            $('.main-menu').removeClass('show');
+        });
+    });
+
+    $(window).on("scroll", function () {
+        checkScrollPosition();
+    });
+</script>
+</body>
+</html>

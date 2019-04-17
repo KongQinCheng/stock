@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/stock")
 public class StockNoninateController {
 
    @Autowired
@@ -50,11 +51,6 @@ public class StockNoninateController {
     @RequestMapping("/toNominateInfo")
     public String toNominateInfo(){
         return "nominate/stock_nominate_info";
-    }
-
-    @RequestMapping("/toNominateCross")
-    public String toNominateCross(String searchType){
-        return "nominate/stock_nominate_cross";
     }
 
 
@@ -85,52 +81,19 @@ public class StockNoninateController {
             return null;
         }
 
+        List<Map<String,Object>>  resultList =new ArrayList<>();
+
         for (int i = 0; i < stockListByStockCode.size(); i++) {
-            zdf_count =zdf_count+stockListByStockCode.get(i).getZdf();
-
-            if (stockListByStockCode.size()>0 &&i==0){ //获取上一日 涨幅
-                zdf_1 =stockListByStockCode.get(i).getZdf();
-                continue;
-            }
-
-            if (stockListByStockCode.size()>1 &&i==1){ //获取上两日 涨幅
-                zdf_2 =stockListByStockCode.get(i).getZdf();
-                continue;
-            }
-            if (stockListByStockCode.size()>2 &&i==2){ //获取上三日 涨幅
-                zdf_3 =stockListByStockCode.get(i).getZdf();
-                continue;
-            }
-
-            if (stockListByStockCode.size()>4 &&i==4){ //获取五日平均 涨幅
-                zdf_5 = zdf_count/5;
-                continue;
-            }
-            if (stockListByStockCode.size()>9 &&i==9){   //获取十日平均 涨幅
-                zdf_10 = zdf_count/10;
-                continue;
-            }
-
-            if (stockListByStockCode.size()>14 &&i==14){ //获取十五日平均 涨幅
-                zdf_15 = zdf_count/15;
-                continue;
-            }
-
-            if (stockListByStockCode.size()>29 &&i==29){  //获取三十日平均 涨幅
-                zdf_30 = zdf_count/30;
-                continue;
-            }
+             ;
+            List<StockInfo> newStockListByStockCodeList = iStockInfoServices.getNewStockListByStockCode(stockListByStockCode.get(i).getStockCode() + "", SortType.DESC.toString(), 30);
+            Map<String, Object> zdfMap = getZdf(newStockListByStockCodeList);
+            zdfMap.put("stockCode",stockListByStockCode.get(i).getStockCode());
+            zdfMap.put("spj",stockListByStockCode.get(i).getSpj());
+            resultList.add(zdfMap);
         }
 
-        Map<String,Object> map =new HashMap<>();
-        map.put("zdf_1",zdf_1);
-        map.put("zdf_2",zdf_2);
-        map.put("zdf_3",zdf_3);
-        map.put("zdf_5",zdf_5);
-        map.put("zdf_10",zdf_10);
-        map.put("zdf_15",zdf_15);
-        map.put("zdf_30",zdf_30);
-        String jsonStr = JSON.toJSONString( map );
+
+        String jsonStr = JSON.toJSONString( resultList );
         return  jsonStr.toString();
     }
 
@@ -144,6 +107,72 @@ public class StockNoninateController {
         List<StockNewData> list = iStockNewDataServices.getNewData(stockNewDataVo);
         return  list;
     }
+
+
+    public  Map<String,Object>  getZdf(List<StockInfo> list){
+
+        double zdf_0 =0;
+        double zdf_1 =0;
+        double zdf_2 =0;
+        double zdf_3 =0;
+        double zdf_5 =0;
+        double zdf_10 =0;
+        double zdf_15 =0;
+        double zdf_30 =0;
+        double zdf_count=0;
+
+        for (int i = 0; i <list.size() ; i++) {
+
+
+        zdf_count =zdf_count+list.get(i).getZdf();
+
+        if (list.size()>0 &&i==0){ //获取上一日 涨幅
+            zdf_1 =list.get(i).getZdf();
+            continue;
+        }
+
+        if (list.size()>1 &&i==1){ //获取上两日 涨幅
+            zdf_2 =list.get(i).getZdf();
+            continue;
+        }
+        if (list.size()>2 &&i==2){ //获取上三日 涨幅
+            zdf_3 =list.get(i).getZdf();
+            continue;
+        }
+
+        if (list.size()>4 &&i==4){ //获取五日平均 涨幅
+            zdf_5 = zdf_count/5;
+            continue;
+        }
+        if (list.size()>9 &&i==9){   //获取十日平均 涨幅
+            zdf_10 = zdf_count/10;
+            continue;
+        }
+
+        if (list.size()>14 &&i==14){ //获取十五日平均 涨幅
+            zdf_15 = zdf_count/15;
+            continue;
+        }
+
+        if (list.size()>29 &&i==29){  //获取三十日平均 涨幅
+            zdf_30 = zdf_count/30;
+            continue;
+        }
+
+    }
+
+    Map<String,Object> map =new HashMap<>();
+        map.put("zdf_1",zdf_1);
+        map.put("zdf_2",zdf_2);
+        map.put("zdf_3",zdf_3);
+        map.put("zdf_5",zdf_5);
+        map.put("zdf_10",zdf_10);
+        map.put("zdf_15",zdf_15);
+        map.put("zdf_30",zdf_30);
+     return  map;
+
+    }
+
 
 
     /***

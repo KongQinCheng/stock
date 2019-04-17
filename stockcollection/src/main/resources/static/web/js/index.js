@@ -15,7 +15,7 @@ function init() {
   var h = canvas.height;
 
     canvas.addEventListener('click', function(e) {
-        window.location.href="/test/toIndex"
+        window.location.href="/web/toHome"
     }, false)
 
 

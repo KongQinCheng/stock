@@ -34,7 +34,8 @@ public class InitProject implements ApplicationRunner {
 
         try {
 
-            stockNoninateCollection.getStockNoninate("603383",10);
+            //查找金叉死叉
+//            stockNoninateCollection.getStockNoninate("603383",10);
 
 //            iStockIncreaseAnalyzeServices.getStockIncreaseAnalyzeToTable("000001");
 

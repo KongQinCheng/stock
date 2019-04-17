@@ -23,8 +23,12 @@
 
     <div class="indexButtom" style="height: 250px">
         <div style="width: 100%;height: 50px;">
-          <label>收盘最低价</label>  <input type="text" id="spjmin" placeholder="收盘最低价" value="300"><br>
-            <label>收盘最高价</label>  <input type="text" id="spjmax" placeholder="收盘最高价" value="3300">
+          <label>收盘最低价</label>  <input type="text" id="spjmin" placeholder="收盘最低价" value="100"><br>
+            <label>收盘最高价</label>  <input type="text" id="spjmax" placeholder="收盘最高价" value="120">
+            <select id="crossType">
+                <option value="GOLD_CROSS" selected="selected">金叉</option>
+                <option value="DEAD_CROSS">死叉</option>
+            </select>
             <br>
             <label>查询时间周期</label> <input type="text" id="dayNum" placeholder="" value="15">
 
@@ -54,18 +58,17 @@
 
         function search() {
 
-            var str = {"spjmin": $("#spjmin").val(), "spjmax": $("#spjmax").val(),"dayNum": $("#dayNum").val(),"crossType": getUrlParam("crossType")}
+            var str = {"spjmin": $("#spjmin").val(), "spjmax": $("#spjmax").val(),"dayNum": $("#dayNum").val(),"crossType": $("#crossType").val()}
             $.ajax({
                 type: "post",
                 async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
-                url: "/getNominateCross",    //请求发送到TestServlet处
+                url: "/stock/getNominateCross",    //请求发送到TestServlet处
                 data: JSON.stringify(str),
                 dataType: "text",        //返回数据形式为json
                 contentType: "application/json",
                 success: function (result) {
 
-                    console.log("请求成功")
-                    console.log(result)
+                    $("#innerTable").html("");
 
                     var tempHtml = "";
                     var jsonObj = JSON.parse(result);//转换为json对象
@@ -77,7 +80,8 @@
                         tempHtml += "<td>" + jsonObj[i].stockCode + "</td>";
                         tempHtml += "<td>" + jsonObj[i].spj + "</td>";
                         tempHtml += "<td>" + jsonObj[i].stockDate + "</td>";
-                        tempHtml += "<td><a href='/toMacd'>操作</a></td>";
+                        tempHtml += "<td><a target='_blank' href=\"/stock/toStockPrice?stockCode="+jsonObj[i].stockCode+"\">查看价格曲线</a></td>";
+                        tempHtml += "<td><a target='_blank' href=\"/stock/toStockMacd?stockCode="+jsonObj[i].stockCode+"\">查看MACD</a></td>";
                         tempHtml += "</tr>";
                     }
                     $("#innerTable").append(tempHtml);

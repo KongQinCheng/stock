@@ -44,8 +44,8 @@ public class StockNoninateServicesImpl implements IStockNoninateServices {
     public Map<String,Object> isExitCross(List<StockInfo> list, int dayNum, String crossType) {
 
         Map<String,Object> resultMap= new HashMap<>();
+        resultMap.put("result",false);
         if (list.size()<1){
-            resultMap.put("result",false);
             return resultMap;
         }
 

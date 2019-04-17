@@ -20,19 +20,19 @@ public class TimedTask {
     StockNewDataCollection stockNewDataCollection;
 
     // 每天的17点、19点、21点都执行一次：0 0 17,19,21 * * ?
-    @Scheduled(cron = "0 0 0,17,18 * * ?")
+    @Scheduled(cron = "0 0 0,17 * * ?")
     public   void getStockInfo() throws Exception {
         stockInfoCollection.getWycjSituationAll();
     }
 
     // 每天的18点、20点、22点都执行一次：0 0 18,20,22 * * ?
-    @Scheduled(cron = "0 0 18,19 * * ?")
+    @Scheduled(cron = "0 0 18 * * ?")
     public  static void getStockMacd(){
         stockMacdInitALL();
     }
 
 //    @Scheduled(cron = "* * * * * ?")
-////    public  static void test(){
+////    public  static void web(){
 ////        System.out.println("11111111111");
 ////    }
 
