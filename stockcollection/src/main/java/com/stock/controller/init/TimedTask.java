@@ -1,10 +1,7 @@
 package com.stock.controller.init;
 
 import com.stock.bean.po.StockList;
-import com.stock.controller.collection.StockInfoCollection;
-import com.stock.controller.collection.StockListCollection;
-import com.stock.controller.collection.StockMacdCollection;
-import com.stock.controller.collection.StockNewDataCollection;
+import com.stock.controller.collection.*;
 import com.stock.dao.IStockInfoDao;
 import com.stock.services.IStockListServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +33,20 @@ public class TimedTask {
     @Autowired
     StockMacdCollection stockMacdCollection;
 
+    @Autowired
+    WeiboCollection weiboCollection;
 
 
-    @Scheduled(cron = "0 0 0,17 * * ?")
+
+    @Scheduled(cron = "0 0 0,23 * * ?")
     public   void getStockInfo() throws Exception {
-      initStep();
+        initStep();
     }
+    @Scheduled(cron = "0 0/3 * * * ? ")   //5分钟获取一次微博的信息
+    public   void getWeiBo() throws Exception {
+        weiboCollection.getWeiBoByUser();
+    }
+
 
 
     public void initStep() throws Exception {

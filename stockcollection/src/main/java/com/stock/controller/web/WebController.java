@@ -3,6 +3,7 @@ package com.stock.controller.web;
 
 import com.alibaba.fastjson.JSON;
 import com.stock.bean.po.WebDiary;
+import com.stock.bean.vo.DiaryVo;
 import com.stock.bean.vo.StockSearchVo;
 import com.stock.services.IWebDiaryServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,14 @@ public class WebController {
         String jsonStr = JSON.toJSONString( diaryAll );
         return jsonStr;
     }
+    @PostMapping(value = "/diary/getDiaryByIndex",consumes = "application/json")
+    @ResponseBody
+    public String getDiaryByIndex(@RequestBody DiaryVo diaryVo){
+        List<WebDiary> diaryAll = iWebDiaryServices.getDiaryByIndex(diaryVo);
+        String jsonStr = JSON.toJSONString( diaryAll );
+        return jsonStr;
+    }
+
 
     @RequestMapping(value = "/diary/getDiaryById")
     @ResponseBody

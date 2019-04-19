@@ -2,10 +2,8 @@ package com.stock.controller.init;
 
 
 import com.stock.bean.po.StockList;
-import com.stock.controller.collection.StockInfoCollection;
-import com.stock.controller.collection.StockListCollection;
-import com.stock.controller.collection.StockNewDataCollection;
-import com.stock.controller.collection.StockNominateCollection;
+import com.stock.bean.po.WebDiary;
+import com.stock.controller.collection.*;
 import com.stock.controller.test.CountDownLatchTest;
 import com.stock.services.IStockIncreaseAnalyzeServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +29,17 @@ public class InitProject implements ApplicationRunner {
     @Autowired
     StockListCollection stockListCollection;
 
+    @Autowired
+    WeiboCollection weiboCollection;
 
     @Override
     public void run(ApplicationArguments args) {
         //项目初始化执行
 
         try {
+//            weiboCollection.getDiaryinit();
+//          weiboCollection.getWeiBoByUser();
+
 
 //            stockListCollection.addStockNewList();
 
