@@ -35,8 +35,7 @@ public class StockNewDataCollection {
      */
     public  void getNewDataToTableThread( ) throws Exception {
 
-        //清空表的内容
-        IStockNewDataDao.deleteAll();
+
 
         List<StockList> stockList = iStockListServices.getStockList();
 
@@ -93,12 +92,18 @@ public class StockNewDataCollection {
      * @param stockCode
      */
     public  void  getNewDataToTable(String stockCode){
+
+        //清空表的内容
+        IStockNewDataDao.deleteByStockCode(stockCode);
+
         List<StockInfo> newStockListByStockCode = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 30);
             for (int j = 0; j < newStockListByStockCode.size(); j++) {
                 StockInfo stockInfo=newStockListByStockCode.get(j);
                 stockInfo.setStockCode(stockCode);
                 IStockNewDataDao.insert(stockInfo);
             }
+
+        System.out.println("拷贝最新的数据保存的数据库中成功stockCode= "+stockCode);
 
     }
 }

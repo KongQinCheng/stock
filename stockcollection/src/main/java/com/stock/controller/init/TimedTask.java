@@ -2,7 +2,6 @@ package com.stock.controller.init;
 
 import com.stock.bean.po.StockList;
 import com.stock.controller.collection.*;
-import com.stock.dao.IStockInfoDao;
 import com.stock.services.IStockListServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -36,34 +35,27 @@ public class TimedTask {
     @Autowired
     WeiboCollection weiboCollection;
 
+    @Autowired
+    StockIncreaseEffectCollection stockIncreaseEffectCollection;
 
 
-    @Scheduled(cron = "0 0 0,23 * * ?")
+
+    @Scheduled(cron = "0 0 0,17 * * ?")
     public   void getStockInfo() throws Exception {
-        initStep();
-    }
-    @Scheduled(cron = "0 0/3 * * * ? ")   //5分钟获取一次微博的信息
-    public   void getWeiBo() throws Exception {
-        weiboCollection.getWeiBoByUser();
-    }
-
-
-
-    public void initStep() throws Exception {
-
         //获取新上市的新股票
         stockListCollection.getStockNewList();
 
         //获取每一只最新的股票信息
         getStockNewData();
-
-        //计算MACD值 保存到表中
-        stockMacdCollection.stockMacdInitALL();
-
-        //将最新的30天的的数据保存到独立的表中
-        stockNewDataCollection.getNewDataToTableThread();
-
     }
+
+
+    @Scheduled(cron = "0 0/5 * * * ? ")   //5分钟获取一次微博的信息
+    public   void getWeiBo() throws Exception {
+        weiboCollection.getWeiBoByUser();
+    }
+
+
 
     private static final double THREAD_NUMBER = 100.0;
 
@@ -112,7 +104,20 @@ public class TimedTask {
             try {
                 for (int i = 0; i < listInput.size(); i++) {
                     try {
+
+                        //获取股票的最新信息
                         stockInfoCollection.getWycjSituation(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+
+                        //计算MACD值
+                        stockMacdCollection.stockMacdInit(listInput.get(i).getStockCode().replaceAll("\t","")+"",1);
+
+                        //保存最新的数据到表中。
+                        stockNewDataCollection.getNewDataToTable(listInput.get(i).getStockCode().replaceAll("\t","")+"");
+
+                        //计算每只股票前一天涨幅对后一天的影响
+                        stockIncreaseEffectCollection.getStockIncreaseEffect(listInput.get(i).getStockCode().replaceAll("\t","")+"");
+
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

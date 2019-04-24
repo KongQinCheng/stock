@@ -58,10 +58,13 @@ public class WebStockController {
      * @param searchType
      * @return
      */
-    @RequestMapping("/toNominateCross")
-    public String toNominateCross(String searchType){
-        return "nominate/stock_nominate_cross";
+    @RequestMapping("/toStockCross")
+    public String toStockCross(String searchType){
+        return "stock/stock_cross";
     }
+
+
+
 
     /***
      * 查看涨跌幅
@@ -72,6 +75,30 @@ public class WebStockController {
     public String toStockZdf(String searchType){
         return "stock/stock_zdf";
     }
+
+
+    /***
+     * 查看涨跌幅 影响
+     * @param searchType
+     * @return
+     */
+    @RequestMapping("/toStockIncreaseEffect")
+    public String toStockIncreaseEffect(String searchType){
+        return "stock/stock_increase_effect";
+    }
+
+
+
+    /***
+     * 查看涨跌幅 影响
+     * @param searchType
+     * @return
+     */
+    @RequestMapping("/toStockCrossEffect")
+    public String toStockCrossEffect(String searchType){
+        return "stock/stock_cross_effect";
+    }
+
 
 
 

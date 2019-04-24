@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.stock.bean.po.WebDiary;
 import com.stock.bean.vo.DiaryVo;
 import com.stock.bean.vo.StockSearchVo;
+import com.stock.controller.init.TimedTask;
 import com.stock.services.IWebDiaryServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,8 +39,19 @@ public class WebController {
         return "web/diary_info";
     }
 
+    //初始化失败的时候执行
+    @RequestMapping("/web/init")
+    public void init() throws Exception {
+        timedTask.getStockInfo();
+    }
+
+
     @Autowired
     IWebDiaryServices iWebDiaryServices;
+
+    @Autowired
+    TimedTask timedTask;
+
 
     @PostMapping(value = "/diary/getDiaryAll",consumes = "application/json")
     @ResponseBody

@@ -38,6 +38,13 @@ public class StockInfoCollection {
     @Autowired
     IStockListServices iStockListServices;
 
+    @Autowired
+    StockMacdCollection stockMacdCollection;
+
+
+    @Autowired
+    StockNewDataCollection stockNewDataCollection;
+
 
     /***
      * 根据数据库中保存的 股票编号 获取股票的历史信息
@@ -85,7 +92,12 @@ public class StockInfoCollection {
         public void run() {
             for (int i = 0; i <listInput.size() ; i++) {
                 try {
+
+                    //获取当天的股票最新股价信息
                     getWycjSituation(listInput.get(i).getStockCode().replaceAll("\t","")+"");
+
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -102,7 +114,7 @@ public class StockInfoCollection {
         createTableByTableName(stockCode);
 
         List<String> urlList = getURLbyStockCode(stockCode);
-        System.out.println("获取数据成功，股票编号为："+stockCode);
+
         for (int i = 0; i <urlList.size() ; i++) {
 
             String html= htmlUtil.getHtmlByURL(urlList.get(i),"UTF-8");
@@ -127,6 +139,8 @@ public class StockInfoCollection {
             }
 
         }
+        System.out.println("获取数据成功，股票编号为："+stockCode);
+
     }
 
 

@@ -19,6 +19,12 @@ public interface IStockNewDataDao {
      */
      void deleteAll();
 
+
+    /***
+     * 清空数据库表中的数据
+     */
+    void deleteByStockCode(String stockCode);
+
     /**
      * 获取stock_new_data数据列表
      * @param stockNewDataVo

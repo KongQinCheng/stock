@@ -1,10 +1,7 @@
 package com.stock.controller.init;
 
 
-import com.stock.bean.po.StockList;
-import com.stock.bean.po.WebDiary;
 import com.stock.controller.collection.*;
-import com.stock.controller.test.CountDownLatchTest;
 import com.stock.services.IStockIncreaseAnalyzeServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -32,11 +29,30 @@ public class InitProject implements ApplicationRunner {
     @Autowired
     WeiboCollection weiboCollection;
 
+    @Autowired
+    StockMacdCollection stockMacdCollection;
+
+
+    @Autowired
+    StockIncreaseEffectCollection stockIncreaseEffectCollection;
+
     @Override
     public void run(ApplicationArguments args) {
         //项目初始化执行
 
         try {
+
+
+            stockIncreaseEffectCollection.getStockIncreaseEffectThread();
+
+            //计算MACD值 保存到表中
+//            stockMacdCollection.stockMacdInitALL();
+
+            //将最新的30天的的数据保存到独立的表中
+//            stockNewDataCollection.getNewDataToTableThread();
+
+//            weiboCollection.getWeiBoByUser();
+//            stockMacdCollection.stockMacdInitALL();
 //            weiboCollection.getDiaryinit();
 //          weiboCollection.getWeiBoByUser();
 

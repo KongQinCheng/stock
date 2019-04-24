@@ -1,5 +1,6 @@
 package com.stock.services.impl;
 
+import com.stock.bean.po.StockIncreaseAnalyze;
 import com.stock.bean.po.StockInfo;
 import com.stock.dao.IStockIncreaseAnalyzeDao;
 import com.stock.dao.IStockInfoDao;
@@ -48,6 +49,32 @@ public class StockIncreaseAnalyzeServicesImpl implements IStockIncreaseAnalyzeSe
 
 //        StockIncreaseAnalyze stockIncreaseAnalyze=new StockIncreaseAnalyze();
 //        iStockIncreaseAnalyzeDao.insert(stockIncreaseAnalyze);
+    }
+
+    @Override
+    public void insert(StockIncreaseAnalyze stockIncreaseAnalyze) {
+        iStockIncreaseAnalyzeDao.insert(stockIncreaseAnalyze);
+
+    }
+
+    @Override
+    public List<StockIncreaseAnalyze> getListAll() {
+      return   iStockIncreaseAnalyzeDao.getListAll();
+    }
+
+    @Override
+    public StockIncreaseAnalyze getEntryByStockCode(String stockCode,String stockDate) {
+        return iStockIncreaseAnalyzeDao.getEntryByStockCode( stockCode, stockDate);
+    }
+
+    @Override
+    public void delByStockCode(String stockCode) {
+        iStockIncreaseAnalyzeDao.delByStockCode(stockCode);
+    }
+
+    @Override
+    public boolean isNewCount(String stockCode , String stockDate) {
+        return iStockIncreaseAnalyzeDao.isNewCount( stockCode ,  stockDate);
     }
 
 

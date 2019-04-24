@@ -1,7 +1,24 @@
 package com.stock.services;
 
+import com.stock.bean.po.StockIncreaseAnalyze;
+
+import java.util.List;
+
 public interface IStockIncreaseAnalyzeServices {
 
-    public void getStockIncreaseAnalyzeToTable(String stockCode);
+     void getStockIncreaseAnalyzeToTable(String stockCode);
 
-    }
+    void insert(StockIncreaseAnalyze stockIncreaseAnalyze);
+
+    List<StockIncreaseAnalyze> getListAll();
+
+    StockIncreaseAnalyze getEntryByStockCode(String stockCode,String stockDate);
+
+    void delByStockCode(String stockCode);
+
+    boolean isNewCount(String stockCode , String stockDate);
+
+
+
+
+}

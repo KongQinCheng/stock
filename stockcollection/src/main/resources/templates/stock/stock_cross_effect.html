@@ -6,8 +6,8 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="../web/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../web/css/templatemo-style.css">
-    <title>涨跌幅排行</title>
-    <script src="../../static/js/common.js"></script>
+    <title>金叉-死叉推荐</title>
+    <script src="../../js/common.js"></script>
 </head>
 
 <body>
@@ -42,6 +42,19 @@
                         <input name="spjmax" type="email" class="form-control" id="spjmax" placeholder="最高收盘价..." required>
                     </div>
                 </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
+                    <div class="form-group contact-field">
+                        <input name="spjmax" type="email" class="form-control" id="dayNum" placeholder="限定日期..." required value="10">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
+                    <select  class="form-control" id="crossType">
+                        <option value="GOLD_CROSS" selected="selected">金叉</option>
+                        <option value="DEAD_CROSS">死叉</option>
+                    </select>
+
+                </div>
                 <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
                 <!--<div class="form-group contact-field">-->
                 <!--<input name="subject" type="text" class="form-control" id="subject" placeholder="Your Subject..." required>-->
@@ -67,14 +80,11 @@
                 <tr>
                     <th>stockCode</th>
                     <th>spj</th>
-                    <th>昨天</th>
-                    <th>前天</th>
-                    <th>大前天</th>
-                    <th>平均-5</th>
-                    <th>平均-10</th>
-                    <th>平均-15</th>
-                    <th>平均-30</th>
-                    <th>详情</th>
+                    <th>时间</th>
+                    <th>综合</th>
+                    <th>MACD</th>
+                    <th>价格</th>
+                    <th>影响</th>
                 </tr>
                 </thead>
                 <tbody id="tbody">
@@ -97,64 +107,33 @@
 <script src="../web/js/jquery.min.js"></script>
 <script src="../web/js/bootstrap.min.js"></script>
 <script src="../web/js/jquery.singlePageNav.min.js"></script>
-
+<script src="../js/common.js"></script>
 <script>
 
-    window.onload=init;
-
-
-    function init() {
-        getNominate();
-    }
+    window.onload=getNominate;
 
     function getNominate() {
 
-        var spjminVal = $("#spjmin").val();
-        var spjmaxVal = $("#spjmax").val();
+        getUrlParam("stockCode")
 
-        if (spjminVal==""||spjminVal==null) {
-            spjminVal=20;
-            $("#spjmin").val(spjminVal);
-        }
-        if (spjmaxVal==""||spjmaxVal==null) {
-            spjmaxVal=spjminVal+20;
-            $("#spjmax").val(spjmaxVal);
-        }
-
-        var parJson = JSON.parse("{\"spjmin\": "+spjminVal+", \"spjmax\": "+spjmaxVal+"}");
-
-        var str = {"spjmin": spjminVal, "spjmax": spjmaxVal}
-
+        var str = {"stockCode": getUrlParam("stockCode")}
 
         $.ajax({
             type: "post",
             async: true,
-            url: "/stock/getNominateInfo",
-            data: JSON.stringify(parJson),
+            url: "/stock/getCrossEffect",
+            data: JSON.stringify(str),
             dataType: "text",        //返回数据形式为json
             contentType: "application/json",
             success: function (result) {
-
-                // "{\"zdf_1\":10.0,\"zdf_2\":-0.28,\"zdf_3\":10.0,\"zdf_5\":5.119999999999999,\"zdf_10\":2.485,\"zdf_15\":2.5660000000000003,\"zdf_30\":3.6983333333333333}"
 
 
                 var jsonObj = JSON.parse(result);//转换为json对象
 
                 var temphtml = "";
                 for (var i = 0; i < jsonObj.length; i++) {
-                    temphtml += "<tr>";
-                    temphtml += "<td>" + jsonObj[i].stockCode + "</td>";
-                    temphtml += "<td>" + jsonObj[i].spj + "</td>";
 
-                    temphtml += "<td>" + jsonObj[i].zdf_1.toFixed(2) + "</td>";
-                    temphtml += "<td>" + jsonObj[i].zdf_2.toFixed(2) + "</td>";
-                    temphtml += "<td>" + jsonObj[i].zdf_3.toFixed(2) + "</td>";
-                    temphtml += "<td>" + jsonObj[i].zdf_5.toFixed(2) + "</td>";
-                    temphtml += "<td>" + jsonObj[i].zdf_10.toFixed(2) + "</td>";
-                    temphtml += "<td>" + jsonObj[i].zdf_15.toFixed(2) + "</td>";
-                    temphtml += "<td>" + jsonObj[i].zdf_30.toFixed(2) + "</td>";
-                    temphtml += "<td><a target='_blank' href='/stock/toStockInfoList?stockCode="+jsonObj[i].stockCode+"'>查看具体信息</a></td>";
-                    temphtml += "</tr>";
+
                 }
 
                 $("#tbody").html(temphtml)
@@ -168,29 +147,6 @@
     }
 
 
-    function toIndex0() {
-        window.location.href = "/stock/toNominateInfo"
-    }
-
-    function toIndex1() {
-        window.location.href = "/stock/toNominateIndex"
-    }
-
-    function toIndex2() {
-        window.location.href = "/stock/toHistory"
-    }
-
-    function toIndex3() {
-        window.location.href = "/stock/toNewStock"
-    }
-
-    function toIndex4() {
-        window.location.href = "/stock/toEma"
-    }
-
-    function toIndex5() {
-        window.location.href = "/stock/toMacd"
-    }
 
 
     // Check scroll position and add/remove background to navbar

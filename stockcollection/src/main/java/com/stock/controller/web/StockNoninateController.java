@@ -43,16 +43,10 @@ public class StockNoninateController {
     @Autowired
     IStockNewDataDao iStockNewDataDao;
 
-    @RequestMapping("/toNominateIndex")
-    public String toNominateIndex(){
-        return "nominate/stock_nominate_index";
+    @RequestMapping("/toStockIncrease")
+    public String toStockIncrease(){
+        return "stock/stock_increase";
     }
-
-    @RequestMapping("/toNominateInfo")
-    public String toNominateInfo(){
-        return "nominate/stock_nominate_info";
-    }
-
 
 
     /***
@@ -60,7 +54,7 @@ public class StockNoninateController {
      * @param stockNewDataVo
      * @return
      */
-    @PostMapping(value = "/getNominateInfo",consumes = "application/json")
+    @PostMapping(value = "/getIncrease",consumes = "application/json")
     @ResponseBody
     public String getNominateInfo( @RequestBody StockNewDataVo stockNewDataVo){
 
@@ -175,14 +169,15 @@ public class StockNoninateController {
 
 
 
+
     /***
      * 获取详细交叉点的信息
      * @param
      * @return
      */
-    @PostMapping(value = "/getNominateCross",consumes = "application/json")
+    @PostMapping(value = "/getCross",consumes = "application/json")
     @ResponseBody
-    public String getNomainateCross( @RequestBody StockSearchVo stockSearchVo  ){
+    public String getCross( @RequestBody StockSearchVo stockSearchVo  ){
 
         StockNewDataVo stockNewDataVo =new StockNewDataVo();
         BeanUtils.copyProperties(stockSearchVo,stockNewDataVo);
@@ -211,4 +206,17 @@ public class StockNoninateController {
         return jsonStr;
     }
 
+
+    /***
+     * 判断出现金叉或者死叉之后出 前几天出现上涨的概率
+     * @param
+     * @return
+     */
+    @PostMapping(value = "/getCrossEffect",consumes = "application/json")
+    @ResponseBody
+    public String getCrossEffect( @RequestBody StockSearchVo stockSearchVo  ){
+
+
+        return "";
+    }
 }

@@ -30,6 +30,7 @@ import java.nio.file.Paths;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -96,52 +97,67 @@ public class WeiboCollection {
                         text = jsonObject_info.get("text").toString();
                         text=text.replaceAll("'","\"");
 
+
                         if (text.indexOf("全文</a>")>-1){
                             String href= htmlUtil.getHtmlByExpression("<a href=\"/status/(.*?)全文</a>",text);
                             href=href.replace("<a href=\"","");
                             href=href.replace("\">全文</a>","");
-                            href="https://m.weibo.cn"+href;
+                            href="http://m.weibo.cn"+href;
                             text = getDetailInfo(href);
                             text=text.replaceAll("'","\"");
+                        }
+
+                        if (text.indexOf("302 Found")>-1){
+                            continue;
                         }
                     }
 
                     if (jsonObject_info.containsKey("created_at")) {
                         created_at = jsonObject_info.get("created_at").toString();
 
-                        if (created_at.indexOf("分")>-1||created_at.indexOf("刚刚")>-1||created_at.indexOf("小时")>-1){
-
-                            Date dt = new Date();
-                            //最后的aa表示“上午”或“下午”    HH表示24小时制    如果换成hh表示12小时制
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                            created_at=sdf.format(dt);
-                        }
-                        if (created_at.length()<6){
+                        if (created_at.indexOf("分钟前")>-1||created_at.indexOf("刚刚")>-1||created_at.indexOf("小时前")>-1||created_at.indexOf("昨天")>-1){
+                            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+                            Date befor_day = null;
+                            Calendar c = Calendar.getInstance();
+                            if (created_at.indexOf("刚刚")>-1){
+                                c.add(Calendar.SECOND, 1);
+                                befor_day = c.getTime();
+                            }
+                            if (created_at.indexOf("分钟前")>-1){
+                                String tempStr=created_at.replaceAll("分钟前","");
+                                int num = - Integer.valueOf(tempStr);
+                                c.add(Calendar.MINUTE, num);
+                                befor_day = c.getTime();
+                            }
+                            if (created_at.indexOf("小时前")>-1){
+                                String tempStr=created_at.replaceAll("小时前","");
+                                int num = - Integer.valueOf(tempStr);
+                                c.add(Calendar.HOUR, num);
+                                 befor_day = c.getTime();
+                            }
+                            if (created_at.indexOf("昨天")>-1){
+                                c.add(Calendar.DAY_OF_MONTH, -1);
+                                befor_day = c.getTime();
+                            }
+                            created_at=sdf2.format(befor_day);
+                        }else{
                             created_at="2019-"+created_at;
                         }
+
+                        created_at=created_at.substring(0,10);
+
                     }
                     DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                     Date dt1 = df.parse(created_at);
                     Date dt2 = df.parse("2019-04-18");
                     if (dt1.getTime()>dt2.getTime()){
-                        if (iWebDiaryServices.isExitByText(text,created_at)){
-
-                            continue;
-                        }else {
+                        if (!iWebDiaryServices.isExitByText(text,created_at)){
                             if (jsonObject_info.containsKey("bmiddle_pic")) {
                                 bmiddle_pic = jsonObject_info.get("bmiddle_pic").toString();
                             }
                             insertDiary( created_at, bmiddle_pic, text,person);
                         }
-                    }else {
-//                        System.out.println("不做处理了");
-                        continue;
                     }
-
-
-
-
-
                 }
             }
         }
@@ -162,7 +178,7 @@ public class WeiboCollection {
         urlConnection.setRequestProperty("Accept", "application/json, text/plain, */*");
         urlConnection.setRequestProperty("MWeibo-Pwa", "1");
 
-        urlConnection.setRequestProperty("Referer", "https://m.weibo.cn/u/3269067024");
+        urlConnection.setRequestProperty("Referer", "http://m.weibo.cn/u/3269067024");
         urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36");
         urlConnection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
         urlConnection.setRequestProperty("X-XSRF-TOKEN", "7fb321");
@@ -194,7 +210,7 @@ public class WeiboCollection {
     public void HttpClientTest() {
 
 
-        String uri ="https://m.weibo.cn/api/container/getIndex?type=uid&value=3269067024&containerid=1076033269067024&since_id=4359981349864609";
+        String uri ="http://m.weibo.cn/api/container/getIndex?type=uid&value=3269067024&containerid=1076033269067024&since_id=4359981349864609";
         // (1) 创建HttpGet实例
         HttpGet get = new HttpGet(uri);
 
@@ -295,7 +311,7 @@ public class WeiboCollection {
 
                 href=href.replace("<a href=\"","");
                 href=href.replace("\">全文</a>","");
-                href="https://m.weibo.cn"+href;
+                href="http://m.weibo.cn"+href;
                 text = getDetailInfo(href);
             }
 
@@ -356,7 +372,7 @@ public class WeiboCollection {
     public  void  getDiaryinit(String userId ) throws Exception {
 
 
-        String html = getHtmlByURL("https://m.weibo.cn/u/"+userId, "utf-8");
+        String html = getHtmlByURL("http://m.weibo.cn/u/"+userId, "utf-8");
 
         HtmlUtil htmlUtil =new HtmlUtil();
         String temphtml="";
@@ -388,7 +404,7 @@ public class WeiboCollection {
 
                 href=href.replace("<a href=\"","");
                 href=href.replace("\">全文</a>","");
-                href="https://m.weibo.cn"+href;
+                href="http://m.weibo.cn"+href;
                 text = getDetailInfo(href);
             }
 

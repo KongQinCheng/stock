@@ -50,14 +50,14 @@ public interface StockInfoMapper {
     public List<StockInfo> getNewStockListByStockCode(@Param("stockCode") String stockCode, @Param("sortType") String sortType, @Param("limitNum") int limitNum);
 
 
-    @Select("select * from  ( select * from stock_info_${stockCode} where 1=1  ORDER BY stockDate DESC limit 100 ) a ORDER BY a.stockDate ")
+    @Select("select * from  ( select * from stock_info_${stockCode} where 1=1  ORDER BY stockDate DESC limit 10 ) a ORDER BY a.stockDate ")
     @ResultMap("stockBeanResults")
     public List<StockInfo> getStockListByStockCodeLimit10(StockInfo stockInfo);
 
 
 
     @Insert("insert into stock_info_${stockCode} (stockCode,stockDate,kpj,zgj,zdj,spj,zde,zdf,cjl,cjje,zf,hsl) "
-            + "values(${stockCode},'${stockDate}',${kpj},${zgj},${zdj},${spj},${zde},${zdf},${cjl},${cjje},${zf},${hsl})")
+            + "values('${stockCode}','${stockDate}',${kpj},${zgj},${zdj},${spj},${zde},${zdf},${cjl},${cjje},${zf},${hsl})")
     public void addStockInfo(StockInfo stockCode);
 
     //------- 创建表----------

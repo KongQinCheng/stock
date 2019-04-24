@@ -21,11 +21,14 @@ import java.util.List;
 public interface StockNewDataMapper {
 
     @Insert("insert into stock_new_data (stockCode,stockDate,kpj,zgj,zdj,spj,zde,zdf,cjl,cjje,zf,hsl,EMA12,EMA26,DIF,EMAMACD,BAR) "
-            + "values(#{stockCode},'${stockDate}',${kpj},${zgj},${zdj},${spj},${zde},${zdf},${cjl},${cjje},${zf},${hsl},${EMA12},${EMA26},${DIF},${EMAMACD},${BAR})")
+            + "values('${stockCode}','${stockDate}',${kpj},${zgj},${zdj},${spj},${zde},${zdf},${cjl},${cjje},${zf},${hsl},${EMA12},${EMA26},${DIF},${EMAMACD},${BAR})")
     public void insert(StockInfo stockInfo);
 
     @Delete("DELETE from stock_new_data WHERE 1=1")
     public void deleteAll();
+
+    @Delete("DELETE from stock_new_data WHERE stockCode ='${stockCode}'")
+    public void deleteByStockCode(@Param("stockCode") String stockCode);
 
 
     @Select("select * from stock_new_data ")

@@ -187,7 +187,7 @@ public class StockMacdCollection {
             stockInfo.setBAR(todayBar);
             iStockInfoServices.updateStockInfoMacd(stockInfo);
         }
-
+        System.out.println("MACD值更新成功stockCode= "+stockCode);
     }
 
 

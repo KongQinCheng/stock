@@ -21,7 +21,22 @@
 
 <div class="container" id="innerDiv">
 
+
     <footer class="col-md-12 content" id="home">
+        <div class="col-lg-6 col-md-6 last">
+            <img src="../web/image/5.jpg" alt="Image" class="tm-image">
+        </div>
+        <div class="col-lg-6 col-md-6 background last ">
+            <h2 class="section-title">MACD</h2>
+            <p class="about-text">计算MACD值的影响概率</p>
+            <p class="about-text"></p>
+            <div>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex0()">推荐</button>
+            </div>
+        </div>
+    </footer>
+
+    <footer class="col-md-12 content" >
         <div class="col-lg-6 col-md-6 last">
             <img src="../web/image/5.jpg" alt="Image" class="tm-image">
         </div>
@@ -30,10 +45,12 @@
             <p class="about-text">查看价格走势</p>
             <p class="about-text">能不能赚钱就看这个了。计算前几天的涨幅对现在的影响。</p>
             <div>
-                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex0()">走势</button>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex1()">走势</button>
             </div>
         </div>
     </footer>
+
+
 
 
     <footer class="col-md-12 content" >
@@ -45,10 +62,12 @@
             <p class="about-text">实时查看涨跌幅度</p>
             <p class="about-text"></p>
             <div>
-                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex3()">查看</button>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex2()">查看</button>
             </div>
         </div>
     </footer>
+
+
 
 
     <footer class="col-md-12 content" >
@@ -56,11 +75,11 @@
             <img src="../web/image/5.jpg" alt="Image" class="tm-image">
         </div>
         <div class="col-lg-6 col-md-6 background last ">
-            <h2 class="section-title">MACD</h2>
-            <p class="about-text">计算MACD值的影响概率</p>
-            <p class="about-text"></p>
+            <h2 class="section-title">涨幅的影响</h2>
+            <p class="about-text">根据股票的全部的涨幅来查看影响</p>
+            <p class="about-text">涨幅很重要啊</p>
             <div>
-                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex1()">推荐</button>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex3()">推荐</button>
             </div>
         </div>
     </footer>
@@ -70,11 +89,11 @@
             <img src="../web/image/5.jpg" alt="Image" class="tm-image">
         </div>
         <div class="col-lg-6 col-md-6 background last ">
-            <h2 class="section-title">金叉死叉</h2>
-            <p class="about-text">根据前几日的金叉和死叉来推荐</p>
-            <p class="about-text">把握机会，就在今天。</p>
+            <h2 class="section-title">金叉死叉的影响</h2>
+            <p class="about-text">根据股票金叉死叉的影响时间来判断</p>
+            <p class="about-text">金叉就是钱啊重要啊</p>
             <div>
-                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex2()">推荐</button>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex4()">推荐</button>
             </div>
         </div>
     </footer>
@@ -86,8 +105,7 @@
 </div>
 
 <div class="text-center footer">
-    <div class="container">Copyright &copy; 2018.Company name All rights reserved.<a target="_blank"
-                                                                                     href="http://sc.chinaz.com/moban/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a>
+    <div class="container">Copyright &copy;
     </div>
 </div>
 
@@ -97,19 +115,23 @@
 <script src="../js/common.js"></script>
 <script>
 
-
     function toIndex0() {
-        window.open("/stock/toStockPrice?stockCode="+getUrlParam("stockCode"));
-    }
-    function toIndex1() {
         window.open("/stock/toStockMacd?stockCode="+getUrlParam("stockCode"));
     }
 
-    function toIndex2() {
-        window.open("/stock/toNominateCross?stockCode="+getUrlParam("stockCode"));
+    function toIndex1() {
+        window.open("/stock/toStockPrice?stockCode="+getUrlParam("stockCode"));
     }
-    function toIndex3() {
+
+    function toIndex2() {
         window.open("/stock/toStockZdf?stockCode="+getUrlParam("stockCode"));
+    }
+
+    function toIndex3() {
+        window.open("/stock/toStockIncreaseEffect?stockCode="+getUrlParam("stockCode"));
+    }
+    function toIndex4() {
+        window.open("/stock/toStockCrossEffect?stockCode="+getUrlParam("stockCode"));
     }
 
 

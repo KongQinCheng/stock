@@ -41,7 +41,7 @@ function init() {
   }
 
 
-    var t1="2019/02/18 21:00:00"; //数据
+    var t1="2019/02/19 23:59:59"; //数据
     var dateBegin = new Date(t1);//转化为Date对象的形式
     var dateEnd = new Date();//当前时间数据
     var date3=dateEnd.getTime()-dateBegin.getTime()  //时间差的毫秒数

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../web/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../web/css/templatemo-style.css">
+    <title>金叉-死叉推荐</title>
+    <script src="../../js/common.js"></script>
+</head>
+
+<body>
+<div class="fixed-header">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" onclick="javascript:history.go(-1);"><</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <section class="col-md-12 content" id="home">
+        <div class="col-lg-6 col-md-6 col-md-push-6 content-item">
+            <img src="../web/image/4.jpg" alt="Image" class="tm-image">
+        </div>
+        <div class="col-lg-6 col-md-6 col-md-pull-6 content-item background flexbox">
+            <h2 class="section-title">搜索</h2>
+            <p class="margin-b-25">找到你的关注点，我将给你帮助.</p>
+
+            <!--<div class="row"> -->
+            <form method="post" name="contact-form" class="contact-form">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <input name="spjmin" type="text" class="form-control" id="spjmin" placeholder="最低收盘价..."
+                               required>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
+                    <div class="form-group contact-field">
+                        <input name="spjmax" type="email" class="form-control" id="spjmax" placeholder="最高收盘价..." required>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
+                    <div class="form-group contact-field">
+                        <input name="spjmax" type="email" class="form-control" id="dayNum" placeholder="限定日期..." required value="10">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
+                    <select  class="form-control" id="crossType">
+                        <option value="GOLD_CROSS" selected="selected">金叉</option>
+                        <option value="DEAD_CROSS">死叉</option>
+                    </select>
+
+                </div>
+                <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
+                <!--<div class="form-group contact-field">-->
+                <!--<input name="subject" type="text" class="form-control" id="subject" placeholder="Your Subject..." required>-->
+                <!--</div>-->
+                <!--</div>-->
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group margin-b-0">
+                        <button type="button" id="form-submit" class="btn no-bg btn-contact" onclick="getNominate()">查询</button>
+                    </div>
+                </div>
+            </form>
+            <!--</div> -->
+            <div id="msgSubmit" class="h3 text-center hidden">Message Submitted!</div>
+        </div>
+    </section>
+
+    <section class="col-md-12 content" id="">
+        <div style="width: 100%;min-height: 800px;background-color: #fff">
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>stockCode</th>
+                    <th>spj</th>
+                    <th>时间</th>
+                    <th>综合</th>
+                    <th>MACD</th>
+                    <th>价格</th>
+                    <th>影响</th>
+                </tr>
+                </thead>
+                <tbody id="tbody">
+
+                </tbody>
+            </table>
+
+
+        </div>
+    </section>
+
+</div>
+
+<div class="text-center footer">
+    <div class="container">Copyright &copy; 2018.Company name All rights reserved.<a target="_blank"
+                                                                                     href="http://sc.chinaz.com/moban/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a>
+    </div>
+</div>
+
+<script src="../web/js/jquery.min.js"></script>
+<script src="../web/js/bootstrap.min.js"></script>
+<script src="../web/js/jquery.singlePageNav.min.js"></script>
+<script src="../js/common.js"></script>
+<script>
+
+    window.onload=getNominate;
+
+    function getNominate() {
+
+        getUrlParam("stockCode")
+
+        var str = {"stockCode": getUrlParam("stockCode")}
+
+        $.ajax({
+            type: "post",
+            async: true,
+            url: "/stock/getIncreaseEffect",
+            data: JSON.stringify(str),
+            dataType: "text",        //返回数据形式为json
+            contentType: "application/json",
+            success: function (result) {
+
+
+                var jsonObj = JSON.parse(result);//转换为json对象
+
+                var temphtml = "";
+                for (var i = 0; i < jsonObj.length; i++) {
+
+
+                }
+
+                $("#tbody").html(temphtml)
+            },
+            error: function (errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+            }
+        })
+
+    }
+
+
+
+
+    // Check scroll position and add/remove background to navbar
+    function checkScrollPosition() {
+        if ($(window).scrollTop() > 50) {
+            $(".fixed-header").addClass("scroll");
+        } else {
+            $(".fixed-header").removeClass("scroll");
+        }
+    }
+
+    $(document).ready(function () {
+// Single page nav
+        $('.fixed-header').singlePageNav({
+            offset: 59,
+            filter: ':not(.external)',
+            updateHash: true
+        });
+
+        checkScrollPosition();
+
+// nav bar
+        $('.navbar-toggle').click(function () {
+            $('.main-menu').toggleClass('show');
+        });
+
+        $('.main-menu a').click(function () {
+            $('.main-menu').removeClass('show');
+        });
+    });
+
+    $(window).on("scroll", function () {
+        checkScrollPosition();
+    });
+
+
+</script>
+</body>
+</html>
