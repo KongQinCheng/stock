@@ -191,10 +191,6 @@ public class StockMacdCollection {
     }
 
 
-
-
-
-
     //    EMA（12）= 前一日EMA（12）×11/13＋今日收盘价×2/13
     public static  double getEMA12(double lastDayEMA12,double todaySpj){
         double result=0;

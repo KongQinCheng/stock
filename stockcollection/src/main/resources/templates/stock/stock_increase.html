@@ -144,7 +144,7 @@
                 var temphtml = "";
                 for (var i = 0; i < jsonObj.length; i++) {
                     temphtml += "<tr>";
-                    temphtml += "<td><a target='_blank' href='/stock/toStockInfoList?stockCode=\"+jsonObj[i].stockCode+\"'>" + jsonObj[i].stockCode + "</a></td>";
+                    temphtml += "<td><a target='_blank' href='/stock/toStockInfoList?stockCode="+jsonObj[i].stockCode+"'>"+jsonObj[i].stockCode+"</a></td>";
                     temphtml += "<td>" + jsonObj[i].spj + "</td>";
                     temphtml += "<td>" + jsonObj[i].zdf_1.toFixed(2) + "</td>";
                     temphtml += "<td>" + jsonObj[i].zdf_2.toFixed(2) + "</td>";

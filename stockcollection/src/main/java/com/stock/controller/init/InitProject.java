@@ -43,7 +43,7 @@ public class InitProject implements ApplicationRunner {
         try {
 
 
-            stockIncreaseEffectCollection.getStockIncreaseEffectThread();
+//            stockIncreaseEffectCollection.getStockIncreaseEffectThread();
 
             //计算MACD值 保存到表中
 //            stockMacdCollection.stockMacdInitALL();

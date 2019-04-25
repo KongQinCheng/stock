@@ -1,6 +1,7 @@
 package com.stock.controller.collection;
 
 import com.alibaba.fastjson.JSON;
+import com.stock.Enum.SortType;
 import com.stock.bean.po.StockIncreaseAnalyze;
 import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockList;
@@ -8,6 +9,7 @@ import com.stock.dao.IStockInfoDao;
 import com.stock.dao.IStockListDao;
 import com.stock.dao.IStockNewDataDao;
 import com.stock.services.IStockIncreaseAnalyzeServices;
+import com.stock.services.IStockInfoServices;
 import com.stock.services.IStockListServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,6 +31,10 @@ public class StockIncreaseEffectCollection {
 
     @Autowired
     IStockInfoDao iStockInfoDao;
+
+    @Autowired
+    IStockInfoServices iStockInfoServices;
+
 
     @Autowired
     IStockNewDataDao IStockNewDataDao;
@@ -292,11 +298,24 @@ public class StockIncreaseEffectCollection {
 
         Date dt = new Date();
         String created_at=sdf.format(dt);
+        Map<String,Object> resultMap= new HashMap<>();
+
+        //查找昨日的涨跌幅
+        List<StockInfo> newStockListByStockCode = iStockInfoServices.getNewStockListByStockCode(stockCode, SortType.DESC.toString(), 1);
+        if (newStockListByStockCode.size()==1){
+            resultMap.put("zdf",newStockListByStockCode.get(0).getZdf());
+        }else {
+            resultMap.put("zdf",0);
+        }
+
+
         //查当前的的ID
         StockIncreaseAnalyze entryByStockCode = iStockIncreaseAnalyzeServices.getEntryByStockCode(stockCode, created_at);
         if (entryByStockCode==null){
             getStockIncreaseEffectInit(stockCode);
+            entryByStockCode = iStockIncreaseAnalyzeServices.getEntryByStockCode(stockCode, created_at);
         }
+
 
         StockIncreaseAnalyze entryByStockCode_000000 = iStockIncreaseAnalyzeServices.getEntryByStockCode("000000", created_at);
         if (entryByStockCode_000000==null){
@@ -305,23 +324,42 @@ public class StockIncreaseEffectCollection {
             entryByStockCode_000000 = iStockIncreaseAnalyzeServices.getEntryByStockCode("000000", created_at);
         }
 
-        Map<String,Object> resultMap= new HashMap<>();
-        resultMap.put("increase02",entryByStockCode.getIncrease02()+"/"+entryByStockCode_000000.getIncrease02());
-        resultMap.put("increase24",entryByStockCode.getIncrease24()+"/"+entryByStockCode_000000.getIncrease24());
-        resultMap.put("increase46",entryByStockCode.getIncrease46()+"/"+entryByStockCode_000000.getIncrease46());
-        resultMap.put("increase68",entryByStockCode.getIncrease68()+"/"+entryByStockCode_000000.getIncrease68());
-        resultMap.put("increase810",entryByStockCode.getIncrease810()+"/"+entryByStockCode_000000.getIncrease810());
-        resultMap.put("increase10",entryByStockCode.getIncrease10()+"/"+entryByStockCode_000000.getIncrease10());
+        Map<String,Object> resultMapOwn= new HashMap<>();
+        resultMapOwn.put("increase02",entryByStockCode.getIncrease02());
+        resultMapOwn.put("increase24",entryByStockCode.getIncrease24());
+        resultMapOwn.put("increase46",entryByStockCode.getIncrease46());
+        resultMapOwn.put("increase68",entryByStockCode.getIncrease68());
+        resultMapOwn.put("increase810",entryByStockCode.getIncrease810());
+        resultMapOwn.put("increase10",entryByStockCode.getIncrease10());
 
-        resultMap.put("descend02",entryByStockCode.getDescend02()+"/"+entryByStockCode_000000.getDescend02());
-        resultMap.put("descend24",entryByStockCode.getDescend24()+"/"+entryByStockCode_000000.getDescend24());
-        resultMap.put("descend46",entryByStockCode.getDescend46()+"/"+entryByStockCode_000000.getDescend46());
-        resultMap.put("descend68",entryByStockCode.getDescend68()+"/"+entryByStockCode_000000.getDescend68());
-        resultMap.put("descend810",entryByStockCode.getDescend810()+"/"+entryByStockCode_000000.getDescend810());
-        resultMap.put("descend10",entryByStockCode.getDescend10()+"/"+entryByStockCode_000000.getDescend10());
+        resultMapOwn.put("descend02",entryByStockCode.getDescend02());
+        resultMapOwn.put("descend24",entryByStockCode.getDescend24());
+        resultMapOwn.put("descend46",entryByStockCode.getDescend46());
+        resultMapOwn.put("descend68",entryByStockCode.getDescend68());
+        resultMapOwn.put("descend810",entryByStockCode.getDescend810());
+        resultMapOwn.put("descend10",entryByStockCode.getDescend10());
 
+        Map<String,Object> resultMapAll= new HashMap<>();
+        resultMapAll.put("increase02",entryByStockCode_000000.getIncrease02());
+        resultMapAll.put("increase24",entryByStockCode_000000.getIncrease24());
+        resultMapAll.put("increase46",entryByStockCode_000000.getIncrease46());
+        resultMapAll.put("increase68",entryByStockCode_000000.getIncrease68());
+        resultMapAll.put("increase810",entryByStockCode_000000.getIncrease810());
+        resultMapAll.put("increase10",entryByStockCode_000000.getIncrease10());
+
+        resultMapAll.put("descend02",entryByStockCode_000000.getDescend02());
+        resultMapAll.put("descend24",entryByStockCode_000000.getDescend24());
+        resultMapAll.put("descend46",entryByStockCode_000000.getDescend46());
+        resultMapAll.put("descend68",entryByStockCode_000000.getDescend68());
+        resultMapAll.put("descend810",entryByStockCode_000000.getDescend810());
+        resultMapAll.put("descend10",entryByStockCode_000000.getDescend10());
+
+
+
+        resultMap.put("resultMapOwn",resultMapOwn);
+        resultMap.put("resultMapAll",resultMapAll);
         String jsonStr = JSON.toJSONString( resultMap );
-        System.out.println(jsonStr);
+//        System.out.println(jsonStr);
         return jsonStr;
     }
 

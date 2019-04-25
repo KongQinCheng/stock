@@ -1,8 +1,6 @@
-package com.stock.controller.web;
+package com.stock.controller.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.stock.Enum.CrossType;
 import com.stock.Enum.SortType;
 import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockNewData;
@@ -12,7 +10,7 @@ import com.stock.bean.vo.StockSearchVo;
 import com.stock.dao.IStockNewDataDao;
 import com.stock.services.IStockInfoServices;
 import com.stock.services.IStockNewDataServices;
-import com.stock.services.IStockNoninateServices;
+import com.stock.services.IStockMacdServices;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,10 +35,11 @@ public class StockNoninateController {
     IStockNewDataServices iStockNewDataServices;
 
     @Autowired
-    IStockNoninateServices iStockNoninateServices;
+    IStockMacdServices iStockMacdServices;
 
     @Autowired
     IStockNewDataDao iStockNewDataDao;
+
 
     @RequestMapping("/toStockIncrease")
     public String toStockIncrease(){
@@ -192,7 +190,7 @@ public class StockNoninateController {
 
             List<StockInfo> newStockListByStockCodelist = iStockInfoServices.getNewStockListByStockCode(newDatalist.get(i).getStockCode(), SortType.ASC.toString(), stockSearchVo.getDayNum());
 
-            Map<String,Object>  checkResult = iStockNoninateServices.isExitCross(newStockListByStockCodelist, 10,stockSearchVo.getCrossType());
+            Map<String,Object>  checkResult = iStockMacdServices.isExistCross(newStockListByStockCodelist, 10,stockSearchVo.getCrossType());
             if ((boolean)checkResult.get("result")){
                 StockNominateTo stockNominateTo=new  StockNominateTo();
                 stockNominateTo.setStockCode(newDatalist.get(i).getStockCode());
@@ -212,11 +210,9 @@ public class StockNoninateController {
      * @param
      * @return
      */
-    @PostMapping(value = "/getCrossEffect",consumes = "application/json")
+    @PostMapping(value = "/getStockCrossEffect",consumes = "application/json")
     @ResponseBody
-    public String getCrossEffect( @RequestBody StockSearchVo stockSearchVo  ){
-
-
-        return "";
+    public String getStockCrossEffect( @RequestBody StockSearchVo stockSearchVo  ){
+        return    iStockMacdServices.getCrossEffect(stockSearchVo.getStockCode());
     }
 }

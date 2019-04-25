@@ -3,10 +3,9 @@ package com.stock.controller.collection;
 import com.stock.Enum.SortType;
 import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockList;
-import com.stock.bean.vo.StockNewDataVo;
 import com.stock.dao.IStockInfoDao;
 import com.stock.services.IStockListServices;
-import com.stock.services.IStockNoninateServices;
+import com.stock.services.IStockMacdServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +20,7 @@ public class StockNominateCollection {
     IStockInfoDao iStockInfoDao;
 
     @Autowired
-    IStockNoninateServices iStockNoninateServices;
+    IStockMacdServices iStockMacdServices;
 
 
     @Autowired
@@ -91,7 +90,7 @@ public class StockNominateCollection {
     //获取0上金叉
     public  void  getStockNoninate(String stockCode,int limitNum){
         List<StockInfo> stockListByStockCode = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(),limitNum);
-        iStockNoninateServices.getStockNoninateCross(stockListByStockCode,300);
+        iStockMacdServices.getStockCross(stockListByStockCode,300);
     }
 
 }

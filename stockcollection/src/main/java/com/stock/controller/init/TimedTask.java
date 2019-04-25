@@ -1,8 +1,10 @@
 package com.stock.controller.init;
 
+import com.stock.bean.po.StockCross;
 import com.stock.bean.po.StockList;
 import com.stock.controller.collection.*;
 import com.stock.services.IStockListServices;
+import com.stock.services.IStockMacdServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -39,9 +41,12 @@ public class TimedTask {
     StockIncreaseEffectCollection stockIncreaseEffectCollection;
 
 
+    @Autowired
+    IStockMacdServices iStockMacdServices;
+
 
     @Scheduled(cron = "0 0 0,17 * * ?")
-    public   void getStockInfo() throws Exception {
+    public void getStockInfo() throws Exception {
         //获取新上市的新股票
         stockListCollection.getStockNewList();
 
@@ -50,11 +55,10 @@ public class TimedTask {
     }
 
 
-    @Scheduled(cron = "0 0/5 * * * ? ")   //5分钟获取一次微博的信息
-    public   void getWeiBo() throws Exception {
+    @Scheduled(cron = "0 1 * * * ? ")   //5分钟获取一次微博的信息
+    public void getWeiBo() throws Exception {
         weiboCollection.getWeiBoByUser();
     }
-
 
 
     private static final double THREAD_NUMBER = 100.0;
@@ -104,23 +108,42 @@ public class TimedTask {
             try {
                 for (int i = 0; i < listInput.size(); i++) {
                     try {
-
                         //获取股票的最新信息
                         stockInfoCollection.getWycjSituation(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
-
-                        //计算MACD值
-                        stockMacdCollection.stockMacdInit(listInput.get(i).getStockCode().replaceAll("\t","")+"",1);
-
-                        //保存最新的数据到表中。
-                        stockNewDataCollection.getNewDataToTable(listInput.get(i).getStockCode().replaceAll("\t","")+"");
-
-                        //计算每只股票前一天涨幅对后一天的影响
-                        stockIncreaseEffectCollection.getStockIncreaseEffect(listInput.get(i).getStockCode().replaceAll("\t","")+"");
-
-
                     } catch (Exception e) {
                         e.printStackTrace();
+                        System.out.println("stockInfoCollection.getWycjSituation 失败 stockCode="+listInput.get(i).getStockCode().replaceAll("\t", ""));
                     }
+                    try {
+                        //计算MACD值
+                        stockMacdCollection.stockMacdInit(listInput.get(i).getStockCode().replaceAll("\t", "") + "", 1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("stockMacdCollection.stockMacdInit 失败 stockCode="+listInput.get(i).getStockCode().replaceAll("\t", ""));
+                    }
+                    try {
+                        //保存最新的数据到表中。
+                        stockNewDataCollection.getNewDataToTable(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("stockNewDataCollection.getNewDataToTable 失败 stockCode="+listInput.get(i).getStockCode().replaceAll("\t", ""));
+                    }
+                    try {
+                        //计算每只股票前一天涨幅对后一天的影响
+                        stockIncreaseEffectCollection.getStockIncreaseEffectInit(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("stockIncreaseEffectCollection.getStockIncreaseEffectInit 失败 stockCode="+listInput.get(i).getStockCode().replaceAll("\t", ""));
+                    }
+
+                    try {
+                        //金叉出现后对后一天的影响
+                        iStockMacdServices.crossEffectInit(listInput.get(i).getStockCode().replaceAll("\t", "") + "","");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("iStockMacdServices.crossEffectInit 失败 stockCode="+listInput.get(i).getStockCode().replaceAll("\t", ""));
+                    }
+
                 }
                 countDownLatch.countDown();
             } catch (Exception e) {
