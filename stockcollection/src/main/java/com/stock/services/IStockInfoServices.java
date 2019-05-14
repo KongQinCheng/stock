@@ -13,12 +13,34 @@ public interface IStockInfoServices {
      * @param limitNum
      * @return
      */
-    public  List<StockInfo> getNewStockListByStockCode(String stockCode, String sortType, int limitNum);
+      List<StockInfo> getNewStockListByStockCode(String stockCode, String sortType, int limitNum);
 
-    public  List<StockInfo> getStockListByStockCode(String stockCode, int limitNum);
+      List<StockInfo> getStockListByStockCode(String stockCode, int limitNum);
 
-    public void createTableByTableName(String tableName);
+//    public void createTableByTableName(String tableName);
 
     void updateStockInfoMacd(StockInfo stockInfo);
+
+
+    /***
+     * 获取股票的历史消息
+     * @param stockCode
+     * @throws Exception
+     */
+      void getStockInfoHistory(String stockCode) throws Exception ;
+
+
+    /***
+     * 删除 空表
+     * @throws Exception
+     */
+      void delNullTable() throws Exception;
+
+    /***
+     * 查找数据为空的表
+     * @throws Exception
+     */
+      void findTable( ) throws Exception;
+
 
 }

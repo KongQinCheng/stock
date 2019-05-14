@@ -22,6 +22,16 @@ public class StockInfoDaoImpl implements IStockInfoDao {
     }
 
     @Override
+    public List<StockInfo> getStockListByStockCodeLimit(String stockCode ,int limitNum) {
+        List<StockInfo> stockListByStockCode = stockInfoMapper.getStockListByStockCodeLimit(stockCode,limitNum);
+        return stockListByStockCode;
+    }
+
+
+
+
+
+    @Override
     public List<StockInfo> getNewStockListByStockCode(String stockCode, String sortType ,int limitNum) {
         List<StockInfo> stockListByStockCode = stockInfoMapper.getNewStockListByStockCode(stockCode,sortType,limitNum);
         return stockListByStockCode;
@@ -43,5 +53,25 @@ public class StockInfoDaoImpl implements IStockInfoDao {
         stockInfoMapper.updateStockInfoMacd(stockInfo);
     }
 
+    @Override
+    public  boolean isTableExist(String tableName)   {
+        boolean isExist=false;
+        double tableExist = stockInfoMapper.isTableExist(tableName);
+        if (tableExist==1){
+            isExist= true;
+        }
+        return isExist;
+    }
 
+    @Override
+    public void addStockInfo(StockInfo stockInfo){
+        stockInfoMapper.addStockInfo(stockInfo);
+    }
+
+    @Override
+    public boolean isRoweExist(StockInfo stockInfo){
+        if(stockInfoMapper.isRoweExist(stockInfo)>=1)
+            return true;
+        return  false;
+    }
 }

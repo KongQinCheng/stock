@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../css/templatemo-style.css">
+    <title>昨日涨幅对今日的影响</title>
+    <script src="../../js/common.js"></script>
+</head>
+
+<body>
+<div class="fixed-header">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" onclick="javascript:history.go(-1);"><</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="container"  id="home">
+
+
+    <section class="col-md-12 content" id="">
+        <div style="width: 100%;min-height: 800px;background-color: #fff">
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>stockCodesz</th>
+                    <th>本/全-1</th>
+                    <th>本/全-2</th>
+                    <th>本/全-3</th>
+                    <th>本/全-4</th>
+                    <th>本/全-5</th>
+                </tr>
+                </thead>
+                <tbody id="tbody">
+
+                </tbody>
+            </table>
+
+
+        </div>
+    </section>
+
+</div>
+
+<div class="text-center footer">
+    <div class="container">Copyright &copy; 2018.Company name All rights reserved.<a target="_blank"
+                                                                                     href="http://sc.chinaz.com/moban/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a>
+    </div>
+</div>
+
+<script src="../../js//jquery-3.3.1.min.js"></script>
+<script src="../../js//bootstrap.min.js"></script>
+<script src="../../js//jquery.singlePageNav.min.js"></script>
+<script src="../js/common.js"></script>
+<script>
+
+    window.onload=getNominate;
+
+    function getNominate() {
+
+        getUrlParam("stockCode")
+
+        var str = {"stockCode": getUrlParam("stockCode")}
+
+        $.ajax({
+            type: "post",
+            async: true,
+            url: "/stock/getStockCrossEffect",
+            data: JSON.stringify(str),
+            dataType: "text",        //返回数据形式为json
+            contentType: "application/json",
+            success: function (result) {
+                console.log(result)
+
+                var jsonObj = JSON.parse(result);//转换为json对象
+                var temphtml = "";
+                var zdf=  jsonObj.zdf;
+
+                temphtml += "<tr>";
+                temphtml += "<td></td>";
+                temphtml += "<td>" + jsonObj.Cross.increase1 + "/"+jsonObj.CrossAll.increase1+"</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase2 + "/"+jsonObj.CrossAll.increase2+"</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase3 + "/"+jsonObj.CrossAll.increase3+"</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase4 + "/"+jsonObj.CrossAll.increase4+"</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase5 + "/"+jsonObj.CrossAll.increase5+"</td>";
+                temphtml += "<tr>";
+
+                $("#tbody").html(temphtml)
+            },
+            error: function (errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+            }
+        })
+
+    }
+
+
+
+
+    // Check scroll position and add/remove background to navbar
+    function checkScrollPosition() {
+        if ($(window).scrollTop() > 50) {
+            $(".fixed-header").addClass("scroll");
+        } else {
+            $(".fixed-header").removeClass("scroll");
+        }
+    }
+
+    $(document).ready(function () {
+// Single page nav
+        $('.fixed-header').singlePageNav({
+            offset: 59,
+            filter: ':not(.external)',
+            updateHash: true
+        });
+
+        checkScrollPosition();
+
+// nav bar
+        $('.navbar-toggle').click(function () {
+            $('.main-menu').toggleClass('show');
+        });
+
+        $('.main-menu a').click(function () {
+            $('.main-menu').removeClass('show');
+        });
+    });
+
+    $(window).on("scroll", function () {
+        checkScrollPosition();
+    });
+
+
+</script>
+</body>
+</html>

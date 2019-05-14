@@ -50,9 +50,9 @@ public interface StockInfoMapper {
     public List<StockInfo> getNewStockListByStockCode(@Param("stockCode") String stockCode, @Param("sortType") String sortType, @Param("limitNum") int limitNum);
 
 
-    @Select("select * from  ( select * from stock_info_${stockCode} where 1=1  ORDER BY stockDate DESC limit 10 ) a ORDER BY a.stockDate ")
+    @Select("select * from  ( select * from stock_info_${stockCode} where 1=1  ORDER BY stockDate DESC limit ${limitNum} ) a ORDER BY a.stockDate ")
     @ResultMap("stockBeanResults")
-    public List<StockInfo> getStockListByStockCodeLimit10(StockInfo stockInfo);
+    public List<StockInfo> getStockListByStockCodeLimit(@Param("stockCode") String stockCode, @Param("limitNum") int limitNum);
 
 
 

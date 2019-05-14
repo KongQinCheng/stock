@@ -4,8 +4,21 @@ import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockList;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IStockListServices {
+
+
+    /***
+     * 循环获取 网易的股票列表 初始化
+     */
+      void getWycjStockList() throws Exception;
+
+
+    /***
+     * 获取最新上市的股票的信息
+     */
+      void getStockNewList() throws Exception;
 
 
     /***

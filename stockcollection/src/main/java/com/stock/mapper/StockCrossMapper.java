@@ -18,8 +18,39 @@ import java.util.List;
 public interface StockCrossMapper {
 
 
-    @Insert("insert into effect_cross (stockCode,stockDate,increase1,increase2,increase3,increase4,increase5,count) "
-            + "values('${stockCode}','${stockDate}','${increase1}','${increase2}','${increase3}','${increase4}','${increase5}','${count}')")
+    @Insert("insert into effect_cross (stockCode,stockDate,increase1,increase2,increase3,increase4,increase5," +
+            "increase102,increase124,increase146,increase168,increase1810,increase110," +
+            "descend102,descend124,descend146,descend168,descend1810,descend110,count1," +
+
+            "increase202,increase224,increase246,increase268,increase2810,increase210," +
+            "descend202,descend224,descend246,descend268,descend2810,descend210,count2," +
+
+            "increase302,increase324,increase346,increase368,increase3810,increase310," +
+            "descend302,descend324,descend346,descend368,descend3810,descend310,count3," +
+
+            "increase402,increase424,increase446,increase468,increase4810,increase410," +
+            "descend402,descend424,descend446,descend468,descend4810,descend410,count4," +
+
+            "increase502,increase524,increase546,increase568,increase5810,increase510," +
+            "descend502,descend524,descend546,descend568,descend5810,descend510,count5," +
+
+            "count) "
+            + "values('${stockCode}','${stockDate}','${increase1}','${increase2}','${increase3}','${increase4}','${increase5}'," +
+            "'${increase102}','${increase124}','${increase146}','${increase168}','${increase1810}','${increase110}'," +
+            "'${descend102}','${descend124}','${descend146}','${descend168}','${descend1810}','${descend110}','${count1}'," +
+
+            "'${increase202}','${increase224}','${increase246}','${increase268}','${increase2810}','${increase210}'," +
+            "'${descend202}','${descend224}','${descend246}','${descend268}','${descend2810}','${descend210}','${count2}'," +
+
+            "'${increase302}','${increase324}','${increase346}','${increase368}','${increase3810}','${increase310}'," +
+            "'${descend302}','${descend324}','${descend346}','${descend368}','${descend3810}','${descend310}','${count3}'," +
+
+            "'${increase402}','${increase424}','${increase446}','${increase468}','${increase4810}','${increase410}'," +
+            "'${descend402}','${descend424}','${descend446}','${descend468}','${descend4810}','${descend410}','${count4}'," +
+
+            "'${increase502}','${increase524}','${increase546}','${increase568}','${increase5810}','${increase510}'," +
+            "'${descend502}','${descend524}','${descend546}','${descend568}','${descend5810}','${descend510}','${count5}'," +
+            "'${count}')")
      void insert(StockCross stockCross);
 
 

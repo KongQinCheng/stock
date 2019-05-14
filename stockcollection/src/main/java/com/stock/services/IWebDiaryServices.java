@@ -7,6 +7,12 @@ import java.util.List;
 
 public interface IWebDiaryServices {
 
+      /***
+       * 获取指定用户的微博最新信息
+       * @throws Exception
+       */
+      void  getWeiBoByUser() throws Exception;
+
       List<WebDiary> getDiaryAll();
 
       List<WebDiary> getDiaryByIndex(DiaryVo diaryVo);
@@ -18,5 +24,7 @@ public interface IWebDiaryServices {
       void updateToTable(WebDiary webDiary);
 
       boolean isExitByText(String text,String date);
+
+
 
 }

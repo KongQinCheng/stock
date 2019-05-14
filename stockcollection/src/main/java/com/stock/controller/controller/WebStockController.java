@@ -35,14 +35,7 @@ public class WebStockController {
         return "stock/stock_price";
     }
 
-    /***
-     * MACD值
-     * @return
-     */
-    @RequestMapping("/toStockMacd")
-    public String toStockMacd(){
-        return "stock/stock_macd";
-    }
+
 
     /***
      * 新股列表
@@ -88,6 +81,24 @@ public class WebStockController {
     }
 
 
+    /***
+     * 查看涨跌幅 影响
+     * @param searchType
+     * @return
+     */
+    @RequestMapping("/toStockIncreaseEffectDay")
+    public String toStockIncreaseEffectDay(String searchType){
+        return "stock/stock_increase_effect_day";
+    }
+
+    @RequestMapping("/toStockIncreaseEffectDay2")
+    public String toStockIncreaseEffectDay2(String searchType){
+        return "stock/stock_increase_effect_day2";
+    }
+
+
+
+
 
     /***
      * 查看涨跌幅 影响
@@ -100,6 +111,27 @@ public class WebStockController {
     }
 
 
+
+    /***
+     * 查看出现金叉时候 涨幅的区间
+     * @param searchType
+     * @return
+     */
+    @RequestMapping("/toStockCrossIncreaseEffect")
+    public String toStockCrossIncreaseEffect(String searchType){
+        return "stock/stock_cross_increase_effect";
+    }
+
+
+    /***
+     * 查看出现金叉时候 涨幅的区间
+     * @param searchType
+     * @return
+     */
+    @RequestMapping("/toStockCrossIncreaseEffectNew")
+    public String toStockCrossIncreaseEffectNew(String searchType){
+        return "stock/stock_cross_increase_effect_new";
+    }
 
 
 }

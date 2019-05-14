@@ -11,8 +11,13 @@ public class StockSearchVo {
     private double spjmin;
     private double spjmax;
 
+    private double zdfmin;
+    private double zdfmax;
+
+
     private int dayNum;
 
     private String  crossType ; //金叉 死叉类型。
+    private String  effectType ; //金叉 死叉类型。
 
 }

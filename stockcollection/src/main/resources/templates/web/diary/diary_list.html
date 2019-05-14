@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="../../../css/bootstrap.css">
+    <link rel="stylesheet" href="../../../css/templatemo-style.css">
+    <title>思念</title>
+</head>
+
+<body id="body">
+<div class="fixed-header">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" onclick="javascript:history.go(-1);"><</a>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="beginIndex" value="0">
+<input type="hidden" id="endIndex"  value="10">
+
+
+<div class="container" id="innerDiv">
+
+</div>
+
+<div class="container">
+    <section class="col-md-12 content">
+        <div class="col-lg-6 col-md-6 content-item">
+            <img src="../../img/1.jpg" alt="Image" class="tm-image">
+        </div>
+        <div class="col-lg-6 col-md-6 content-item content-item-1 background">
+            <button type="button" class="btn btn-big dark-blue-bordered-btn" onclick="getData()">下一页</button>
+        </div>
+    </section>
+
+
+</div>
+
+
+<div class="text-center footer">
+    <div class="container">Copyright &copy; 2018.Company name All rights reserved.
+        <a target="_blank"  href="http://sc.chinaz.com/moban/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a>
+    </div>
+</div>
+
+<script src="../../js/jquery-3.3.1.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/jquery.singlePageNav.min.js"></script>
+
+<script>
+
+
+
+
+
+    window.onload = getData();
+
+    function getData() {
+
+        var str ={"beginIndex":$("#beginIndex").val(),"endIndex":$("#endIndex").val()}
+
+        $.ajax({
+            type: "post",
+            async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url: "/web/diary/getDiaryByIndex",    //请求发送到TestServlet处
+
+            data : JSON.stringify(str),
+            dataType: "text",        //返回数据形式为json
+            contentType: "application/json",
+            success: function (result) {
+
+                var innerhtml = "";
+
+                var jsonObj = JSON.parse(result);//转换为json对象
+                for (var i = 0; i < jsonObj.length; i++) {
+                    // console.log(jsonObj[i].address);
+                    // console.log(jsonObj[i].text);
+                    // console.log(jsonObj[i].createdate);
+                    var rempcreatedate = jsonObj[i].createdate;
+                    rempcreatedate = rempcreatedate.replace(":00.0", ":00")
+
+                    var remptext = jsonObj[i].text;
+                    // remptext = remptext.substr(0, 100) + "...<br>";
+                    remptext = remptext.replace(/\n/g, "<br>")
+
+                    var isdan =false
+                    if(i%2==0){
+                        isdan=true;
+                    }
+
+                    if (isdan) {
+                        if (i==0 && $("#beginIndex").val()==0)
+                        innerhtml += "<section class=\"col-md-12 content\" id=\"home\">";
+                        else
+                            innerhtml += "<section class=\"col-md-12 content\" >";
+
+                        innerhtml += "<div class=\"col-lg-6 col-md-6 content-item\">";
+                    }else{
+                        innerhtml += "<section class=\"col-md-12 content padding\">";
+                        innerhtml += "<div class=\"col-lg-6 col-md-6 col-md-push-6 content-item\">";
+                    }
+
+                    innerhtml += "<img src=\"../../img/2.jpg\" alt=\"Image\" class=\"tm-image\">";
+                    innerhtml += "</div>";
+                    if (isdan){
+                        innerhtml += "<div class=\"col-lg-6 col-md-6 content-item content-item-1 background\">";
+                    }else{
+                        innerhtml += "<div class=\"col-lg-6 col-md-6 col-md-pull-6 content-item background flexbox\">";
+                    }
+                    innerhtml += "<h2 class=\"main-title text-center dark-blue-text\">" + rempcreatedate + "</h2>";
+                    innerhtml += remptext;
+                    innerhtml += "<p style=\"color: #00adff;\"><br>"+jsonObj[i].address+"</p>";
+                    innerhtml += " <a href=\"/web/diary/toDiaryInfo?id="+jsonObj[i].id+"\"><button type=\"button\" class=\"btn btn-big dark-blue-bordered-btn\">More</button></a>";
+                    innerhtml += "</div>";
+                    innerhtml += "</section>";
+                }
+
+                $("#innerDiv").append(innerhtml);
+
+                $("#beginIndex").val(  parseInt($("#beginIndex").val())+parseInt($("#endIndex").val()) );
+            },
+            error: function (errorMsg) {
+                //请求失败时执行该函数
+                console.log("获取信息失败!");
+            }
+        })
+    }
+
+
+
+
+    // Check scroll position and add/remove background to navbar
+    function checkScrollPosition() {
+        if ($(window).scrollTop() > 50) {
+            $(".fixed-header").addClass("scroll");
+        } else {
+            $(".fixed-header").removeClass("scroll");
+        }
+    }
+
+    $(document).ready(function () {
+// Single page nav
+        $('.fixed-header').singlePageNav({
+            offset: 59,
+            filter: ':not(.external)',
+            updateHash: true
+        });
+
+        checkScrollPosition();
+
+// nav bar
+        $('.navbar-toggle').click(function () {
+            $('.main-menu').toggleClass('show');
+        });
+
+        $('.main-menu a').click(function () {
+            $('.main-menu').removeClass('show');
+        });
+    });
+
+    $(window).on("scroll", function () {
+        checkScrollPosition();
+    });
+
+
+
+
+
+</script>
+</body>
+</html>

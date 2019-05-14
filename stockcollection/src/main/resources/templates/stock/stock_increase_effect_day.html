@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../css/templatemo-style.css">
+    <title>股票整体的涨幅情况</title>
+    <script src="../../js/common.js"></script>
+</head>
+
+<body>
+<div class="fixed-header">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" onclick="javascript:history.go(-1);"><</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <section class="col-md-12 content" id="home">
+        <div class="col-lg-6 col-md-6 col-md-push-6 content-item">
+            <img src="../../img/4.jpg" alt="Image" class="tm-image">
+        </div>
+        <div class="col-lg-6 col-md-6 col-md-pull-6 content-item background flexbox">
+            <h2 class="section-title">搜索</h2>
+            <p class="margin-b-25">查询个股涨幅的影响.</p>
+
+            <!--<div class="row"> -->
+            <form method="post" name="contact-form" class="contact-form">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <input name="spjmin" type="text" class="form-control" id="stockCode" placeholder="股票编号..."
+                               required>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
+                    <select class="form-control" id="effectType">
+                        <option value="0" selected="selected">股票的涨幅情况</option>
+                        <option value="1">前一天的涨幅区间对 后一天上涨的影响</option>
+                        <option value="2">前一天上涨对后一天涨幅的影响</option>
+                    </select>
+                </div>
+
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group margin-b-0">
+                        <button type="button" id="form-submit" class="btn no-bg btn-contact" onclick="search()">查询
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <!--</div> -->
+            <div id="msgSubmit" class="h3 text-center hidden">Message Submitted!</div>
+        </div>
+    </section>
+
+    <section class="col-md-12 content" id="">
+        <div style="width: 100%;min-height: 800px;background-color: #fff">
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>涨幅区间</th>
+                    <th>本股票涨幅</th>
+                    <th>全盘股票涨幅</th>
+                    <th>昨日涨幅</th>
+                </tr>
+                </thead>
+                <tbody id="tbody">
+
+
+                </tbody>
+            </table>
+
+
+        </div>
+    </section>
+
+</div>
+
+<div class="text-center footer">
+
+</div>
+
+
+<script>
+
+    window.onload = getNominate;
+
+    function getNominate() {
+
+
+        $("#stockCode").val(getUrlParam("stockCode"))
+        $("#effectType").val(getUrlParam("effectType"))
+
+        var str = {"stockCode": getUrlParam("stockCode"),"effectType": $('#effectType').val() }
+
+        $.ajax({
+            type: "post",
+            async: true,
+            url: "/stockIncrease/getStockIncreaseEffectDay",
+            data: JSON.stringify(str),
+            dataType: "text",        //返回数据形式为json
+            contentType: "application/json",
+            success: function (result) {
+
+                var jsonObj = JSON.parse(result);//转换为json对象
+                var temphtml = "";
+                console.log(result)
+
+                for (var i = 0; i < jsonObj.resultMapOwn.length; i++) {
+                    temphtml += getHtml("10", jsonObj.resultMapOwn[i].increase10, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].increase10, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("9", jsonObj.resultMapOwn[i].increase9, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].increase9, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("8", jsonObj.resultMapOwn[i].increase8, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].increase8, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("7", jsonObj.resultMapOwn[i].increase7, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].increase7, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("6", jsonObj.resultMapOwn[i].increase6, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].increase6, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("5", jsonObj.resultMapOwn[i].increase5, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].increase5, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("4", jsonObj.resultMapOwn[i].increase4, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].increase4, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("3", jsonObj.resultMapOwn[i].increase3, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].increase3, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("2", jsonObj.resultMapOwn[i].increase2, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].increase2, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("1", jsonObj.resultMapOwn[i].increase1, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].increase1, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("0", jsonObj.resultMapOwn[i].increase0, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].increase0, jsonObj.resultMapAll[i].count)
+
+                    temphtml += getHtml("-1", jsonObj.resultMapOwn[i].descend1, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].descend1, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("-2", jsonObj.resultMapOwn[i].descend2, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].descend2, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("-3", jsonObj.resultMapOwn[i].descend3, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].descend3, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("-4", jsonObj.resultMapOwn[i].descend4, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].descend4, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("-5", jsonObj.resultMapOwn[i].descend5, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].descend5, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("-6", jsonObj.resultMapOwn[i].descend6, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].descend6, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("-7", jsonObj.resultMapOwn[i].descend7, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].descend7, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("-8", jsonObj.resultMapOwn[i].descend8, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].descend8, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("-9", jsonObj.resultMapOwn[i].descend9, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].descend9, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("-10", jsonObj.resultMapOwn[i].descend10, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].descend10, jsonObj.resultMapAll[i].count)
+                    temphtml += getHtml("-11", jsonObj.resultMapOwn[i].descend20, jsonObj.resultMapOwn[i].count,jsonObj.resultMapAll[i].descend20, jsonObj.resultMapAll[i].count)
+
+
+                }
+
+                $("#tbody").html(temphtml)
+            },
+            error: function (errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+            }
+        })
+
+    }
+
+
+    function getHtml(title, ownCount, ownCountAll ,allCount,allCountAll) {
+        var ownpersent = 0;
+        var allpersent = 0;
+        if (ownCountAll != 0) {
+            ownpersent = ownCount / ownCountAll * 100;
+            ownpersent=toDecimal2(ownpersent)
+        }
+
+        if (ownCountAll != 0) {
+            allpersent = ownCount / ownCountAll * 100;
+            allpersent=toDecimal2(allpersent)
+        }
+
+        var html = ""
+        html += "<tr>"
+        html += "<td>" + title + "</td>"
+
+        html += "<td>"
+        html += "<div style='width: 100%;background-color: beige'>"
+        html += "<div style='width: " + ownpersent + "%;background-color: #eea236'>"
+        html += ownpersent
+        html += "</div>"
+        html += "</div>"
+        html += "</td>"
+
+        html += "<td>"
+
+        html += "<div style='width: 100%;background-color: beige'>"
+        html += "<div style='width: " + allpersent + "%;background-color: #eea236'>"
+        html += allpersent
+        html += "</div>"
+        html += "</div>"
+
+
+        html += "</td>"
+        html += "<td></td>"
+        html += "</tr>"
+
+        return html;
+    }
+
+
+    function search() {
+
+        if ($("#effectType").val()==0) {
+            window.location.replace("/stock/toStockIncreaseEffectDay?stockCode=" + $("#stockCode").val() +"&effectType=" + $("#effectType").val() )
+        }
+        window.location.replace("/stock/toStockIncreaseEffectDay2?stockCode=" + $("#stockCode").val() +"&effectType=" + $("#effectType").val() )
+
+    }
+</script>
+
+<script src="../../js//jquery-3.3.1.min.js"></script>
+<script src="../../js//bootstrap.min.js"></script>
+<script src="../../js//jquery.singlePageNav.min.js"></script>
+<script src="../js/common.js"></script>
+<script>
+    // Check scroll position and add/remove background to navbar
+    function checkScrollPosition() {
+        if ($(window).scrollTop() > 50) {
+            $(".fixed-header").addClass("scroll");
+        } else {
+            $(".fixed-header").removeClass("scroll");
+        }
+    }
+
+    $(document).ready(function () {
+// Single page nav
+        $('.fixed-header').singlePageNav({
+            offset: 59,
+            filter: ':not(.external)',
+            updateHash: true
+        });
+
+        checkScrollPosition();
+
+
+        $('.navbar-toggle').click(function () {
+            $('.main-menu').toggleClass('show');
+        });
+
+        $('.main-menu a').click(function () {
+            $('.main-menu').removeClass('show');
+        });
+    });
+
+    $(window).on("scroll", function () {
+        checkScrollPosition();
+    });
+</script>
+</body>
+</html>

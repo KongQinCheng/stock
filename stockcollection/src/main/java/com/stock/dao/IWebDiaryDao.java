@@ -1,6 +1,5 @@
 package com.stock.dao;
 
-import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.WebDiary;
 import com.stock.bean.vo.DiaryVo;
 

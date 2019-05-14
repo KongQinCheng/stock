@@ -17,7 +17,12 @@ public class StockNewDataSqlProvider {
                 if (stockNewDataVo.getSpjmax() != 0.0) {
                     WHERE(" a.spj <= "+stockNewDataVo.getSpjmax());
                 }
-                ORDER_BY("a.zdf desc limit 30");
+
+                WHERE(" a.zdf >= "+ stockNewDataVo.getZdfmin());
+                WHERE(" a.zdf <= "+stockNewDataVo.getZdfmax());
+
+
+                ORDER_BY("a.zdf desc ");
 
             }
         }.toString();

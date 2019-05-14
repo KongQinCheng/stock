@@ -31,4 +31,17 @@ public interface IStockCrossDao {
     void delete(String stockCode);
 
 
+
+    List<StockCross> getStockCrossMacdList();
+
+
+    StockCross getStockCrossMacdtByStockCode(String stockCode);
+
+    void insertMacd(StockCross stockCross);
+
+    boolean isExistMacdByStockCodeAndDate(String stockCode, String stockDate) ;
+
+    void deleteMacd(String stockCode);
+
+
 }

@@ -4,9 +4,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="../web/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../web/css/templatemo-style.css">
-    <title>昨日涨幅对今日的影响</title>
+    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../css/templatemo-style.css">
+    <title>出现金叉之后，5天内上涨的概率</title>
     <script src="../../js/common.js"></script>
 </head>
 
@@ -30,11 +30,16 @@
                 <thead>
                 <tr>
                     <th>stockCodesz</th>
-                    <th>本/全-1</th>
-                    <th>本/全-2</th>
-                    <th>本/全-3</th>
-                    <th>本/全-4</th>
-                    <th>本/全-5</th>
+                    <th>本-1</th>
+                    <th>全-1</th>
+                    <th>本-2</th>
+                    <th>全-2</th>
+                    <th>本-3</th>
+                    <th>全-3</th>
+                    <th>本-4</th>
+                    <th>全-4</th>
+                    <th>本-5</th>
+                    <th>全-5</th>
                 </tr>
                 </thead>
                 <tbody id="tbody">
@@ -54,9 +59,9 @@
     </div>
 </div>
 
-<script src="../web/js/jquery.min.js"></script>
-<script src="../web/js/bootstrap.min.js"></script>
-<script src="../web/js/jquery.singlePageNav.min.js"></script>
+<script src="../../js//jquery-3.3.1.min.js"></script>
+<script src="../../js//bootstrap.min.js"></script>
+<script src="../../js//jquery.singlePageNav.min.js"></script>
 <script src="../js/common.js"></script>
 <script>
 
@@ -84,12 +89,126 @@
 
                 temphtml += "<tr>";
                 temphtml += "<td></td>";
-                temphtml += "<td>" + jsonObj.Cross.increase1 + "/"+jsonObj.CrossAll.increase1+"</td>";
-                temphtml += "<td>" + jsonObj.Cross.increase2 + "/"+jsonObj.CrossAll.increase2+"</td>";
-                temphtml += "<td>" + jsonObj.Cross.increase3 + "/"+jsonObj.CrossAll.increase3+"</td>";
-                temphtml += "<td>" + jsonObj.Cross.increase4 + "/"+jsonObj.CrossAll.increase4+"</td>";
-                temphtml += "<td>" + jsonObj.Cross.increase5 + "/"+jsonObj.CrossAll.increase5+"</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase1 + "</td><td>"+jsonObj.CrossAll.increase1+"</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase2 + "</td><td>"+jsonObj.CrossAll.increase2+"</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase3 + "</td><td>"+jsonObj.CrossAll.increase3+"</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase4 + "</td><td>"+jsonObj.CrossAll.increase4+"</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase5 + "</td><td>"+jsonObj.CrossAll.increase5+"</td>";
                 temphtml += "<tr>";
+
+                temphtml += "<tr>";
+                temphtml += "<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>";
+                temphtml += "<tr>";
+
+                temphtml += "<tr>";
+                temphtml += "<td>+ 10</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase110   +  "</td><td>"+jsonObj.CrossAll.increase110   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase210   +  "</td><td>"+jsonObj.CrossAll.increase210   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase310   +  "</td><td>"+jsonObj.CrossAll.increase310   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase410   +  "</td><td>"+jsonObj.CrossAll.increase410   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase510   +  "</td><td>"+jsonObj.CrossAll.increase510   + "</td>";
+                temphtml += "<tr>";
+
+                temphtml += "<tr>";
+                temphtml += "<td>+ 8-10</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase1810   +  "</td><td>"+jsonObj.CrossAll.increase1810   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase2810   +  "</td><td>"+jsonObj.CrossAll.increase2810   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase3810   +  "</td><td>"+jsonObj.CrossAll.increase3810   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase4810   +  "</td><td>"+jsonObj.CrossAll.increase4810   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase5810   +  "</td><td>"+jsonObj.CrossAll.increase5810   + "</td>";
+                temphtml += "<tr>";
+
+                temphtml += "<tr>";
+                temphtml += "<td>+ 6-8</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase168   +  "</td><td>"+jsonObj.CrossAll.increase168   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase268   +  "</td><td>"+jsonObj.CrossAll.increase268   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase368   +  "</td><td>"+jsonObj.CrossAll.increase368   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase468   +  "</td><td>"+jsonObj.CrossAll.increase468   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase568   +  "</td><td>"+jsonObj.CrossAll.increase568   + "</td>";
+                temphtml += "<tr>";
+
+                temphtml += "<tr>";
+                temphtml += "<td>+ 4-6</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase146   +  "</td><td>"+jsonObj.CrossAll.increase146   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase246   +  "</td><td>"+jsonObj.CrossAll.increase246   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase346   +  "</td><td>"+jsonObj.CrossAll.increase346   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase446   +  "</td><td>"+jsonObj.CrossAll.increase446   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase546   +  "</td><td>"+jsonObj.CrossAll.increase546   + "</td>";
+                temphtml += "<tr>";
+
+                temphtml += "<tr>";
+                temphtml += "<td>+ 2-4</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase124   +  "</td><td>"+jsonObj.CrossAll.increase124   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase224   +  "</td><td>"+jsonObj.CrossAll.increase224   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase324   +  "</td><td>"+jsonObj.CrossAll.increase324   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase424   +  "</td><td>"+jsonObj.CrossAll.increase424   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase524   +  "</td><td>"+jsonObj.CrossAll.increase524   + "</td>";
+                temphtml += "<tr>";
+
+                temphtml += "<tr>";
+                temphtml += "<td>+ 0-2</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase102   +  "</td><td>"+jsonObj.CrossAll.increase102   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase202   +  "</td><td>"+jsonObj.CrossAll.increase202   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase302   +  "</td><td>"+jsonObj.CrossAll.increase302   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase402   +  "</td><td>"+jsonObj.CrossAll.increase402   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.increase502   +  "</td><td>"+jsonObj.CrossAll.increase502   + "</td>";
+                temphtml += "<tr>";
+
+                temphtml += "<tr>";
+                temphtml += "<td>- 2-0</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend102   +  "</td><td>"+jsonObj.CrossAll.descend102   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend202   +  "</td><td>"+jsonObj.CrossAll.descend202   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend302   +  "</td><td>"+jsonObj.CrossAll.descend302   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend402   +  "</td><td>"+jsonObj.CrossAll.descend402   + "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend502   +  "</td><td>"+jsonObj.CrossAll.descend502   + "</td>";
+                temphtml += "<tr>";
+
+                temphtml += "<tr>";
+                temphtml += "<td>- 4- -2</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend124   +   "</td><td>"+jsonObj.CrossAll.descend124   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend224   +   "</td><td>"+jsonObj.CrossAll.descend224   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend324   +   "</td><td>"+jsonObj.CrossAll.descend324   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend424   +   "</td><td>"+jsonObj.CrossAll.descend424   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend524   +   "</td><td>"+jsonObj.CrossAll.descend524   +  "</td>";
+                temphtml += "<tr>";
+
+                temphtml += "<tr>";
+                temphtml += "<td>- 6 -4</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend146   +   "</td><td>"+jsonObj.CrossAll.descend146   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend246   +   "</td><td>"+jsonObj.CrossAll.descend246   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend346   +   "</td><td>"+jsonObj.CrossAll.descend346   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend446   +   "</td><td>"+jsonObj.CrossAll.descend446   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend546   +   "</td><td>"+jsonObj.CrossAll.descend546   +  "</td>";
+                temphtml += "<tr>";
+
+                temphtml += "<tr>";
+                temphtml += "<td>- 8 -6</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend168   +   "</td><td>"+jsonObj.CrossAll.descend168   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend268   +   "</td><td>"+jsonObj.CrossAll.descend268   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend368   +   "</td><td>"+jsonObj.CrossAll.descend368   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend468   +   "</td><td>"+jsonObj.CrossAll.descend468   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend568   +   "</td><td>"+jsonObj.CrossAll.descend568   +  "</td>";
+                temphtml += "<tr>";
+
+                temphtml += "<tr>";
+                temphtml += "<td>- 10 -8</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend1810   +   "</td><td>"+jsonObj.CrossAll.descend1810   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend2810   +   "</td><td>"+jsonObj.CrossAll.descend2810   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend3810   +   "</td><td>"+jsonObj.CrossAll.descend3810   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend4810   +   "</td><td>"+jsonObj.CrossAll.descend4810   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend5810   +   "</td><td>"+jsonObj.CrossAll.descend5810   +  "</td>";
+                temphtml += "<tr>";
+
+                temphtml += "<tr>";
+                temphtml += "<td>- 12 -10</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend110   +   "</td><td>"+jsonObj.CrossAll.descend110   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend210   +   "</td><td>"+jsonObj.CrossAll.descend210   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend310   +   "</td><td>"+jsonObj.CrossAll.descend310   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend410   +   "</td><td>"+jsonObj.CrossAll.descend410   +  "</td>";
+                temphtml += "<td>" + jsonObj.Cross.descend510   +   "</td><td>"+jsonObj.CrossAll.descend510   +  "</td>";
+                temphtml += "<tr>";
+
+
 
                 $("#tbody").html(temphtml)
             },

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>股票每天的涨幅对最近几日的影响。</title>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="../css/style.css" type="text/css"/>
+</head>
+<body>
+
+<div style="width: 96%;margin-left:2%;float: left;height: 50px;margin-top: 10px;">
+    <input class="searchInputDiv" id="stockCode" name="stockCode" placeholder="请输入要查询的股票编码: 如000001">
+
+    <select id="effectType" class="searchInputDiv" onchange="init()">
+        <option value="0" selected="selected">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+    </select>
+    <div class="searchInputButton" id="searchInputButton" onclick="init()">确定</div>
+</div>
+
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div class="flowDiv">
+    <div id="main" style="height:800px;width: 5000px;"></div>
+</div>
+x
+
+<!-- ECharts单文件引入 -->
+<script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+<script src="../js/common.js"></script>
+<script type="text/javascript">
+    window.onload = f();
+
+    function f() {
+        $("#stockCode").val(getUrlParam("stockCode"));
+        init()
+    }
+    function init() {
+
+
+        var stockCode = $("#stockCode").val();
+
+        if (stockCode == "" || stockCode == undefined)
+            stockCode = "000001"
+
+
+        var effectType =$("#effectType").val();
+        var str = {"stockCode": stockCode,"effectType":effectType, "stockBeginTime": "", "stockEndTime": ""}
+        // 基于准备好的dom，初始化echarts图表
+        var myChart = echarts.init(document.getElementById('main'));
+
+        var date = ['10','9','8','7','6','5','4','3','2','1','0','-1','-2','-3','-4','-5','-6','-7','-8','-9','-10','-11',];
+        var effectType_0 = [];
+        var effectType_1_1 = [];
+        var effectType_1_2 = [];
+        var effectType_1_3 = [];
+        var effectType_1_4 = [];
+        var effectType_1_5 = [];
+
+        var effectType_2_1 = [];
+        var effectType_2_2 = [];
+        var effectType_2_3 = [];
+        var effectType_2_4 = [];
+        var effectType_2_5 = [];
+
+
+
+        $.ajax({
+            type: "post",
+            async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url: "/stockIncrease/getStockIncreaseEffectDay",    //请求发送到TestServlet处
+            data: JSON.stringify(str),
+            dataType: "text",        //返回数据形式为json
+            contentType: "application/json",
+            success: function (result) {
+                console.log(result)
+
+                var effectType= jsonObj.resultMapOwn[0].effectType
+                var jsonObj = JSON.parse(result);//转换为json对象
+                for (var i = 0; i < jsonObj.resultMapOwn.length; i++) {
+
+                    if (effectType==0) {
+                        effectType_0.push(jsonObj[i].increase10);
+                        effectType_0.push(jsonObj[i].increase9);
+                        effectType_0.push(jsonObj[i].increase8);
+                        effectType_0.push(jsonObj[i].increase7);
+                        effectType_0.push(jsonObj[i].increase6);
+                        effectType_0.push(jsonObj[i].increase5);
+                        effectType_0.push(jsonObj[i].increase4);
+                        effectType_0.push(jsonObj[i].increase3);
+                        effectType_0.push(jsonObj[i].increase2);
+                        effectType_0.push(jsonObj[i].increase1);
+                        effectType_0.push(jsonObj[i].increase0);
+                        effectType_0.push(jsonObj[i].descend1);
+                        effectType_0.push(jsonObj[i].descend2);
+                        effectType_0.push(jsonObj[i].descend3);
+                        effectType_0.push(jsonObj[i].descend4);
+                        effectType_0.push(jsonObj[i].descend5);
+                        effectType_0.push(jsonObj[i].descend6);
+                        effectType_0.push(jsonObj[i].descend7);
+                        effectType_0.push(jsonObj[i].descend8);
+                        effectType_0.push(jsonObj[i].descend9);
+                        effectType_0.push(jsonObj[i].descend10);
+                        effectType_0.push(jsonObj[i].descend20);
+                    }
+                    if (effectType==1) {
+
+                    }
+                    if (effectType==2) {
+
+                    }
+
+
+                }
+
+
+
+
+            },
+            error: function (errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                myChart.hideLoading();
+            }
+        })
+
+    }
+
+
+    $('#stockCode').bind('keyup', function(event) {
+        if (event.keyCode == "13") {
+            //回车执行查询
+            $('#searchInputButton').click();
+        }
+    });
+
+</script>
+</body>

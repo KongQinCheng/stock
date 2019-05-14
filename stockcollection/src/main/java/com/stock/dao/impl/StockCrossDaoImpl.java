@@ -42,4 +42,29 @@ public class StockCrossDaoImpl implements IStockCrossDao {
     public void delete(String stockCode) {
         stockCrossMapper.delete(stockCode);
     }
+
+    @Override
+    public List<StockCross> getStockCrossMacdList() {
+        return null;
+    }
+
+    @Override
+    public StockCross getStockCrossMacdtByStockCode(String stockCode) {
+        return null;
+    }
+
+    @Override
+    public void insertMacd(StockCross stockCross) {
+
+    }
+
+    @Override
+    public boolean isExistMacdByStockCodeAndDate(String stockCode, String stockDate) {
+        return false;
+    }
+
+    @Override
+    public void deleteMacd(String stockCode) {
+
+    }
 }

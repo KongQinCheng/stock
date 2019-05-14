@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../css/templatemo-style.css">
+    <title>金交对后几天涨幅的影响</title>
+    <script src="../../js/common.js"></script>
+</head>
+
+<body>
+<div class="fixed-header">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" onclick="javascript:history.go(-1);"><</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="container"  id="home">
+
+
+    <section class="col-md-12 content" id="">
+        <div style="width: 100%;min-height: 800px;background-color: #fff">
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>stockCodesz</th>
+                    <th>本/全-1</th>
+                    <th>本/全-2</th>
+                    <th>本/全-3</th>
+                    <th>本/全-4</th>
+                    <th>本/全-5</th>
+                </tr>
+                </thead>
+                <tbody id="tbody">
+
+                </tbody>
+            </table>
+
+
+        </div>
+    </section>
+
+</div>
+
+<div class="text-center footer">
+    <div class="container">Copyright &copy; 2018.Company name All rights reserved.<a target="_blank"
+                                                                                     href="http://sc.chinaz.com/moban/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a>
+    </div>
+</div>
+
+<script src="../../js//jquery-3.3.1.min.js"></script>
+<script src="../../js//bootstrap.min.js"></script>
+<script src="../../js//jquery.singlePageNav.min.js"></script>
+<script src="../js/common.js"></script>
+<script>
+
+    window.onload=getNominate;
+
+    function getNominate() {
+
+        var str = {"stockCode": getUrlParam("stockCode"),"effectType": "0"}
+
+        $.ajax({
+            type: "post",
+            async: true,
+            url: "/stock/getStockCrossEffectNew",
+            data: JSON.stringify(str),
+            dataType: "text",        //返回数据形式为json
+            contentType: "application/json",
+            success: function (result) {
+                console.log(result)
+
+                var jsonObj = JSON.parse(result);//转换为json对象
+                var temphtml = "";
+
+                var jsonObj_1 = jsonObj.crossEffect_1;
+                var jsonObj_2 = jsonObj.crossEffect_2;
+                var jsonObj_3 = jsonObj.crossEffect_3;
+                var jsonObj_4 = jsonObj.crossEffect_4;
+                var jsonObj_5 = jsonObj.crossEffect_5;
+
+                var ajsonObj_1 = jsonObj.crossEffectALL_1;
+                var ajsonObj_2 = jsonObj.crossEffectALL_2;
+                var ajsonObj_3 = jsonObj.crossEffectALL_3;
+                var ajsonObj_4 = jsonObj.crossEffectALL_4
+                var ajsonObj_5 = jsonObj.crossEffectALL_5;
+
+
+                temphtml+=  getHtml("+10",jsonObj_1.increase10,jsonObj_2.increase10,jsonObj_3.increase10,jsonObj_4.increase10,jsonObj_5.increase10,ajsonObj_1.increase10,ajsonObj_2.increase10,ajsonObj_3.increase10,ajsonObj_4.increase10,ajsonObj_5.increase10);
+                temphtml+=  getHtml("+9",jsonObj_1.increase9,jsonObj_2.increase9,jsonObj_3.increase9,jsonObj_4.increase9,jsonObj_5.increase9,ajsonObj_1.increase9,ajsonObj_2.increase9,ajsonObj_3.increase9,ajsonObj_4.increase9,ajsonObj_5.increase9);
+                temphtml+=  getHtml("+8",jsonObj_1.increase8,jsonObj_2.increase8,jsonObj_3.increase8,jsonObj_4.increase8,jsonObj_5.increase8,ajsonObj_1.increase8,ajsonObj_2.increase8,ajsonObj_3.increase8,ajsonObj_4.increase8,ajsonObj_5.increase8);
+                temphtml+=  getHtml("+7",jsonObj_1.increase7,jsonObj_2.increase7,jsonObj_3.increase7,jsonObj_4.increase7,jsonObj_5.increase7,ajsonObj_1.increase7,ajsonObj_2.increase7,ajsonObj_3.increase7,ajsonObj_4.increase7,ajsonObj_5.increase7);
+                temphtml+=  getHtml("+6",jsonObj_1.increase6,jsonObj_2.increase6,jsonObj_3.increase6,jsonObj_4.increase6,jsonObj_5.increase6,ajsonObj_1.increase6,ajsonObj_2.increase6,ajsonObj_3.increase6,ajsonObj_4.increase6,ajsonObj_5.increase6);
+                temphtml+=  getHtml("+5",jsonObj_1.increase5,jsonObj_2.increase5,jsonObj_3.increase5,jsonObj_4.increase5,jsonObj_5.increase5,ajsonObj_1.increase5,ajsonObj_2.increase5,ajsonObj_3.increase5,ajsonObj_4.increase5,ajsonObj_5.increase5);
+                temphtml+=  getHtml("+4",jsonObj_1.increase4,jsonObj_2.increase4,jsonObj_3.increase4,jsonObj_4.increase4,jsonObj_5.increase4,ajsonObj_1.increase4,ajsonObj_2.increase4,ajsonObj_3.increase4,ajsonObj_4.increase4,ajsonObj_5.increase4);
+                temphtml+=  getHtml("+3",jsonObj_1.increase3,jsonObj_2.increase3,jsonObj_3.increase3,jsonObj_4.increase3,jsonObj_5.increase3,ajsonObj_1.increase3,ajsonObj_2.increase3,ajsonObj_3.increase3,ajsonObj_4.increase3,ajsonObj_5.increase3);
+                temphtml+=  getHtml("+2",jsonObj_1.increase2,jsonObj_2.increase2,jsonObj_3.increase2,jsonObj_4.increase2,jsonObj_5.increase2,ajsonObj_1.increase2,ajsonObj_2.increase2,ajsonObj_3.increase2,ajsonObj_4.increase2,ajsonObj_5.increase2);
+                temphtml+=  getHtml("+1",jsonObj_1.increase1,jsonObj_2.increase1,jsonObj_3.increase1,jsonObj_4.increase1,jsonObj_5.increase1,ajsonObj_1.increase1,ajsonObj_2.increase1,ajsonObj_3.increase1,ajsonObj_4.increase1,ajsonObj_5.increase1);
+                temphtml+=  getHtml("+0",jsonObj_1.increase0,jsonObj_2.increase0,jsonObj_3.increase0,jsonObj_4.increase0,jsonObj_5.increase0,ajsonObj_1.increase0,ajsonObj_2.increase0,ajsonObj_3.increase0,ajsonObj_4.increase0,ajsonObj_5.increase0);
+                temphtml+=  getHtml("-1",jsonObj_1.descend1,jsonObj_2.descend1,jsonObj_3.descend1,jsonObj_4.descend1,jsonObj_5.descend1,ajsonObj_1.descend1,ajsonObj_2.descend1,ajsonObj_3.descend1,ajsonObj_4.descend1,ajsonObj_5.descend1);
+                temphtml+=  getHtml("-2",jsonObj_1.descend2,jsonObj_2.descend2,jsonObj_3.descend2,jsonObj_4.descend2,jsonObj_5.descend2,ajsonObj_1.descend2,ajsonObj_2.descend2,ajsonObj_3.descend2,ajsonObj_4.descend2,ajsonObj_5.descend2);
+                temphtml+=  getHtml("-3",jsonObj_1.descend3,jsonObj_2.descend3,jsonObj_3.descend3,jsonObj_4.descend3,jsonObj_5.descend3,ajsonObj_1.descend3,ajsonObj_2.descend3,ajsonObj_3.descend3,ajsonObj_4.descend3,ajsonObj_5.descend3);
+                temphtml+=  getHtml("-4",jsonObj_1.descend4,jsonObj_2.descend4,jsonObj_3.descend4,jsonObj_4.descend4,jsonObj_5.descend4,ajsonObj_1.descend4,ajsonObj_2.descend4,ajsonObj_3.descend4,ajsonObj_4.descend4,ajsonObj_5.descend4);
+                temphtml+=  getHtml("-5",jsonObj_1.descend5,jsonObj_2.descend5,jsonObj_3.descend5,jsonObj_4.descend5,jsonObj_5.descend5,ajsonObj_1.descend5,ajsonObj_2.descend5,ajsonObj_3.descend5,ajsonObj_4.descend5,ajsonObj_5.descend5);
+                temphtml+=  getHtml("-6",jsonObj_1.descend6,jsonObj_2.descend6,jsonObj_3.descend6,jsonObj_4.descend6,jsonObj_5.descend6,ajsonObj_1.descend6,ajsonObj_2.descend6,ajsonObj_3.descend6,ajsonObj_4.descend6,ajsonObj_5.descend6);
+                temphtml+=  getHtml("-7",jsonObj_1.descend7,jsonObj_2.descend7,jsonObj_3.descend7,jsonObj_4.descend7,jsonObj_5.descend7,ajsonObj_1.descend7,ajsonObj_2.descend7,ajsonObj_3.descend7,ajsonObj_4.descend7,ajsonObj_5.descend7);
+                temphtml+=  getHtml("-8",jsonObj_1.descend8,jsonObj_2.descend8,jsonObj_3.descend8,jsonObj_4.descend8,jsonObj_5.descend8,ajsonObj_1.descend8,ajsonObj_2.descend8,ajsonObj_3.descend8,ajsonObj_4.descend8,ajsonObj_5.descend8);
+                temphtml+=  getHtml("-9",jsonObj_1.descend9,jsonObj_2.descend9,jsonObj_3.descend9,jsonObj_4.descend9,jsonObj_5.descend9,ajsonObj_1.descend9,ajsonObj_2.descend9,ajsonObj_3.descend9,ajsonObj_4.descend9,ajsonObj_5.descend9);
+                temphtml+=  getHtml("-10",jsonObj_1.descend10,jsonObj_2.descend10,jsonObj_3.descend10,jsonObj_4.descend10,jsonObj_5.descend10,ajsonObj_1.descend10,ajsonObj_2.descend10,ajsonObj_3.descend10,ajsonObj_4.descend10,ajsonObj_5.descend10);
+                temphtml+=  getHtml("-20",jsonObj_1.descend20,jsonObj_2.descend20,jsonObj_3.descend20,jsonObj_4.descend20,jsonObj_5.descend20,ajsonObj_1.descend20,ajsonObj_2.descend20,ajsonObj_3.descend20,ajsonObj_4.descend20,ajsonObj_5.descend20);
+
+                $("#tbody").html(temphtml)
+            },
+            error: function (errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+            }
+        })
+
+    }
+
+    
+    function  getHtml(title,val1,val2,val3,val4,val5,aval1,aval2,aval3,aval4,aval5) {
+
+        val1= toDecimal2(val1)
+        val2= toDecimal2(val2)
+        val3= toDecimal2(val3)
+        val4= toDecimal2(val4)
+        val5= toDecimal2(val5)
+
+        aval1= toDecimal2(aval1)
+        aval2= toDecimal2(aval2)
+        aval3= toDecimal2(aval3)
+        aval4= toDecimal2(aval4)
+        aval5= toDecimal2(aval5)
+
+        var temphtml = "";
+        temphtml += "<tr>";
+        temphtml += "<td>"+title+"</td>";
+        temphtml += "<td>" + val1+"/"+aval1+"</td>";
+        temphtml += "<td>" + val2+"/"+aval2+"</td>";
+        temphtml += "<td>" + val3+"/"+aval3+"</td>";
+        temphtml += "<td>" + val4+"/"+aval4+"</td>";
+        temphtml += "<td>" + val5+"/"+aval5+"</td>";
+
+        temphtml += "<tr>";
+        return temphtml;
+    }
+
+
+
+    // Check scroll position and add/remove background to navbar
+    function checkScrollPosition() {
+        if ($(window).scrollTop() > 50) {
+            $(".fixed-header").addClass("scroll");
+        } else {
+            $(".fixed-header").removeClass("scroll");
+        }
+    }
+
+    $(document).ready(function () {
+// Single page nav
+        $('.fixed-header').singlePageNav({
+            offset: 59,
+            filter: ':not(.external)',
+            updateHash: true
+        });
+
+        checkScrollPosition();
+
+// nav bar
+        $('.navbar-toggle').click(function () {
+            $('.main-menu').toggleClass('show');
+        });
+
+        $('.main-menu a').click(function () {
+            $('.main-menu').removeClass('show');
+        });
+    });
+
+    $(window).on("scroll", function () {
+        checkScrollPosition();
+    });
+
+
+</script>
+</body>
+</html>

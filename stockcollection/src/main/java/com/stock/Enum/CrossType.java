@@ -1,5 +1,5 @@
 package com.stock.Enum;
 
 public enum CrossType {
-    GOLD_CROSS, DEAD_CROSS;
+    NONE,GOLD_CROSS, DEAD_CROSS;
 }

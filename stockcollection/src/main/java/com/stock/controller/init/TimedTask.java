@@ -1,10 +1,7 @@
 package com.stock.controller.init;
 
-import com.stock.bean.po.StockCross;
 import com.stock.bean.po.StockList;
-import com.stock.controller.collection.*;
-import com.stock.services.IStockListServices;
-import com.stock.services.IStockMacdServices;
+import com.stock.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -20,44 +17,44 @@ public class TimedTask {
 
 
     @Autowired
-    StockListCollection stockListCollection;
-
-    @Autowired
     IStockListServices iStockListServices;
 
     @Autowired
-    StockInfoCollection stockInfoCollection;
-
-    @Autowired
-    StockNewDataCollection stockNewDataCollection;
-
-    @Autowired
-    StockMacdCollection stockMacdCollection;
-
-    @Autowired
-    WeiboCollection weiboCollection;
-
-    @Autowired
-    StockIncreaseEffectCollection stockIncreaseEffectCollection;
+    IStockNewDataServices iStockNewDataServices;
 
 
     @Autowired
-    IStockMacdServices iStockMacdServices;
+    IStockInfoMacdServices iStockInfoMacdServices;
+
+    @Autowired
+    IStockAnalyzeMacdServices iStockAnalyzeMacdServices;
+
+
+    @Autowired
+    IStockAnalyzeIncreaseServices iStockAnalyzeIncreaseServices;
+
+    @Autowired
+    IWebDiaryServices iWebDiaryServices;
+
+
+    @Autowired
+    IStockInfoServices iStockInfoServices;
 
 
     @Scheduled(cron = "0 0 0,17 * * ?")
     public void getStockInfo() throws Exception {
         //获取新上市的新股票
-        stockListCollection.getStockNewList();
+        iStockListServices.getStockNewList();
 
         //获取每一只最新的股票信息
         getStockNewData();
     }
 
 
-    @Scheduled(cron = "0 1 * * * ? ")   //5分钟获取一次微博的信息
+    @Scheduled(cron = "0 0/30 * * * ? ")   //1分钟获取一次微博的信息
     public void getWeiBo() throws Exception {
-        weiboCollection.getWeiBoByUser();
+        iWebDiaryServices.getWeiBoByUser();
+        System.out.println("微博采集完成");
     }
 
 
@@ -109,39 +106,39 @@ public class TimedTask {
                 for (int i = 0; i < listInput.size(); i++) {
                     try {
                         //获取股票的最新信息
-                        stockInfoCollection.getWycjSituation(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+                        iStockInfoServices.getStockInfoHistory(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
                     } catch (Exception e) {
                         e.printStackTrace();
-                        System.out.println("stockInfoCollection.getWycjSituation 失败 stockCode="+listInput.get(i).getStockCode().replaceAll("\t", ""));
+                        System.out.println(" iStockInfoServices.getStockInfoHistory 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
                     }
                     try {
                         //计算MACD值
-                        stockMacdCollection.stockMacdInit(listInput.get(i).getStockCode().replaceAll("\t", "") + "", 1);
+                        iStockInfoMacdServices.getStockInfoMacd(listInput.get(i).getStockCode().replaceAll("\t", "") + "", 1);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        System.out.println("stockMacdCollection.stockMacdInit 失败 stockCode="+listInput.get(i).getStockCode().replaceAll("\t", ""));
+                        System.out.println("iStockInfoMacdServices.getStockInfoMacd 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
                     }
                     try {
                         //保存最新的数据到表中。
-                        stockNewDataCollection.getNewDataToTable(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+                        iStockNewDataServices.getNewDataToTable(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
                     } catch (Exception e) {
                         e.printStackTrace();
-                        System.out.println("stockNewDataCollection.getNewDataToTable 失败 stockCode="+listInput.get(i).getStockCode().replaceAll("\t", ""));
+                        System.out.println("iStockNewDataServices.getNewDataToTable 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
                     }
                     try {
                         //计算每只股票前一天涨幅对后一天的影响
-                        stockIncreaseEffectCollection.getStockIncreaseEffectInit(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+//                        iStockAnalyzeIncreaseServices.getStockAnalyzeIncreaseAll(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
                     } catch (Exception e) {
                         e.printStackTrace();
-                        System.out.println("stockIncreaseEffectCollection.getStockIncreaseEffectInit 失败 stockCode="+listInput.get(i).getStockCode().replaceAll("\t", ""));
+                        System.out.println("iStockAnalyzeIncreaseServices.getStockIncreaseEffectInit 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
                     }
 
                     try {
                         //金叉出现后对后一天的影响
-                        iStockMacdServices.crossEffectInit(listInput.get(i).getStockCode().replaceAll("\t", "") + "","");
+//                        iStockAnalyzeMacdServices.crossEffectInit(listInput.get(i).getStockCode().replaceAll("\t", "") + "", "");
                     } catch (Exception e) {
                         e.printStackTrace();
-                        System.out.println("iStockMacdServices.crossEffectInit 失败 stockCode="+listInput.get(i).getStockCode().replaceAll("\t", ""));
+                        System.out.println("iStockAnalyzeMacdServices.crossEffectInit 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
                     }
 
                 }

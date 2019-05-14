@@ -1,21 +1,20 @@
 package com.stock.controller.controller;
 
 
-import com.alibaba.fastjson.JSON;
-import com.stock.bean.po.WebDiary;
-import com.stock.bean.vo.DiaryVo;
 import com.stock.controller.init.TimedTask;
-import com.stock.services.IWebDiaryServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @Controller
 public class WebController {
 
+
+
+
+    @Autowired
+    TimedTask timedTask;
 
     //首页
     @RequestMapping("/toIndex")
@@ -27,6 +26,7 @@ public class WebController {
     public String toHome(){
         return "web/home";
     }
+
     //日记列表页
     @RequestMapping("/web/toDiaryList")
     public String toDiaryList(){
@@ -45,34 +45,4 @@ public class WebController {
     }
 
 
-    @Autowired
-    IWebDiaryServices iWebDiaryServices;
-
-    @Autowired
-    TimedTask timedTask;
-
-
-    @PostMapping(value = "/diary/getDiaryAll",consumes = "application/json")
-    @ResponseBody
-    public String getDiaryAll(){
-        List<WebDiary> diaryAll = iWebDiaryServices.getDiaryAll();
-        String jsonStr = JSON.toJSONString( diaryAll );
-        return jsonStr;
-    }
-    @PostMapping(value = "/diary/getDiaryByIndex",consumes = "application/json")
-    @ResponseBody
-    public String getDiaryByIndex(@RequestBody DiaryVo diaryVo){
-        List<WebDiary> diaryAll = iWebDiaryServices.getDiaryByIndex(diaryVo);
-        String jsonStr = JSON.toJSONString( diaryAll );
-        return jsonStr;
-    }
-
-
-    @RequestMapping(value = "/diary/getDiaryById")
-    @ResponseBody
-    public String getDiaryById( String id ){
-        WebDiary webDiary = iWebDiaryServices.getDiaryById(id);
-        String jsonStr = JSON.toJSONString( webDiary);
-        return jsonStr;
-    }
 }
