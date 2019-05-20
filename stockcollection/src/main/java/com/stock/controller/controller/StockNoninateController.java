@@ -336,4 +336,17 @@ public class StockNoninateController {
     }
 
 
+    /***
+     * 判断出现金叉或者死叉之后出 前几天出现上涨的概率
+     * @param
+     * @return
+     */
+    @PostMapping(value = "/getStockCrossEffectNewFinal", consumes = "application/json")
+    @ResponseBody
+    public String getStockCrossEffectNewFinal(@RequestBody StockSearchVo stockSearchVo) {
+        Map<String, Object> resultMap = iStockAnalyzeMacdServices.getStockCrossEffectNewFinal(stockSearchVo.getStockCode(),Integer.valueOf(stockSearchVo.getEffectType()));
+        String jsonStr = JSON.toJSONString(resultMap);
+        return jsonStr;
+    }
+
 }

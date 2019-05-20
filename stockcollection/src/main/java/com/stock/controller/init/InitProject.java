@@ -2,6 +2,7 @@ package com.stock.controller.init;
 
 
 import com.stock.services.IStockAnalyzeIncreaseServices;
+import com.stock.services.IStockAnalyzeMacdServices;
 import com.stock.services.IWebDiaryServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -13,7 +14,7 @@ public class InitProject implements ApplicationRunner {
 
 
     @Autowired
-    IStockAnalyzeIncreaseServices iStockAnalyzeIncreaseServices;
+    IStockAnalyzeMacdServices iStockAnalyzeMacdServices;
 
 
 
@@ -24,7 +25,8 @@ public class InitProject implements ApplicationRunner {
 
         try {
 
-//            iStockAnalyzeIncreaseServices.getStockAnalyzeIncreaseAll("603383");
+            iStockAnalyzeMacdServices.getStockCrossEffectNewFinal("603383",1);
+
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("出现异常");

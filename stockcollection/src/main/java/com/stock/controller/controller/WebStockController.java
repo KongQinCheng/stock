@@ -134,4 +134,13 @@ public class WebStockController {
     }
 
 
+    /***
+     * 查看出现金叉时候 涨幅的区间
+     * @param searchType
+     * @return
+     */
+    @RequestMapping("/toStockAnalyze")
+    public String toStockAnalyze(String searchType){
+        return "stock/stock_analyze";
+    }
 }

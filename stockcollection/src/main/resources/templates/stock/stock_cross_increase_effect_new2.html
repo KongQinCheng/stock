@@ -6,7 +6,7 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../css/templatemo-style.css">
-    <title>金交对后几天平均涨幅的影响</title>
+    <title>金交对后几天涨幅的影响</title>
     <script src="../../js/common.js"></script>
 </head>
 
@@ -70,7 +70,7 @@
 
     function getNominate() {
 
-        var str = {"stockCode": getUrlParam("stockCode"), "effectType": getUrlParam("effectType")}
+        var str = {"stockCode": getUrlParam("stockCode"), "effectType": "1"}
 
         $.ajax({
             type: "post",

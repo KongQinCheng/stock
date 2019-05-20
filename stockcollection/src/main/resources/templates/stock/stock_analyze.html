@@ -26,9 +26,9 @@
             <img src="../../img/5.jpg" alt="Image" class="tm-image">
         </div>
         <div class="col-lg-6 col-md-6 background last ">
-            <h2 class="section-title">女神推荐-涨幅</h2>
-            <p class="about-text">根据前几日的涨跌的权值来推荐</p>
-            <p class="about-text">昨日涨幅，前几日涨幅</p>
+            <h2 class="section-title">金叉-每天影响</h2>
+            <p class="about-text">金叉-每天影响</p>
+            <p class="about-text">金叉金叉</p>
             <div>
                 <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex0()">推荐</button>
             </div>
@@ -40,9 +40,9 @@
             <img src="../../img/5.jpg" alt="Image" class="tm-image">
         </div>
         <div class="col-lg-6 col-md-6 background last ">
-            <h2 class="section-title">女神推荐-金叉-死叉</h2>
-            <p class="about-text">根据前几日的金叉和死叉来推荐</p>
-            <p class="about-text">金交，死交</p>
+            <h2 class="section-title">金叉-平均影响</h2>
+            <p class="about-text">金叉-平均影响</p>
+            <p class="about-text">金叉</p>
             <div>
                 <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex1()">推荐</button>
             </div>
@@ -54,40 +54,15 @@
             <img src="../../img/5.jpg" alt="Image" class="tm-image">
         </div>
         <div class="col-lg-6 col-md-6 background last ">
-            <h2 class="section-title">数据分析</h2>
-            <p class="about-text">新的开始，新的机遇</p>
-            <p class="about-text">如果不行，那就从新开始。</p>
+            <h2 class="section-title">金叉-最终影响</h2>
+            <p class="about-text">最终是涨还是跌</p>
+            <p class="about-text"></p>
             <div>
-                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex4()">从新开始</button>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex2()">从新开始</button>
             </div>
         </div>
     </footer>
 
-    <footer class="col-md-12 content">
-        <div class="col-lg-6 col-md-6 last">
-            <img src="../../img/5.jpg" alt="Image" class="tm-image">
-        </div>
-        <div class="col-lg-6 col-md-6 background last ">
-            <h2 class="section-title">历史推荐</h2>
-            <p class="about-text">查看历史推荐的准确性。</p>
-            <div>
-                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex2()">准确性</button>
-            </div>
-        </div>
-    </footer>
-    <footer class="col-md-12 content" >
-        <div class="col-lg-6 col-md-6 last">
-            <img src="../../img/5.jpg" alt="Image" class="tm-image">
-        </div>
-        <div class="col-lg-6 col-md-6 background last ">
-            <h2 class="section-title">新股上市</h2>
-            <p class="about-text">新的开始，新的机遇</p>
-            <p class="about-text">如果不行，那就从新开始。</p>
-            <div>
-                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex3()">从新开始</button>
-            </div>
-        </div>
-    </footer>
 
 
 
@@ -108,27 +83,15 @@
 
 
     function toIndex0() {
-        window.location.href = "/stock/toStockIncrease"
+        window.location.href = "/stock/toStockCrossIncreaseEffectNew?effectType=0&stockCode=0000001"
     }
     function toIndex1() {
-        window.location.href = "/stock/toStockCross?crossType=GOLD_CROSS"
+        window.location.href = "/stock/toStockCrossIncreaseEffectNew?effectType=1&stockCode=0000001"
     }
 
     function toIndex2() {
-        window.location.href = "/stock/toHistory"
+        window.location.href = "/stock/toStockCrossIncreaseEffectNewFinal"
     }
-
-    function toIndex3() {
-        window.location.href = "/stock/toNewStock"
-    }
-
-    function toIndex4() {
-        window.location.href = "/stock/toStockAnalyze"
-    }
-
-
-
-
 
 
     // Check scroll position and add/remove background to navbar

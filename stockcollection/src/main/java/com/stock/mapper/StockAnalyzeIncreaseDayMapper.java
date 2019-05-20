@@ -20,10 +20,10 @@ import java.util.List;
 @Mapper
 public interface StockAnalyzeIncreaseDayMapper {
 
-    @Insert("insert into stock_analyze_increase_day (stockCode,stockDate,indexDay,effectType,increaseType,level," +
+    @Insert("insert into stock_analyze_increase_day (stockCode,stockDate,indexDay,effectType,increaseType,level,crossType," +
             "increase10,increase9,increase8,increase7,increase6,increase5,increase4,increase3,increase2,increase1,increase0," +
             "descend1,descend2,descend3,descend4,descend5,descend6,descend7,descend8,descend9,descend10,descend20,count) "
-            + "values('${stockCode}','${stockDate}','${indexDay}','${effectType}', '${increaseType}', '${level}', " +
+            + "values('${stockCode}','${stockDate}','${indexDay}','${effectType}', '${increaseType}', '${level}','${crossType}', " +
             "'${increase10}','${increase9}','${increase8}','${increase7}','${increase6}','${increase5}','${increase4}','${increase3}','${increase2}','${increase1}','${increase0}'," +
             "'${descend1}','${descend2}','${descend3}','${descend4}','${descend5}','${descend6}','${descend7}','${descend8}','${descend9}','${descend10}','${descend20}','${count}')")
     public void insert(AnalyzeIncreaseDay analyzeIncreaseDay);

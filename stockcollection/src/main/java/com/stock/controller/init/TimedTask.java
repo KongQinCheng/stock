@@ -51,7 +51,7 @@ public class TimedTask {
     }
 
 
-    @Scheduled(cron = "0 0/30 * * * ? ")   //1分钟获取一次微博的信息
+    @Scheduled(cron = "0 0/59 * * * ? ")   //1分钟获取一次微博的信息
     public void getWeiBo() throws Exception {
         iWebDiaryServices.getWeiBoByUser();
         System.out.println("微博采集完成");
@@ -135,10 +135,10 @@ public class TimedTask {
 
                     try {
                         //金叉出现后对后一天的影响
-//                        iStockAnalyzeMacdServices.crossEffectInit(listInput.get(i).getStockCode().replaceAll("\t", "") + "", "");
+                        iStockAnalyzeMacdServices.crossEffectInitNew(listInput.get(i).getStockCode().replaceAll("\t", "") + "", "");
                     } catch (Exception e) {
                         e.printStackTrace();
-                        System.out.println("iStockAnalyzeMacdServices.crossEffectInit 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+                        System.out.println("iStockAnalyzeMacdServices.crossEffectInitNew 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
                     }
 
                 }

@@ -2,10 +2,8 @@ package com.stock.services.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.stock.bean.dto.AnalyzeCorssEffectDto;
-import com.stock.bean.po.AnalyzeIncreaseDay;
-import com.stock.bean.po.AnalyzeIncreaseDayMore;
-import com.stock.bean.po.StockCross;
-import com.stock.bean.po.StockInfo;
+import com.stock.bean.po.*;
+import com.stock.dao.IStockAnalyzeIncreaseDay2Dao;
 import com.stock.dao.IStockAnalyzeIncreaseDayDao;
 import com.stock.dao.IStockCrossDao;
 import com.stock.dao.IStockInfoDao;
@@ -33,6 +31,9 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
 
     @Autowired
     IStockInfoMacdServices iStockInfoMacdServices;
+
+    @Autowired
+    IStockAnalyzeIncreaseDay2Dao iStockAnalyzeIncreaseDay2Dao;
 
 
     @Override
@@ -511,7 +512,7 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
     }
 
     @Override
-    public void crossEffectInitNew(String stockCode, String effecType) {
+    public void crossEffectInitNew(String stockCode, String sss) {
         //删除历史数据
         iStockAnalyzeIncreaseDayDao.delByStockCode(stockCode, "1");
 
@@ -520,7 +521,6 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
         Date date = c.getTime();
         String stockDate = sdf.format(date);
 
-        List<Map<String, String>> resultList = new ArrayList<>();
         List<StockInfo> list = iStockInfoDao.getStockListByStockCode(stockCode, 999999999);
 
         if (list != null && list.size() > 0) {
@@ -575,7 +575,7 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
             insertAnalyzeIncreaseDayMore(increaseEffect1_4);
             insertAnalyzeIncreaseDayMore(increaseEffect1_5);
         }
-
+        System.out.println("金叉影响 更新完毕stockCode=" + stockCode);
     }
 
 
@@ -625,6 +625,13 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
         iStockAnalyzeIncreaseDayDao.insert(analyzeIncreaseDayMore.getAnalyzeIncreaseDayPart());
     }
 
+    public void insertAnalyzeIncreaseDayMore(AnalyzeIncreaseDayMore analyzeIncreaseDayMore, String crossType) {
+        analyzeIncreaseDayMore.getAnalyzeIncreaseDayAll().setCrossType(crossType);
+        analyzeIncreaseDayMore.getAnalyzeIncreaseDayPart().setCrossType(crossType);
+        iStockAnalyzeIncreaseDayDao.insert(analyzeIncreaseDayMore.getAnalyzeIncreaseDayAll());
+        iStockAnalyzeIncreaseDayDao.insert(analyzeIncreaseDayMore.getAnalyzeIncreaseDayPart());
+    }
+
     /***
      * 上涨的概率
      * @param dayNum 天数  n：交叉后n天的数据
@@ -664,6 +671,50 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
         return analyzeIncreaseDayMore;
     }
 
+    /***
+     * 判断各种交叉 出现之后 后面是否一定会上涨
+     *
+     * @param list
+     * @param i
+     * @param analyzeIncreaseDay2
+     * @return
+     */
+    public static AnalyzeIncreaseDay2 getIncreaseEffectFinal(List<StockInfo> list, int i, AnalyzeIncreaseDay2 analyzeIncreaseDay2) {
+
+        analyzeIncreaseDay2.setCount(analyzeIncreaseDay2.getCount() + 1.0);
+
+        if ((list.get(i + 1).getSpj() - list.get(i).getSpj() > 0)) {
+            analyzeIncreaseDay2.setDay1(analyzeIncreaseDay2.getDay1() + 1.0);
+            return analyzeIncreaseDay2;
+        }
+        if ((list.get(i + 2).getSpj() - list.get(i).getSpj() > 0)) {
+            analyzeIncreaseDay2.setDay2(analyzeIncreaseDay2.getDay2() + 1.0);
+            return analyzeIncreaseDay2;
+        }
+        if ((list.get(i + 3).getSpj() - list.get(i).getSpj() > 0)) {
+            analyzeIncreaseDay2.setDay3(analyzeIncreaseDay2.getDay3() + 1.0);
+            return analyzeIncreaseDay2;
+        }
+        if ((list.get(i + 4).getSpj() - list.get(i).getSpj() > 0)) {
+            analyzeIncreaseDay2.setDay4(analyzeIncreaseDay2.getDay4() + 1.0);
+            return analyzeIncreaseDay2;
+        }
+        if ((list.get(i + 5).getSpj() - list.get(i).getSpj() > 0)) {
+            analyzeIncreaseDay2.setDay5(analyzeIncreaseDay2.getDay5() + 1.0);
+            return analyzeIncreaseDay2;
+        }
+        return analyzeIncreaseDay2;
+    }
+
+
+    public static AnalyzeIncreaseDay2 getIncreaseEffectFinalDay(AnalyzeIncreaseDay2 analyzeIncreaseInsert, AnalyzeIncreaseDay2 analyzeIncreaseReturn) {
+        analyzeIncreaseReturn.setDay1(analyzeIncreaseReturn.getDay1()+analyzeIncreaseInsert.getDay1());
+        analyzeIncreaseReturn.setDay2(analyzeIncreaseReturn.getDay2()+analyzeIncreaseInsert.getDay2());
+        analyzeIncreaseReturn.setDay3(analyzeIncreaseReturn.getDay3()+analyzeIncreaseInsert.getDay3());
+        analyzeIncreaseReturn.setDay4(analyzeIncreaseReturn.getDay4()+analyzeIncreaseInsert.getDay4());
+        analyzeIncreaseReturn.setDay5(analyzeIncreaseReturn.getDay5()+analyzeIncreaseInsert.getDay5());
+       return analyzeIncreaseReturn;
+    }
 
     @Override
     public void crossEffectAllInit(String type) {
@@ -1167,7 +1218,7 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
             analyzeIncreaseDay.setLevel(1);
             List<AnalyzeIncreaseDay> entryByStockCodePart = iStockAnalyzeIncreaseDayDao.getEntryByEntry(analyzeIncreaseDay);
 
-            if (entryByStockCodeAll!=null&&   entryByStockCodePart!=null && entryByStockCodeAll.size() > 0 && entryByStockCodePart.size() > 0) {
+            if (entryByStockCodeAll != null && entryByStockCodePart != null && entryByStockCodeAll.size() > 0 && entryByStockCodePart.size() > 0) {
                 AnalyzeCorssEffectDto analyzeCorssEffectDto = getAnalyzeCorssEffectDto(entryByStockCodeAll.get(0), entryByStockCodePart.get(0));
                 resultmap.put("crossEffectALL_" + i, analyzeCorssEffectDto);
             }
@@ -1175,6 +1226,124 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
 
 
         return resultmap;
+    }
+
+    @Override
+    public Map<String, Object> getStockCrossEffectNewFinal(String stockCode, String crossType) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        Date date = c.getTime();
+        String stockDate = sdf.format(date);
+
+
+        AnalyzeIncreaseDay2 analyzeIncreaseDay2=new AnalyzeIncreaseDay2();
+        analyzeIncreaseDay2.setStockCode(stockCode);
+        analyzeIncreaseDay2.setStockDate(stockDate);
+        analyzeIncreaseDay2.setCrossType(crossType);
+        List<AnalyzeIncreaseDay2> listOwn = iStockAnalyzeIncreaseDay2Dao.getEntryByEntry(analyzeIncreaseDay2);
+
+        if (listOwn==null||listOwn.size()==0){
+            crossEffectInitNewFinal(stockCode,stockDate);
+            listOwn = iStockAnalyzeIncreaseDay2Dao.getEntryByEntry(analyzeIncreaseDay2);
+        }
+
+        analyzeIncreaseDay2.setStockCode("000000");
+        List<AnalyzeIncreaseDay2> listAll = iStockAnalyzeIncreaseDay2Dao.getEntryByEntry(analyzeIncreaseDay2);
+
+        if (listAll==null||listAll.size()==0){
+            crossEffectInitNewFinalAll(stockDate);
+            listAll = iStockAnalyzeIncreaseDay2Dao.getEntryByEntry(analyzeIncreaseDay2);
+        }
+
+
+
+
+
+
+        return null;
+    }
+
+
+    public void crossEffectInitNewFinal(String stockCode, String stockDate) {
+
+        //删除历史数据
+        iStockAnalyzeIncreaseDay2Dao.delByStockCode(stockCode, "1");
+
+        List<StockInfo> list = iStockInfoDao.getStockListByStockCode(stockCode, 999999999);
+
+        if (list != null && list.size() > 0) {
+
+            double beforeDIF = list.get(0).getDIF();
+            double beforeDEA = list.get(0).getEMAMACD();
+
+            AnalyzeIncreaseDay2 analyzeIncreaseDay11 = new AnalyzeIncreaseDay2(stockCode, stockDate, "11");
+            AnalyzeIncreaseDay2 analyzeIncreaseDay10 = new AnalyzeIncreaseDay2(stockCode, stockDate, "10");
+            AnalyzeIncreaseDay2 analyzeIncreaseDay01 = new AnalyzeIncreaseDay2(stockCode, stockDate, "01");
+            AnalyzeIncreaseDay2 analyzeIncreaseDay00 = new AnalyzeIncreaseDay2(stockCode, stockDate, "00");
+
+            for (int i = 1; i < list.size(); i++) {
+                Map<String, String> map = iStockInfoMacdServices.haveCross(list.get(i).getStockDate(), beforeDIF, beforeDEA, list.get(i).getDIF(), list.get(i).getEMAMACD());
+                beforeDIF = list.get(i).getDIF();
+                beforeDEA = list.get(i).getEMAMACD();
+
+                if (!"-1".equals(map.get("type"))) { //有出现交叉 保存下来
+
+                    switch (map.get("type")) {
+                        case "00":
+                            analyzeIncreaseDay00 = getIncreaseEffectFinal(list, i, analyzeIncreaseDay00);
+                        case "01":
+                            analyzeIncreaseDay01 = getIncreaseEffectFinal(list, i, analyzeIncreaseDay01);
+                        case "10":
+                            analyzeIncreaseDay10 = getIncreaseEffectFinal(list, i, analyzeIncreaseDay10);
+                        case "11":
+                            analyzeIncreaseDay11 = getIncreaseEffectFinal(list, i, analyzeIncreaseDay11);
+
+                    }
+
+                }
+            }
+            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay00);
+            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay01);
+            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay10);
+            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay11);
+        }
+
+    }
+
+    public void crossEffectInitNewFinalAll( String stockDate) {
+        //删除历史数据
+        iStockAnalyzeIncreaseDay2Dao.delByStockCode("000000", "1");
+
+        AnalyzeIncreaseDay2 analyzeIncreaseDay2 =new AnalyzeIncreaseDay2();
+        analyzeIncreaseDay2.setStockCode("000000");
+        analyzeIncreaseDay2.setStockDate(stockDate);
+        List<AnalyzeIncreaseDay2> entryByEntry = iStockAnalyzeIncreaseDay2Dao.getEntryByEntry(analyzeIncreaseDay2);
+
+
+        AnalyzeIncreaseDay2 analyzeIncreaseDay11 = new AnalyzeIncreaseDay2("000000", stockDate, "11");
+        AnalyzeIncreaseDay2 analyzeIncreaseDay10 = new AnalyzeIncreaseDay2("000000", stockDate, "10");
+        AnalyzeIncreaseDay2 analyzeIncreaseDay01 = new AnalyzeIncreaseDay2("000000", stockDate, "01");
+        AnalyzeIncreaseDay2 analyzeIncreaseDay00 = new AnalyzeIncreaseDay2("000000", stockDate, "00");
+
+        for (int i = 0; i < entryByEntry.size(); i++) {
+
+                    switch (entryByEntry.get(i).getCrossType()) {
+                        case "00":
+                            analyzeIncreaseDay00 =getIncreaseEffectFinalDay(analyzeIncreaseDay00) ;
+                        case "01":
+                            analyzeIncreaseDay01 = getIncreaseEffectFinalDay(list, i, analyzeIncreaseDay01);
+                        case "10":
+                            analyzeIncreaseDay10 = getIncreaseEffectFinalDay(list, i, analyzeIncreaseDay10);
+                        case "11":
+                            analyzeIncreaseDay11 = getIncreaseEffectFinalDay(list, i, analyzeIncreaseDay11);
+
+
+                }
+            }
+
+        }
+
     }
 
 

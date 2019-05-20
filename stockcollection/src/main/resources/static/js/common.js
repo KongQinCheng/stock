@@ -22,6 +22,7 @@ function getUrlParam(paraName) {
     }
 }
 
+
 function toDecimal2(x) {
     var f = parseFloat(x);
     if (isNaN(f)) {
@@ -58,4 +59,46 @@ function toDecimal4(x) {
         s += '0';
     }
     return s;
+}
+
+
+function getHtml(title, ownCount, ownCountAll ,allCount,allCountAll) {
+    var ownpersent = 0;
+    var allpersent = 0;
+    if (ownCountAll != 0) {
+        ownpersent = ownCount / ownCountAll * 100;
+        ownpersent=toDecimal2(ownpersent)
+    }
+
+    if (ownCountAll != 0) {
+        allpersent = ownCount / ownCountAll * 100;
+        allpersent=toDecimal2(allpersent)
+    }
+
+    var html = ""
+    html += "<tr>"
+    html += "<td>" + title + "</td>"
+
+    html += "<td>"
+    html += "<div style='width: 100%;background-color: beige'>"
+    html += "<div style='width: " + ownpersent + "%;background-color: #eea236'>"
+    html += ownpersent
+    html += "</div>"
+    html += "</div>"
+    html += "</td>"
+
+    html += "<td>"
+
+    html += "<div style='width: 100%;background-color: beige'>"
+    html += "<div style='width: " + allpersent + "%;background-color: #eea236'>"
+    html += allpersent
+    html += "</div>"
+    html += "</div>"
+
+
+    html += "</td>"
+    html += "<td></td>"
+    html += "</tr>"
+
+    return html;
 }
