@@ -141,6 +141,14 @@ public class TimedTask {
                         System.out.println("iStockAnalyzeMacdServices.crossEffectInitNew 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
                     }
 
+                    try {
+                        //金叉出现后有多少的前面几天内一定会涨
+                        iStockAnalyzeMacdServices.crossEffectInitNewFinal(listInput.get(i).getStockCode().replaceAll("\t", "") + "", "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("iStockAnalyzeMacdServices.crossEffectInitNew 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+                    }
+
                 }
                 countDownLatch.countDown();
             } catch (Exception e) {

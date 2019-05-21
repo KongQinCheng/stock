@@ -25,7 +25,7 @@ public class InitProject implements ApplicationRunner {
 
         try {
 
-            iStockAnalyzeMacdServices.getStockCrossEffectNewFinal("603383",1);
+//            iStockAnalyzeMacdServices.getStockCrossEffectNewFinal("603383","11");
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -45,9 +45,14 @@ public interface IStockAnalyzeMacdServices {
      * @param stockCode
      * @return
      */
-    Map<String, Object> getStockCrossEffectNewFinal(String stockCode,int effectType);
+    Map<String, Object> getStockCrossEffectNewFinal(String stockCode,String crossType);
 
-
+    /***
+     * 统计所有数据的 出现金叉之后对后续的影响
+     * @param stockCode
+     * @return
+     */
+     void crossEffectInitNewFinal(String stockCode, String sss);
 
     /***
      * 统计所有数据的 出现金叉之后对 MACD值 对后续的影响

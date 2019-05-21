@@ -25,6 +25,14 @@
 
     <section class="col-md-12 content" id="">
         <div style="width: 100%;min-height: 800px;background-color: #fff">
+            <div style="width: 100%">
+                <select id="crossType" onchange="getNominate()">
+                    <option selected="selected" value="11">0上金叉</option>
+                    <option  value="10">0下金叉</option>
+                    <option  value="01">0上死叉</option>
+                    <option  value="00">0下死叉</option>
+                </select>
+            </div>
 
             <table class="table">
                 <thead>
@@ -36,11 +44,6 @@
                     <th>本-4</th>
                     <th>本-5</th>
 
-                    <th>全-1</th>
-                    <th>全-2</th>
-                    <th>全-3</th>
-                    <th>全-4</th>
-                    <th>全-5</th>
                 </tr>
                 </thead>
                 <tbody id="tbody">
@@ -70,12 +73,12 @@
 
     function getNominate() {
 
-        var str = {"stockCode": getUrlParam("stockCode"), "effectType": "1"}
+        var str = {"stockCode": getUrlParam("stockCode"), "crossType": $("#crossType").val()}
 
         $.ajax({
             type: "post",
             async: true,
-            url: "/stock/getStockCrossEffectNew",
+            url: "/stock/getStockCrossEffectNewFinal",
             data: JSON.stringify(str),
             dataType: "text",        //返回数据形式为json
             contentType: "application/json",
@@ -85,42 +88,39 @@
                 var jsonObj = JSON.parse(result);//转换为json对象
                 var temphtml = "";
 
-                var jsonObj_1 = jsonObj.crossEffect_1;
-                var jsonObj_2 = jsonObj.crossEffect_2;
-                var jsonObj_3 = jsonObj.crossEffect_3;
-                var jsonObj_4 = jsonObj.crossEffect_4;
-                var jsonObj_5 = jsonObj.crossEffect_5;
 
-                var ajsonObj_1 = jsonObj.crossEffectALL_1;
-                var ajsonObj_2 = jsonObj.crossEffectALL_2;
-                var ajsonObj_3 = jsonObj.crossEffectALL_3;
-                var ajsonObj_4 = jsonObj.crossEffectALL_4
-                var ajsonObj_5 = jsonObj.crossEffectALL_5;
+                var jsonObj00 = jsonObj.map00;
+                var jsonObj01 = jsonObj.map01;
+                var jsonObj10 = jsonObj.map10;
+                var jsonObj11 = jsonObj.map11;
 
 
-                temphtml += getHtml("+10", jsonObj_1.increase10, jsonObj_2.increase10, jsonObj_3.increase10, jsonObj_4.increase10, jsonObj_5.increase10, ajsonObj_1.increase10, ajsonObj_2.increase10, ajsonObj_3.increase10, ajsonObj_4.increase10, ajsonObj_5.increase10);
-                temphtml += getHtml("+9", jsonObj_1.increase9, jsonObj_2.increase9, jsonObj_3.increase9, jsonObj_4.increase9, jsonObj_5.increase9, ajsonObj_1.increase9, ajsonObj_2.increase9, ajsonObj_3.increase9, ajsonObj_4.increase9, ajsonObj_5.increase9);
-                temphtml += getHtml("+8", jsonObj_1.increase8, jsonObj_2.increase8, jsonObj_3.increase8, jsonObj_4.increase8, jsonObj_5.increase8, ajsonObj_1.increase8, ajsonObj_2.increase8, ajsonObj_3.increase8, ajsonObj_4.increase8, ajsonObj_5.increase8);
-                temphtml += getHtml("+7", jsonObj_1.increase7, jsonObj_2.increase7, jsonObj_3.increase7, jsonObj_4.increase7, jsonObj_5.increase7, ajsonObj_1.increase7, ajsonObj_2.increase7, ajsonObj_3.increase7, ajsonObj_4.increase7, ajsonObj_5.increase7);
-                temphtml += getHtml("+6", jsonObj_1.increase6, jsonObj_2.increase6, jsonObj_3.increase6, jsonObj_4.increase6, jsonObj_5.increase6, ajsonObj_1.increase6, ajsonObj_2.increase6, ajsonObj_3.increase6, ajsonObj_4.increase6, ajsonObj_5.increase6);
-                temphtml += getHtml("+5", jsonObj_1.increase5, jsonObj_2.increase5, jsonObj_3.increase5, jsonObj_4.increase5, jsonObj_5.increase5, ajsonObj_1.increase5, ajsonObj_2.increase5, ajsonObj_3.increase5, ajsonObj_4.increase5, ajsonObj_5.increase5);
-                temphtml += getHtml("+4", jsonObj_1.increase4, jsonObj_2.increase4, jsonObj_3.increase4, jsonObj_4.increase4, jsonObj_5.increase4, ajsonObj_1.increase4, ajsonObj_2.increase4, ajsonObj_3.increase4, ajsonObj_4.increase4, ajsonObj_5.increase4);
-                temphtml += getHtml("+3", jsonObj_1.increase3, jsonObj_2.increase3, jsonObj_3.increase3, jsonObj_4.increase3, jsonObj_5.increase3, ajsonObj_1.increase3, ajsonObj_2.increase3, ajsonObj_3.increase3, ajsonObj_4.increase3, ajsonObj_5.increase3);
-                temphtml += getHtml("+2", jsonObj_1.increase2, jsonObj_2.increase2, jsonObj_3.increase2, jsonObj_4.increase2, jsonObj_5.increase2, ajsonObj_1.increase2, ajsonObj_2.increase2, ajsonObj_3.increase2, ajsonObj_4.increase2, ajsonObj_5.increase2);
-                temphtml += getHtml("+1", jsonObj_1.increase1, jsonObj_2.increase1, jsonObj_3.increase1, jsonObj_4.increase1, jsonObj_5.increase1, ajsonObj_1.increase1, ajsonObj_2.increase1, ajsonObj_3.increase1, ajsonObj_4.increase1, ajsonObj_5.increase1);
-                temphtml += getHtml("+0", jsonObj_1.increase0, jsonObj_2.increase0, jsonObj_3.increase0, jsonObj_4.increase0, jsonObj_5.increase0, ajsonObj_1.increase0, ajsonObj_2.increase0, ajsonObj_3.increase0, ajsonObj_4.increase0, ajsonObj_5.increase0);
-                temphtml += getHtml("-1", jsonObj_1.descend1, jsonObj_2.descend1, jsonObj_3.descend1, jsonObj_4.descend1, jsonObj_5.descend1, ajsonObj_1.descend1, ajsonObj_2.descend1, ajsonObj_3.descend1, ajsonObj_4.descend1, ajsonObj_5.descend1);
-                temphtml += getHtml("-2", jsonObj_1.descend2, jsonObj_2.descend2, jsonObj_3.descend2, jsonObj_4.descend2, jsonObj_5.descend2, ajsonObj_1.descend2, ajsonObj_2.descend2, ajsonObj_3.descend2, ajsonObj_4.descend2, ajsonObj_5.descend2);
-                temphtml += getHtml("-3", jsonObj_1.descend3, jsonObj_2.descend3, jsonObj_3.descend3, jsonObj_4.descend3, jsonObj_5.descend3, ajsonObj_1.descend3, ajsonObj_2.descend3, ajsonObj_3.descend3, ajsonObj_4.descend3, ajsonObj_5.descend3);
-                temphtml += getHtml("-4", jsonObj_1.descend4, jsonObj_2.descend4, jsonObj_3.descend4, jsonObj_4.descend4, jsonObj_5.descend4, ajsonObj_1.descend4, ajsonObj_2.descend4, ajsonObj_3.descend4, ajsonObj_4.descend4, ajsonObj_5.descend4);
-                temphtml += getHtml("-5", jsonObj_1.descend5, jsonObj_2.descend5, jsonObj_3.descend5, jsonObj_4.descend5, jsonObj_5.descend5, ajsonObj_1.descend5, ajsonObj_2.descend5, ajsonObj_3.descend5, ajsonObj_4.descend5, ajsonObj_5.descend5);
-                temphtml += getHtml("-6", jsonObj_1.descend6, jsonObj_2.descend6, jsonObj_3.descend6, jsonObj_4.descend6, jsonObj_5.descend6, ajsonObj_1.descend6, ajsonObj_2.descend6, ajsonObj_3.descend6, ajsonObj_4.descend6, ajsonObj_5.descend6);
-                temphtml += getHtml("-7", jsonObj_1.descend7, jsonObj_2.descend7, jsonObj_3.descend7, jsonObj_4.descend7, jsonObj_5.descend7, ajsonObj_1.descend7, ajsonObj_2.descend7, ajsonObj_3.descend7, ajsonObj_4.descend7, ajsonObj_5.descend7);
-                temphtml += getHtml("-8", jsonObj_1.descend8, jsonObj_2.descend8, jsonObj_3.descend8, jsonObj_4.descend8, jsonObj_5.descend8, ajsonObj_1.descend8, ajsonObj_2.descend8, ajsonObj_3.descend8, ajsonObj_4.descend8, ajsonObj_5.descend8);
-                temphtml += getHtml("-9", jsonObj_1.descend9, jsonObj_2.descend9, jsonObj_3.descend9, jsonObj_4.descend9, jsonObj_5.descend9, ajsonObj_1.descend9, ajsonObj_2.descend9, ajsonObj_3.descend9, ajsonObj_4.descend9, ajsonObj_5.descend9);
-                temphtml += getHtml("-10", jsonObj_1.descend10, jsonObj_2.descend10, jsonObj_3.descend10, jsonObj_4.descend10, jsonObj_5.descend10, ajsonObj_1.descend10, ajsonObj_2.descend10, ajsonObj_3.descend10, ajsonObj_4.descend10, ajsonObj_5.descend10);
-                temphtml += getHtml("-20", jsonObj_1.descend20, jsonObj_2.descend20, jsonObj_3.descend20, jsonObj_4.descend20, jsonObj_5.descend20, ajsonObj_1.descend20, ajsonObj_2.descend20, ajsonObj_3.descend20, ajsonObj_4.descend20, ajsonObj_5.descend20);
-                // console.log(temphtml)
+                var jsonObj00sub ="" ;
+                var jsonObj00all ="";
+
+                jsonObj00sub = jsonObj11.crossEffect;
+                jsonObj00all = jsonObj11.crossEffectALL;
+                temphtml += getHtml("0上金叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
+                temphtml += getHtml("0上金叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
+
+                jsonObj00sub = jsonObj10.crossEffect;
+                jsonObj00all = jsonObj10.crossEffectALL;
+                temphtml += getHtml("0下金叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
+                temphtml += getHtml("0下金叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
+
+
+                jsonObj00sub = jsonObj01.crossEffect;
+                jsonObj00all = jsonObj01.crossEffectALL;
+                temphtml += getHtml("0上死叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
+                temphtml += getHtml("0上死叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
+
+
+                 jsonObj00sub = jsonObj00.crossEffect;
+                 jsonObj00all = jsonObj00.crossEffectALL;
+                temphtml += getHtml("0下死叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
+                temphtml += getHtml("0下死叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
+
+
                 $("#tbody").html(temphtml)
             },
             error: function (errorMsg) {
@@ -132,19 +132,22 @@
     }
 
 
-    function getHtml(title, val1, val2, val3, val4, val5, aval1, aval2, aval3, aval4, aval5) {
+    function getHtml(title, val1, val2, val3, val4, val5, count) {
 
-        val1 = toDecimal2(val1)
-        val2 = toDecimal2(val2)
-        val3 = toDecimal2(val3)
-        val4 = toDecimal2(val4)
-        val5 = toDecimal2(val5)
+        if (count != 0) {
+            val1 = toDecimal2(val1 / count)
+            val2 = toDecimal2(val2 / count)
+            val3 = toDecimal2(val3 / count)
+            val4 = toDecimal2(val4 / count)
+            val5 = toDecimal2(val5 / count)
+        } else {
+            val1 = 0
+            val2 = 0
+            val3 = 0
+            val4 = 0
+            val5 = 0
+        }
 
-        aval1 = toDecimal2(aval1)
-        aval2 = toDecimal2(aval2)
-        aval3 = toDecimal2(aval3)
-        aval4 = toDecimal2(aval4)
-        aval5 = toDecimal2(aval5)
 
         var temphtml = "";
         temphtml += "<tr>";
@@ -156,11 +159,6 @@
         temphtml += "<td>" + getHtmlsub(val4) + "</td>";
         temphtml += "<td>" + getHtmlsub(val5) + "</td>";
 
-        temphtml += "<td>" + getHtmlsub(aval1) + "</td>";
-        temphtml += "<td>" + getHtmlsub(aval2) + "</td>";
-        temphtml += "<td>" + getHtmlsub(aval3) + "</td>";
-        temphtml += "<td>" + getHtmlsub(aval4) + "</td>";
-        temphtml += "<td>" + getHtmlsub(aval5) + "</td>";
 
         temphtml += "<tr>";
         return temphtml;
@@ -169,7 +167,7 @@
 
     function getHtmlsub(ownpersent) {
 
-        ownpersent=ownpersent*100
+        ownpersent = ownpersent * 100
         ownpersent = toDecimal2(ownpersent)
 
         var html = "";

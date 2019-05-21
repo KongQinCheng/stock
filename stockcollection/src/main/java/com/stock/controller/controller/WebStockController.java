@@ -133,6 +133,16 @@ public class WebStockController {
         return "stock/stock_cross_increase_effect_new";
     }
 
+    /***
+     * 查看出现金叉时候 涨幅的区间
+     * @param searchType
+     * @return
+     */
+    @RequestMapping("/toStockCrossIncreaseEffectNew2")
+    public String toStockCrossIncreaseEffectNew2(String searchType){
+        return "stock/stock_cross_increase_effect_new2";
+    }
+
 
     /***
      * 查看出现金叉时候 涨幅的区间
