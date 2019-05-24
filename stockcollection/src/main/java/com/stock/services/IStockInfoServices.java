@@ -30,6 +30,9 @@ public interface IStockInfoServices {
       void getStockInfoHistory(String stockCode) throws Exception ;
 
 
+    void delStockInfo(String stockCode, String stockDate)  ;
+
+
     /***
      * 删除 空表
      * @throws Exception
@@ -41,6 +44,16 @@ public interface IStockInfoServices {
      * @throws Exception
      */
       void findTable( ) throws Exception;
+
+
+
+
+    /***
+     * 获取股票的实时的价格信息
+     * @param stockCode
+     * @throws Exception
+     */
+    void getStockInfoActualTime(String stockCode) throws Exception ;
 
 
 }

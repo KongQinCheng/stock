@@ -122,4 +122,9 @@ public interface StockInfoMapper {
     @Update("UPDATE stock_info_${stockCode} set stockCode =#{stockCode}")
     public void updateStockCode(@Param("stockCode") String stockCode);
 
+
+    @Delete("delete from  stock_info_${stockCode} where stockDate='${stockDate}' ")
+    public void delStockInfo(@Param("stockCode") String stockCode,@Param("stockDate") String stockDate);
+
+
 }

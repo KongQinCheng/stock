@@ -11,6 +11,11 @@ public class StockNewDataSqlProvider {
 
                 FROM(" stock_new_data a ");
                 WHERE(" a.stockDate = (SELECT MAX(stockDate) FROM stock_new_data )  ");
+
+                if (!("".equals(stockNewDataVo.getStockCode())||stockNewDataVo.getStockCode()==null)) {
+                    WHERE(" a.stockCode = '"+ stockNewDataVo.getStockCode() +"'" );
+                }
+
                 if (stockNewDataVo.getSpjmin() != 0.0) {
                     WHERE(" a.spj >= "+ stockNewDataVo.getSpjmin());
                 }

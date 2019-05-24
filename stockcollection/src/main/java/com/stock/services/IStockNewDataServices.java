@@ -6,7 +6,7 @@ import com.stock.bean.vo.StockNewDataVo;
 import java.util.List;
 
 public interface IStockNewDataServices {
-      void  getNewDataToTable(String stockCode);
+      void getNewDataToTable(String stockCode);
 
     List<StockNewData>  getNewData(StockNewDataVo stockNewDataVo);
 }

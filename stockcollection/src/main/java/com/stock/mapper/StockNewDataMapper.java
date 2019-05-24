@@ -30,6 +30,9 @@ public interface StockNewDataMapper {
     @Delete("DELETE from stock_new_data WHERE stockCode ='${stockCode}'")
     public void deleteByStockCode(@Param("stockCode") String stockCode);
 
+    @Delete("DELETE from stock_new_data WHERE stockCode ='${stockCode}' and stockDate ='${stockDate}'")
+    public void deleteByStockCodeAndStockDate(@Param("stockCode") String stockCode,@Param("stockDate") String stockDate);
+
 
     @Select("select * from stock_new_data ")
     @Results(id = "stockNewDataResults", value = {

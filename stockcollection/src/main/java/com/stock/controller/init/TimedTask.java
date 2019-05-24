@@ -1,11 +1,14 @@
 package com.stock.controller.init;
 
 import com.stock.bean.po.StockList;
+import com.stock.dao.IStockInfoDao;
 import com.stock.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -41,7 +44,7 @@ public class TimedTask {
     IStockInfoServices iStockInfoServices;
 
 
-    @Scheduled(cron = "0 0 0,17 * * ?")
+    @Scheduled(cron = "0 0 0,16 * * ?")
     public void getStockInfo() throws Exception {
         //获取新上市的新股票
         iStockListServices.getStockNewList();
@@ -51,10 +54,16 @@ public class TimedTask {
     }
 
 
-    @Scheduled(cron = "0 0/59 * * * ? ")   //1分钟获取一次微博的信息
+    @Scheduled(cron = "0 0 0/2 * * ?")   //1分钟获取一次微博的信息
     public void getWeiBo() throws Exception {
         iWebDiaryServices.getWeiBoByUser();
         System.out.println("微博采集完成");
+    }
+
+
+    @Scheduled(cron = "0 00-59/5 17 * * ?")
+    public void getStockMACDActualTime() throws Exception {
+        StockMACDActualTime();
     }
 
 
@@ -90,6 +99,7 @@ public class TimedTask {
         }
     }
 
+
     public class StockNewDataRunnable implements Runnable {
         private String mName;
         private CountDownLatch countDownLatch;
@@ -105,6 +115,12 @@ public class TimedTask {
             try {
                 for (int i = 0; i < listInput.size(); i++) {
                     try {
+                        //删除表中当天的数据（计算实时的MACD的时候，添加进去的，数据不准）
+                        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+                        Date day = new Date();
+
+                        iStockInfoServices.delStockInfo(listInput.get(i).getStockCode().replaceAll("\t", ""), sdf2.format(day));
+
                         //获取股票的最新信息
                         iStockInfoServices.getStockInfoHistory(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
                     } catch (Exception e) {
@@ -151,6 +167,67 @@ public class TimedTask {
 
                 }
                 countDownLatch.countDown();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public void StockMACDActualTime() {
+        List<StockList> stockList = iStockListServices.getStockList();
+        CountDownLatch CountDownLatch_getStockNewData = new CountDownLatch((int) THREAD_NUMBER);
+        ExecutorService fixedThreadPool = Executors.newFixedThreadPool((int) THREAD_NUMBER);
+        int listSize = stockList.size();
+
+        //将总数分成 多个线程之后，每个线程需要处理的数据为： listSize/threadCount
+        double divNumd = Math.ceil(listSize / THREAD_NUMBER);
+        int divNum = (int) divNumd;
+
+        if (listSize > 0) {
+            int batch = listSize % divNum == 0 ? listSize / divNum : listSize / divNum + 1;
+            for (int j = 0; j < batch; j++) {
+                int end = (j + 1) * divNum;
+                if (end > listSize) {
+                    end = listSize;
+                }
+                List<StockList> subList = stockList.subList(j * divNum, end);
+                StockMACDActualTimeRunnable threadRunnable = new StockMACDActualTimeRunnable( subList);
+                fixedThreadPool.execute(threadRunnable);
+            }
+        }
+        try {
+            CountDownLatch_getStockNewData.await();
+            System.out.println("getStockNewData 执行结束。开始继续执行主线程");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public class StockMACDActualTimeRunnable implements Runnable {
+
+        private List<StockList> listInput;
+        public StockMACDActualTimeRunnable( List<StockList> temp) {
+            this.listInput = temp;
+        }
+
+        public void run() {
+            try {
+                for (int i = 0; i < listInput.size(); i++) {
+                    iStockInfoServices.getStockInfoActualTime(listInput.get(i).getStockCode().replaceAll("\t", ""));
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -1,12 +1,22 @@
 package com.stock.services.impl;
 
+import com.stock.Enum.CrossType;
+import com.stock.Enum.SortType;
 import com.stock.bean.po.StockInfo;
+import com.stock.bean.po.StockInfoActualtime;
 import com.stock.bean.po.StockList;
+import com.stock.bean.po.StockNewData;
+import com.stock.bean.vo.StockNewDataVo;
+import com.stock.dao.IStockInfoActualtimeDao;
 import com.stock.dao.IStockInfoDao;
 import com.stock.dao.IStockListDao;
+import com.stock.dao.IStockNewDataDao;
+import com.stock.services.IStockInfoMacdServices;
 import com.stock.services.IStockInfoServices;
 import com.stock.services.IStockListServices;
+import com.stock.services.IStockNewDataServices;
 import com.stock.util.HtmlUtil;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +24,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class StockInfoServicesImpl implements IStockInfoServices {
@@ -28,6 +40,13 @@ public class StockInfoServicesImpl implements IStockInfoServices {
 
     @Autowired
     IStockListDao iStockListDao;
+
+
+    @Autowired
+    IStockNewDataDao iStockNewDataDao;
+
+    @Autowired
+    IStockInfoActualtimeDao iStockInfoActualtimeDao;
 
 
     @Override
@@ -78,6 +97,94 @@ public class StockInfoServicesImpl implements IStockInfoServices {
             }
         }
         System.out.println("获取数据成功，股票编号为：" + stockCode);
+    }
+
+    @Override
+    public void delStockInfo(String stockCode, String stockDate) {
+        iStockInfoDao.delStockInfo(stockCode, stockDate);
+    }
+
+
+    /***
+     * 获取 单个 股票的 历史信息
+     */
+    @Override
+    public void getStockInfoActualTime(String stockCode) throws Exception {
+
+            String url = "http://www.baidu.com/s?wd=" + stockCode;
+            String html = htmlUtil.getHtmlByURL(url, "UTF-8");
+            html = htmlUtil.getHtmlByExpression("<span class=\"op-stockdynamic-moretab-cur-num c-gap-right-small\">(.*?)</span>", html);
+            String[] strings = htmlUtil.splitByExpression("</span>", html);
+            html = strings[0];
+            html = html.replaceAll("<span class=\"op-stockdynamic-moretab-cur-num c-gap-right-small\">", "");
+
+            // 进行相关处理
+            String crossStockCode = insertStockInfoActualTime(stockCode, html);
+            if ("".equals(crossStockCode)) {
+                //插入到推荐表
+                StockInfoActualtime stockInfoActualtime =new StockInfoActualtime();
+                stockInfoActualtime.setSpj(html);
+                stockInfoActualtime.setStockCode(stockCode);
+                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+                Date day = new Date();
+                String stockDate = sdf2.format(day);
+                stockInfoActualtime.setStockDate(stockDate);
+                iStockInfoActualtimeDao.insert(stockInfoActualtime);
+            }
+    }
+
+
+    @Autowired
+    IStockInfoMacdServices iStockInfoMacdServices;
+
+    @Autowired
+    IStockInfoServices iStockInfoServices;
+
+    @Autowired
+    IStockNewDataServices iStockNewDataServices;
+
+    public String insertStockInfoActualTime(String stockCode, String price) {
+
+        try {
+            Double.parseDouble(price);
+        }catch (Exception e){
+            System.out.println("Double.parseDouble(price)= "+stockCode);
+            return "";
+        }
+
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        Date day = new Date();
+        String stockDate = sdf2.format(day);
+
+
+        //删除今天的数据，现在的数据到保存到数据库中。
+        iStockInfoDao.delStockInfo(stockCode, stockDate);
+        iStockNewDataDao.deleteByStockCodeAndStockDate(stockCode, stockDate);
+
+        //添加数据到数据库
+        StockInfo stockInfo = new StockInfo();
+        stockInfo.setStockCode(stockCode);
+        stockInfo.setStockDate(stockDate);
+        stockInfo.setSpj(Double.parseDouble(price));
+        iStockInfoDao.addStockInfo(stockInfo);
+
+        //计算MACD值
+        iStockInfoMacdServices.getStockInfoMacd(stockCode, 1);
+
+        //拷贝到新数据表中
+        List<StockInfo> newStockListByStockCode = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 1);
+        iStockNewDataDao.insert(newStockListByStockCode.get(0));
+
+        //判断是否存在交叉
+        List<StockInfo> newStockListByStockCodelist = iStockInfoServices.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 5);
+
+        Map<String, Object> checkResult = iStockInfoMacdServices.isExistCross(newStockListByStockCodelist, 2, CrossType.GOLD_CROSS.toString());
+        if (!checkResult.isEmpty()) {
+            if ((boolean)checkResult.get("result")){
+                return stockCode;
+            }
+        }
+        return "";
     }
 
 

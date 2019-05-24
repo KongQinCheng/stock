@@ -33,6 +33,12 @@ public class StockNewDataDaoImpl implements IStockNewDataDao {
     }
 
     @Override
+    public void deleteByStockCodeAndStockDate(String stockCode,String stockDate){
+        stockNewDataMapper.deleteByStockCodeAndStockDate(stockCode,stockDate);
+    }
+
+
+    @Override
     public List<StockNewData> getStockNewDataListByVo(StockNewDataVo stockNewDataVo) {
         return stockNewDataMapper.getStockNewDataListByVo(stockNewDataVo);
     }

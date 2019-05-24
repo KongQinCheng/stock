@@ -65,6 +65,12 @@ public interface IStockInfoDao {
 
 
     /***
+     * 删除 股票的信息
+     * @param stockCode
+     */
+    void delStockInfo(String stockCode,String stockDate);
+
+    /***
      * 判断数据是否已经存在
      * @param stockInfo
      * @return

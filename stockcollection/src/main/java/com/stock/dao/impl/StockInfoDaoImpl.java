@@ -69,6 +69,12 @@ public class StockInfoDaoImpl implements IStockInfoDao {
     }
 
     @Override
+    public void delStockInfo(String stockCode, String stockDate) {
+        stockInfoMapper.delStockInfo(stockCode,stockDate);
+    }
+
+
+    @Override
     public boolean isRoweExist(StockInfo stockInfo){
         if(stockInfoMapper.isRoweExist(stockInfo)>=1)
             return true;

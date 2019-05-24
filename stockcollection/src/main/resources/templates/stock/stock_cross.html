@@ -170,8 +170,8 @@
                     temphtml += "<td><a target='_blank' href='/stock/toStockInfoList?stockCode="+jsonObj[i].stockCode+"'>" + jsonObj[i].stockCode + "</a></td>";
                     temphtml += "<td>" + jsonObj[i].spj + "</td>";
                     temphtml += "<td>" + jsonObj[i].zdf + "</td>";
-                    temphtml += "<td>" + jsonObj[i].zdfEffect + "</td>";
-                    temphtml += "<td>" + jsonObj[i].zdfEffectAll + "</td>";
+                    temphtml += "<td><a target='_blank' href='/stock/toStockCrossIncreaseEffectNew2?stockCode="+jsonObj[i].stockCode+"'>当前涨幅对后续的影响</a></td>";
+                    temphtml += "<td><a target='_blank' href='/stock/toStockCrossIncreaseEffectNew2?stockCode="+jsonObj[i].stockCode+"'>金叉后会涨吗</a></td>";
                     temphtml += "<td>" + tempdate + "</td>";
                     temphtml += "<td><a target='_blank' href='/stock/toStockInfoList?stockCode="+jsonObj[i].stockCode+"'>综合</a></td>";
                     temphtml += "<td><a target='_blank' href='/stock/toStockMacd?stockCode="+jsonObj[i].stockCode+"'>MACD</a></td>";

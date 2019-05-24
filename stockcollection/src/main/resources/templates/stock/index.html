@@ -68,6 +68,19 @@
             <img src="../../img/5.jpg" alt="Image" class="tm-image">
         </div>
         <div class="col-lg-6 col-md-6 background last ">
+            <h2 class="section-title">股票信息</h2>
+            <p class="about-text">股票的各个信息。</p>
+            <div>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex5()">准确性</button>
+            </div>
+        </div>
+    </footer>
+
+    <footer class="col-md-12 content">
+        <div class="col-lg-6 col-md-6 last">
+            <img src="../../img/5.jpg" alt="Image" class="tm-image">
+        </div>
+        <div class="col-lg-6 col-md-6 background last ">
             <h2 class="section-title">历史推荐</h2>
             <p class="about-text">查看历史推荐的准确性。</p>
             <div>
@@ -124,6 +137,10 @@
 
     function toIndex4() {
         window.location.href = "/stock/toStockAnalyze"
+    }
+
+    function toIndex5() {
+        window.location.href = "/stock/toStockInfoList?stockCode=000001"
     }
 
 
