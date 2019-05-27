@@ -26,4 +26,10 @@ public class StockInfoActualtimeDaoImpl implements IStockInfoActualtimeDao {
     public void delete(String stockCode) {
         stockInfoActualtimeMapper.delByStockCode(stockCode);
     }
+
+    @Override
+    public void deleteByStockCodeAndStockDate(String stockCode,String stockDate) {
+        stockInfoActualtimeMapper.delByStockCodeAndStockDate(stockCode,stockDate);
+    }
+
 }

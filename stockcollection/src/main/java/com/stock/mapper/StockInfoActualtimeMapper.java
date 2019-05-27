@@ -36,5 +36,9 @@ public interface StockInfoActualtimeMapper {
     public void delByStockCode(@Param("stockCode") String stockCode);
 
 
+    @Delete("delete  from stock_info_actualtime where stockCode = '${stockCode}'and  stockDate = '${stockDate}' ")
+    public void delByStockCodeAndStockDate(@Param("stockCode") String stockCode,@Param("stockDate") String stockDate);
+
+
 
 }

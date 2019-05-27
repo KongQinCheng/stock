@@ -61,7 +61,7 @@ public class TimedTask {
     }
 
 
-    @Scheduled(cron = "0 00-59/5 17 * * ?")
+    @Scheduled(cron = "0 30-59/2 14 * * ?")
     public void getStockMACDActualTime() throws Exception {
         StockMACDActualTime();
     }
@@ -177,17 +177,8 @@ public class TimedTask {
 
 
 
-
-
-
-
-
-
-
-
     public void StockMACDActualTime() {
         List<StockList> stockList = iStockListServices.getStockList();
-        CountDownLatch CountDownLatch_getStockNewData = new CountDownLatch((int) THREAD_NUMBER);
         ExecutorService fixedThreadPool = Executors.newFixedThreadPool((int) THREAD_NUMBER);
         int listSize = stockList.size();
 
@@ -207,17 +198,10 @@ public class TimedTask {
                 fixedThreadPool.execute(threadRunnable);
             }
         }
-        try {
-            CountDownLatch_getStockNewData.await();
-            System.out.println("getStockNewData 执行结束。开始继续执行主线程");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
 
     public class StockMACDActualTimeRunnable implements Runnable {
-
         private List<StockList> listInput;
         public StockMACDActualTimeRunnable( List<StockList> temp) {
             this.listInput = temp;

@@ -111,26 +111,32 @@ public class StockInfoServicesImpl implements IStockInfoServices {
     @Override
     public void getStockInfoActualTime(String stockCode) throws Exception {
 
-            String url = "http://www.baidu.com/s?wd=" + stockCode;
-            String html = htmlUtil.getHtmlByURL(url, "UTF-8");
-            html = htmlUtil.getHtmlByExpression("<span class=\"op-stockdynamic-moretab-cur-num c-gap-right-small\">(.*?)</span>", html);
-            String[] strings = htmlUtil.splitByExpression("</span>", html);
-            html = strings[0];
-            html = html.replaceAll("<span class=\"op-stockdynamic-moretab-cur-num c-gap-right-small\">", "");
+        String url = "http://www.baidu.com/s?wd=" + stockCode;
+        String html = htmlUtil.getHtmlByURL(url, "UTF-8");
+        html = htmlUtil.getHtmlByExpression("<span class=\"op-stockdynamic-moretab-cur-num c-gap-right-small\">(.*?)</span>", html);
+        String[] strings = htmlUtil.splitByExpression("</span>", html);
+        html = strings[0];
+        html = html.replaceAll("<span class=\"op-stockdynamic-moretab-cur-num c-gap-right-small\">", "");
 
-            // 进行相关处理
-            String crossStockCode = insertStockInfoActualTime(stockCode, html);
-            if ("".equals(crossStockCode)) {
-                //插入到推荐表
-                StockInfoActualtime stockInfoActualtime =new StockInfoActualtime();
-                stockInfoActualtime.setSpj(html);
-                stockInfoActualtime.setStockCode(stockCode);
-                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-                Date day = new Date();
-                String stockDate = sdf2.format(day);
-                stockInfoActualtime.setStockDate(stockDate);
-                iStockInfoActualtimeDao.insert(stockInfoActualtime);
-            }
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        Date day = new Date();
+        String stockDate = sdf2.format(day);
+
+        // 进行相关处理
+        String crossStockCode = insertStockInfoActualTime(stockCode, html);
+        if (!"".equals(crossStockCode)) {
+            //删除 推荐表中的数据
+            iStockInfoActualtimeDao.deleteByStockCodeAndStockDate(stockCode, stockDate);
+            //插入新数据
+            StockInfoActualtime stockInfoActualtime = new StockInfoActualtime();
+            stockInfoActualtime.setSpj(html);
+            stockInfoActualtime.setStockCode(stockCode);
+            stockInfoActualtime.setStockDate(stockDate);
+            iStockInfoActualtimeDao.insert(stockInfoActualtime);
+        } else {
+            //删除 推荐表中的数据
+            iStockInfoActualtimeDao.deleteByStockCodeAndStockDate(stockCode, stockDate);
+        }
     }
 
 
@@ -147,8 +153,8 @@ public class StockInfoServicesImpl implements IStockInfoServices {
 
         try {
             Double.parseDouble(price);
-        }catch (Exception e){
-            System.out.println("Double.parseDouble(price)= "+stockCode);
+        } catch (Exception e) {
+            System.out.println("Double.parseDouble(price)= " + stockCode);
             return "";
         }
 
@@ -176,11 +182,11 @@ public class StockInfoServicesImpl implements IStockInfoServices {
         iStockNewDataDao.insert(newStockListByStockCode.get(0));
 
         //判断是否存在交叉
-        List<StockInfo> newStockListByStockCodelist = iStockInfoServices.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 5);
+        List<StockInfo> newStockListByStockCodelist = iStockInfoServices.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 2);
 
         Map<String, Object> checkResult = iStockInfoMacdServices.isExistCross(newStockListByStockCodelist, 2, CrossType.GOLD_CROSS.toString());
         if (!checkResult.isEmpty()) {
-            if ((boolean)checkResult.get("result")){
+            if ((boolean) checkResult.get("result")) {
                 return stockCode;
             }
         }

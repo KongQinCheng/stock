@@ -11,4 +11,6 @@ public interface IStockInfoActualtimeDao {
 
     void delete(String stockCode);
 
+     void deleteByStockCodeAndStockDate(String stockCode,String stockDate) ;
+
 }

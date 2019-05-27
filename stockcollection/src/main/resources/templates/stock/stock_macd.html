@@ -11,7 +11,8 @@
     <input class="searchInputDiv" id="stockCode" name="stockCode" placeholder="请输入要查询的股票编码: 如000001">
 
     <select id="limitNum" class="searchInputDiv" onchange="init()">
-        <option value="100" selected="selected">100</option>
+        <option value="50" selected="selected">50</option>
+        <option value="100">100</option>
         <option value="200">200</option>
         <option value="300">300</option>
         <option value="500">500</option>
@@ -26,8 +27,10 @@
 <div class="flowDiv">
     <div id="main" style="height:800px;width: 5000px;"></div>
 </div>
-x
 
+<div class="text-center footer">
+    <div class="container">Copyright &copy; 2019.GWQ & CMF Company All rights reserved.</div>
+</div>
 <!-- ECharts单文件引入 -->
 <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
 <script src="../js/common.js"></script>
@@ -38,6 +41,7 @@ x
         $("#stockCode").val(getUrlParam("stockCode"));
         init()
     }
+
     function init() {
 
 
@@ -47,8 +51,8 @@ x
             stockCode = "000001"
 
 
-        var limitnum =$("#limitNum").val();
-        var str = {"stockCode": stockCode,"limitNum":limitnum, "stockBeginTime": "", "stockEndTime": ""}
+        var limitnum = $("#limitNum").val();
+        var str = {"stockCode": stockCode, "limitNum": limitnum, "stockBeginTime": "", "stockEndTime": ""}
         // 基于准备好的dom，初始化echarts图表
         var myChart = echarts.init(document.getElementById('main'));
 
@@ -170,7 +174,7 @@ x
     }
 
 
-    $('#stockCode').bind('keyup', function(event) {
+    $('#stockCode').bind('keyup', function (event) {
         if (event.keyCode == "13") {
             //回车执行查询
             $('#searchInputButton').click();
@@ -179,3 +183,4 @@ x
 
 </script>
 </body>
+</html>
