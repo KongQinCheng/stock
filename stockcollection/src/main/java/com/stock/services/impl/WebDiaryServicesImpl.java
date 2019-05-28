@@ -8,12 +8,6 @@ import com.stock.bean.vo.DiaryVo;
 import com.stock.dao.IWebDiaryDao;
 import com.stock.services.IWebDiaryServices;
 import com.stock.util.HtmlUtil;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

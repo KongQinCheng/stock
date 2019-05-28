@@ -153,4 +153,25 @@ public class WebStockController {
     public String toStockAnalyze(String searchType){
         return "stock/stock_analyze";
     }
+
+
+    /***
+     * 查看出现金叉时候 涨幅的区间
+     * @param searchType
+     * @return
+     */
+    @RequestMapping("/toStockActualtime")
+    public String toStockActualtime(String searchType){
+        return "stock/stock_actualtime";
+    }
+
+    /***
+     * 查看出现金叉时候 涨幅的区间
+     * @param searchType
+     * @return
+     */
+    @RequestMapping("/toStockActualtimeHistory")
+    public String toStockActualtimeHistory(String searchType){
+        return "stock/stock_actualtime_history";
+    }
 }

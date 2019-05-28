@@ -18,6 +18,11 @@ public class StockInfoActualtimeDaoImpl implements IStockInfoActualtimeDao {
     StockInfoActualtimeMapper stockInfoActualtimeMapper;
 
     @Override
+    public List<StockInfoActualtime> getByStockDate(String stockDate) {
+        return stockInfoActualtimeMapper.getByStockDate(stockDate);
+    }
+
+    @Override
     public void insert(StockInfoActualtime stockInfoActualtime) {
         stockInfoActualtimeMapper.insert(stockInfoActualtime);
     }

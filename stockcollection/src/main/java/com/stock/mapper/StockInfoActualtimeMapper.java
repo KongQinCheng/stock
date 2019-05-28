@@ -1,6 +1,7 @@
 package com.stock.mapper;
 
 import com.stock.bean.po.AnalyzeIncreaseDay2;
+import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockInfoActualtime;
 import com.stock.sqlProvider.StockAnalyzeIncreaseDay2SqlProvider;
 import org.apache.ibatis.annotations.*;
@@ -24,12 +25,12 @@ public interface StockInfoActualtimeMapper {
     public void insert(StockInfoActualtime stockInfoActualtime);
 
 
-    @Select("select * from stock_info_actualtime where 1=1 ")
+    @Select("select * from stock_info_actualtime where 1=1 and stockDate = '${stockDate}' order by spj desc ")
     @Results(id = "stockinfoActualtimeResults", value = {
             @Result(column = "stockCode", property = "stockCode"),
             @Result(column = "spj", property = "spj"),
             @Result(column = "stockDate", property = "stockDate")})
-    public List<AnalyzeIncreaseDay2> getListAll(@Param("crossType") String crossType);
+    public List<StockInfoActualtime> getByStockDate(@Param("stockDate") String stockDate);
 
 
     @Delete("delete  from stock_info_actualtime where stockCode = '${stockCode}' ")

@@ -1,11 +1,12 @@
-package com.stock.dao;
+package com.stock.services;
 
-import com.stock.bean.po.StockCross;
+
 import com.stock.bean.po.StockInfoActualtime;
 
 import java.util.List;
+import java.util.Map;
 
-public interface IStockInfoActualtimeDao {
+public interface IStockInfoActualtimeServices {
 
     List<StockInfoActualtime> getByStockDate(String stockDate);
 
@@ -13,6 +14,7 @@ public interface IStockInfoActualtimeDao {
 
     void delete(String stockCode);
 
-     void deleteByStockCodeAndStockDate(String stockCode,String stockDate) ;
+    void deleteByStockCodeAndStockDate(String stockCode,String stockDate) ;
+
 
 }
