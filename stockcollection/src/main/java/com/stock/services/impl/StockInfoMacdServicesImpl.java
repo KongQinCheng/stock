@@ -33,7 +33,7 @@ public class StockInfoMacdServicesImpl implements IStockInfoMacdServices {
             stockListByStockCode = iStockInfoDao.getStockListByStockCode(stockCode, 999999999);
         }
         if (type == 1) {
-            stockListByStockCode = iStockInfoDao.getStockListByStockCodeLimit(stockCode,10);
+            stockListByStockCode = iStockInfoDao.getStockListByStockCodeLimit(stockCode, 10);
         }
 
         double lastDayEma12 = 0;
@@ -118,24 +118,15 @@ public class StockInfoMacdServicesImpl implements IStockInfoMacdServices {
             beforeDIF = list.get(i).getDIF();
             beforeDEA = list.get(i).getEMAMACD();
 
-            if (CrossType.GOLD_CROSS.toString().equals(crossType)) {
-                if ("10".equals(map.get("type")) || "11".equals(map.get("type"))) {
-                    resultMap.put("result", true);
-                    resultMap.put("date", list.get(i).getStockDate());
-                    return resultMap;
-                }
+            if (crossType.equals(map.get("type"))) {
+                resultMap.put("result", true);
+                resultMap.put("date", list.get(i).getStockDate());
+                return resultMap;
             }
-            if (CrossType.DEAD_CROSS.toString().equals(crossType)) {
-                if ("00".equals(map.get("type")) || "01".equals(map.get("type"))) {
-                    resultMap.put("result", true);
-                    resultMap.put("date", list.get(i).getStockDate());
-                    return resultMap;
-                }
-            }
+
         }
         return resultMap;
     }
-
 
 
     @Override
