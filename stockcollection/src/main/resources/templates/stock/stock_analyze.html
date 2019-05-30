@@ -54,11 +54,25 @@
             <img src="../../img/5.jpg" alt="Image" class="tm-image">
         </div>
         <div class="col-lg-6 col-md-6 background last ">
-            <h2 class="section-title">金叉-最终影响</h2>
+            <h2 class="section-title">涨幅-后某一天上涨</h2>
+            <p class="about-text">某一天上涨情况</p>
+            <p class="about-text"></p>
+            <div>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex2()">涨幅预测</button>
+            </div>
+        </div>
+    </footer>
+
+    <footer class="col-md-12 content" >
+        <div class="col-lg-6 col-md-6 last">
+            <img src="../../img/5.jpg" alt="Image" class="tm-image">
+        </div>
+        <div class="col-lg-6 col-md-6 background last ">
+            <h2 class="section-title">涨幅-后几天最终上涨</h2>
             <p class="about-text">最终是涨还是跌</p>
             <p class="about-text"></p>
             <div>
-                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex2()">从新开始</button>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex3()">涨幅预测</button>
             </div>
         </div>
     </footer>
@@ -86,10 +100,14 @@
     function toIndex1() {
         window.location.href = "/stock/toStockCrossIncreaseEffectNew2?effectType=1&stockCode=000001"
     }
-
     function toIndex2() {
-
+        window.location.href = "/stock/toStockCrossIncreaseEffectNew?effectType=0&stockCode=000001"
     }
+    function toIndex3() {
+        window.location.href = "/stock/toStockCrossIncreaseEffectNew?effectType=1&stockCode=000001"
+    }
+
+
 
 
     // Check scroll position and add/remove background to navbar

@@ -20,9 +20,9 @@ import java.util.List;
 @Mapper
 public interface StockAnalyzeIncreaseDay2Mapper {
 
-    @Insert("insert into stock_analyze_increase_day2 (stockCode,stockDate,crossType," +
+    @Insert("insert into stock_analyze_increase_day2 (stockCode,stockDate,crossType,searchType," +
             "day1,day2,day3,day4,day5,count) "
-            + "values('${stockCode}','${stockDate}','${crossType}', " +
+            + "values('${stockCode}','${stockDate}','${crossType}','${searchType}',  " +
             "'${day1}','${day2}','${day3}','${day4}','${day5}','${count}')")
     public void insert(AnalyzeIncreaseDay2 analyzeIncreaseDay);
 
@@ -46,8 +46,8 @@ public interface StockAnalyzeIncreaseDay2Mapper {
     List<AnalyzeIncreaseDay2> getEntryByStockCode(AnalyzeIncreaseDay2 analyzeIncreaseDay);
 
 
-    @Delete("delete  from stock_analyze_increase_day2 where stockCode = '${stockCode}' ")
-    public void delByStockCode(@Param("stockCode") String stockCode, @Param("crossType") String crossType);
+    @Delete("delete  from stock_analyze_increase_day2 where stockCode = '${stockCode}'  ")
+    public void delByStockCode(@Param("stockCode") String stockCode, @Param("searchType") String searchType);
 
 
     @Select("  SELECT COUNT(*) as count FROM stock_analyze_increase_day2  WHERE  stockDate ='${stockDate}' and stockCode = '${stockCode}'")

@@ -21,17 +21,9 @@
 
 <div class="container" id="home">
 
-
     <section class="col-md-12 content" id="">
         <div style="width: 100%;min-height: 800px;background-color: #fff">
-            <div style="width: 100%">
-                <select id="crossType" onchange="getNominate()">
-                    <option selected="selected" value="11">0上金叉</option>
-                    <option  value="10">0下金叉</option>
-                    <option  value="01">0上死叉</option>
-                    <option  value="00">0下死叉</option>
-                </select>
-            </div>
+
 
             <table class="table">
                 <thead>
@@ -46,6 +38,9 @@
                 </tr>
                 </thead>
                 <tbody id="tbody">
+
+                </tbody>
+                <tbody id="tbody2">
 
                 </tbody>
             </table>
@@ -71,7 +66,7 @@
 
     function getNominate() {
 
-        var str = {"stockCode": getUrlParam("stockCode"), "crossType": $("#crossType").val()}
+        var str = {"stockCode": getUrlParam("stockCode"), "searchType": "01"}
 
         $.ajax({
             type: "post",
@@ -81,52 +76,73 @@
             dataType: "text",        //返回数据形式为json
             contentType: "application/json",
             success: function (result) {
-                // console.log(result)
-
-                var jsonObj = JSON.parse(result);//转换为json对象
                 var temphtml = "";
-
-
-                var jsonObj00 = jsonObj.map00;
-                var jsonObj01 = jsonObj.map01;
-                var jsonObj10 = jsonObj.map10;
-                var jsonObj11 = jsonObj.map11;
-
-
-                var jsonObj00sub ="" ;
-                var jsonObj00all ="";
-
-                jsonObj00sub = jsonObj11.crossEffect;
-                jsonObj00all = jsonObj11.crossEffectALL;
-                temphtml += getHtml("0上金叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
-                temphtml += getHtml("0上金叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
-
-                jsonObj00sub = jsonObj10.crossEffect;
-                jsonObj00all = jsonObj10.crossEffectALL;
-                temphtml += getHtml("0下金叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
-                temphtml += getHtml("0下金叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
-
-
-                jsonObj00sub = jsonObj01.crossEffect;
-                jsonObj00all = jsonObj01.crossEffectALL;
-                temphtml += getHtml("0上死叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
-                temphtml += getHtml("0上死叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
-
-
-                 jsonObj00sub = jsonObj00.crossEffect;
-                 jsonObj00all = jsonObj00.crossEffectALL;
-                temphtml += getHtml("0下死叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
-                temphtml += getHtml("0下死叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
-
-
+                temphtml= getAllHtml(result)
                 $("#tbody").html(temphtml)
             },
             error: function (errorMsg) {
-                //请求失败时执行该函数
                 alert("图表请求数据失败!");
             }
         })
 
+
+        var str1 = {"stockCode": getUrlParam("stockCode"), "searchType": "02"}
+        $.ajax({
+            type: "post",
+            async: true,
+            url: "/stock/getStockCrossEffectNewFinal",
+            data: JSON.stringify(str1),
+            dataType: "text",        //返回数据形式为json
+            contentType: "application/json",
+            success: function (result) {
+                var temphtml = "";
+                temphtml= getAllHtml(result)
+                $("#tbody2").html(result)
+            },
+            error: function (errorMsg) {
+                alert("图表请求数据失败!");
+            }
+        })
+
+    }
+
+
+    function  getAllHtml(result) {
+
+        var jsonObj = JSON.parse(result);//转换为json对象
+        var temphtml = "";
+
+        var jsonObj00 = jsonObj.map00;
+        var jsonObj01 = jsonObj.map01;
+        var jsonObj10 = jsonObj.map10;
+        var jsonObj11 = jsonObj.map11;
+
+        var jsonObj00sub ="" ;
+        var jsonObj00all ="";
+
+        jsonObj00sub = jsonObj11.crossEffect;
+        jsonObj00all = jsonObj11.crossEffectALL;
+        temphtml += getHtml("0上金叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
+        temphtml += getHtml("0上金叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
+
+        jsonObj00sub = jsonObj10.crossEffect;
+        jsonObj00all = jsonObj10.crossEffectALL;
+        temphtml += getHtml("0下金叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
+        temphtml += getHtml("0下金叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
+
+
+        jsonObj00sub = jsonObj01.crossEffect;
+        jsonObj00all = jsonObj01.crossEffectALL;
+        temphtml += getHtml("0上死叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
+        temphtml += getHtml("0上死叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
+
+
+        jsonObj00sub = jsonObj00.crossEffect;
+        jsonObj00all = jsonObj00.crossEffectALL;
+        temphtml += getHtml("0下死叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
+        temphtml += getHtml("0下死叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
+
+        return temphtml;
     }
 
 
@@ -151,12 +167,11 @@
         temphtml += "<tr>";
         temphtml += "<td>" + title + "</td>";
 
-        temphtml += "<td>" + getHtmlsub(val1) + "</td>";
-        temphtml += "<td>" + getHtmlsub(val2) + "</td>";
-        temphtml += "<td>" + getHtmlsub(val3) + "</td>";
-        temphtml += "<td>" + getHtmlsub(val4) + "</td>";
-        temphtml += "<td>" + getHtmlsub(val5) + "</td>";
-
+        temphtml += "<td>" + getHtmlsub(val1) + "-"+val1+"/"+count+"</td>";
+        temphtml += "<td>" + getHtmlsub(val2) + "-"+val2+"/"+count+"</td>";
+        temphtml += "<td>" + getHtmlsub(val3) + "-"+val3+"/"+count+"</td>";
+        temphtml += "<td>" + getHtmlsub(val4) + "-"+val4+"/"+count+"</td>";
+        temphtml += "<td>" + getHtmlsub(val4) + "-"+val5+"/"+count+"</td>";
 
         temphtml += "<tr>";
         return temphtml;

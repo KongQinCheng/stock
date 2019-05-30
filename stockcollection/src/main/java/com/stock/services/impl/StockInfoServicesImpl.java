@@ -48,6 +48,15 @@ public class StockInfoServicesImpl implements IStockInfoServices {
     @Autowired
     IStockInfoActualtimeDao iStockInfoActualtimeDao;
 
+    @Autowired
+    IStockInfoMacdServices iStockInfoMacdServices;
+
+    @Autowired
+    IStockInfoServices iStockInfoServices;
+
+    @Autowired
+    IStockNewDataServices iStockNewDataServices;
+
 
     @Override
     public List<StockInfo> getNewStockListByStockCode(String stockCode, String sortType, int limitNum) {
@@ -106,7 +115,7 @@ public class StockInfoServicesImpl implements IStockInfoServices {
 
 
     /***
-     * 获取 单个 股票的 历史信息
+     * 获取 单个 股票的 实时信息
      */
     @Override
     public void getStockInfoActualTime(String stockCode) throws Exception {
@@ -137,17 +146,9 @@ public class StockInfoServicesImpl implements IStockInfoServices {
             //删除 推荐表中的数据
             iStockInfoActualtimeDao.deleteByStockCodeAndStockDate(stockCode, stockDate);
         }
+        System.out.println("实时金叉查询 查询完成  stockCode=" + stockCode);
     }
 
-
-    @Autowired
-    IStockInfoMacdServices iStockInfoMacdServices;
-
-    @Autowired
-    IStockInfoServices iStockInfoServices;
-
-    @Autowired
-    IStockNewDataServices iStockNewDataServices;
 
     public String insertStockInfoActualTime(String stockCode, String price) {
 
@@ -184,7 +185,7 @@ public class StockInfoServicesImpl implements IStockInfoServices {
         //判断是否存在交叉
         List<StockInfo> newStockListByStockCodelist = iStockInfoServices.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 2);
 
-        Map<String, Object> checkResult = iStockInfoMacdServices.isExistCross(newStockListByStockCodelist, 2, CrossType.GOLD_CROSS.toString());
+        Map<String, Object> checkResult = iStockInfoMacdServices.isExistCross(newStockListByStockCodelist, 2, "11");
         if (!checkResult.isEmpty()) {
             if ((boolean) checkResult.get("result")) {
                 return stockCode;

@@ -344,10 +344,10 @@ public class StockNoninateController {
     @PostMapping(value = "/getStockCrossEffectNewFinal", consumes = "application/json")
     @ResponseBody
     public String getStockCrossEffectNewFinal(@RequestBody StockSearchVo stockSearchVo) {
-        Map<String, Object> resultMap11 = iStockAnalyzeMacdServices.getStockCrossEffectNewFinal(stockSearchVo.getStockCode(),"11");
-        Map<String, Object> resultMap10 = iStockAnalyzeMacdServices.getStockCrossEffectNewFinal(stockSearchVo.getStockCode(),"10");
-        Map<String, Object> resultMap01 = iStockAnalyzeMacdServices.getStockCrossEffectNewFinal(stockSearchVo.getStockCode(),"01");
-        Map<String, Object> resultMap00 = iStockAnalyzeMacdServices.getStockCrossEffectNewFinal(stockSearchVo.getStockCode(),"00");
+        Map<String, Object> resultMap11 = iStockAnalyzeMacdServices.getStockCrossEffectNewFinal(stockSearchVo.getStockCode(),"11",stockSearchVo.getSearchType());
+        Map<String, Object> resultMap10 = iStockAnalyzeMacdServices.getStockCrossEffectNewFinal(stockSearchVo.getStockCode(),"10",stockSearchVo.getSearchType());
+        Map<String, Object> resultMap01 = iStockAnalyzeMacdServices.getStockCrossEffectNewFinal(stockSearchVo.getStockCode(),"01",stockSearchVo.getSearchType());
+        Map<String, Object> resultMap00 = iStockAnalyzeMacdServices.getStockCrossEffectNewFinal(stockSearchVo.getStockCode(),"00",stockSearchVo.getSearchType());
         Map<String, Object> resultMap =new HashMap<>();
         resultMap.put("map11",resultMap11);
         resultMap.put("map10",resultMap10);

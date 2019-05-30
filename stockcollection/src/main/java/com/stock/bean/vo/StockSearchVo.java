@@ -19,5 +19,6 @@ public class StockSearchVo {
 
     private String  crossType ; //金叉 死叉类型。
     private String  effectType ; //金叉 死叉类型。
+    private String  searchType ; //查询 类型。
 
 }

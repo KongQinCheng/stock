@@ -24,6 +24,11 @@ public class StockAnalyzeIncreaseDay2SqlProvider {
                     WHERE(" a.crossType = '"+ analyzeIncreaseDay.getCrossType() +"'" );
                 }
 
+                if (!("".equals(analyzeIncreaseDay.getSearchType()) || analyzeIncreaseDay.getSearchType()==null)) {
+                    WHERE(" a.searchType = '"+ analyzeIncreaseDay.getSearchType() +"'" );
+                }
+
+
             }
         }.toString();
     }
