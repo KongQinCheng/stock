@@ -1325,13 +1325,19 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
             AnalyzeIncreaseDay2 analyzeIncreaseDay01 = new AnalyzeIncreaseDay2(stockCode, stockDate, "01", "01");
             AnalyzeIncreaseDay2 analyzeIncreaseDay00 = new AnalyzeIncreaseDay2(stockCode, stockDate, "00", "01");
 
+
+            AnalyzeIncreaseDay2   analyzeIncreaseDay11_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "11", "02");
+            AnalyzeIncreaseDay2   analyzeIncreaseDay10_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "10", "02");
+            AnalyzeIncreaseDay2   analyzeIncreaseDay01_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "01", "02");
+            AnalyzeIncreaseDay2   analyzeIncreaseDay00_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "00", "02");
+
+
             for (int i = 1; i < list.size(); i++) {
                 Map<String, String> map = iStockInfoMacdServices.haveCross(list.get(i).getStockDate(), beforeDIF, beforeDEA, list.get(i).getDIF(), list.get(i).getEMAMACD());
                 beforeDIF = list.get(i).getDIF();
                 beforeDEA = list.get(i).getEMAMACD();
 
                 if (!"-1".equals(map.get("type"))) { //有出现交叉 保存下来
-
 
                     switch (map.get("type")) {
                         case "00":
@@ -1345,35 +1351,30 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
 
                     }
 
-                    iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay00);
-                    iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay01);
-                    iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay10);
-                    iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay11);
-
-
-
-                    analyzeIncreaseDay11 = new AnalyzeIncreaseDay2(stockCode, stockDate, "11", "02");
-                    analyzeIncreaseDay10 = new AnalyzeIncreaseDay2(stockCode, stockDate, "10", "02");
-                    analyzeIncreaseDay01 = new AnalyzeIncreaseDay2(stockCode, stockDate, "01", "02");
-                    analyzeIncreaseDay00 = new AnalyzeIncreaseDay2(stockCode, stockDate, "00", "02");
 
                     switch (map.get("type")) {
                         case "00":
-                            analyzeIncreaseDay00 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay00);
+                            analyzeIncreaseDay00_02 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay00_02);
                         case "01":
-                            analyzeIncreaseDay01 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay01);
+                            analyzeIncreaseDay01_02 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay01_02);
                         case "10":
-                            analyzeIncreaseDay10 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay10);
+                            analyzeIncreaseDay10_02 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay10_02);
                         case "11":
-                            analyzeIncreaseDay11 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay11);
+                            analyzeIncreaseDay11_02 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay11_02);
                     }
-                    iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay00);
-                    iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay01);
-                    iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay10);
-                    iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay11);
 
                 }
             }
+
+            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay00);
+            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay01);
+            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay10);
+            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay11);
+
+            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay00_02);
+            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay01_02);
+            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay10_02);
+            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay11_02);
 
         }
         System.out.println("金叉出现之后一定会涨 stockCode=" + stockCode);
