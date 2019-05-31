@@ -44,7 +44,7 @@ public class TimedTask {
     IStockInfoServices iStockInfoServices;
 
 
-    @Scheduled(cron = "0 0 0,16 * * ?")
+    @Scheduled(cron = "0 0 17 * * ?")
     public void getStockInfo() throws Exception {
         //获取新上市的新股票
         iStockListServices.getStockNewList();
