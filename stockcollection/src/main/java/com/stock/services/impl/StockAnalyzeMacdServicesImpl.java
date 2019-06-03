@@ -742,6 +742,81 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
         return analyzeIncreaseDay2;
     }
 
+    /***
+     * 判断各种交叉 出现之后 后面是否一定会上涨
+     *
+     * @param list
+     * @param i
+     * @param analyzeIncreaseDay2
+     * @return
+     */
+    public static AnalyzeIncreaseDay2 getIncreaseEffectMaxValueDistribution(List<StockInfo> list, int i, AnalyzeIncreaseDay2 analyzeIncreaseDay2) {
+
+        analyzeIncreaseDay2.setCount(analyzeIncreaseDay2.getCount() + 1.0);
+
+        if (i + 1 < list.size() && (list.get(i + 1).getZgj() - list.get(i).getSpj() > 0)) {
+            analyzeIncreaseDay2.setDay1(analyzeIncreaseDay2.getDay1() + 1.0);
+            return analyzeIncreaseDay2;
+        }
+        if (i + 2 < list.size() && (list.get(i + 2).getZgj() - list.get(i).getSpj() > 0)) {
+            analyzeIncreaseDay2.setDay2(analyzeIncreaseDay2.getDay2() + 1.0);
+            return analyzeIncreaseDay2;
+        }
+        if (i + 3 < list.size() && (list.get(i + 3).getZgj() - list.get(i).getSpj() > 0)) {
+            analyzeIncreaseDay2.setDay3(analyzeIncreaseDay2.getDay3() + 1.0);
+            return analyzeIncreaseDay2;
+        }
+        if (i + 4 < list.size() && (list.get(i + 4).getZgj() - list.get(i).getSpj() > 0)) {
+            analyzeIncreaseDay2.setDay4(analyzeIncreaseDay2.getDay4() + 1.0);
+            return analyzeIncreaseDay2;
+        }
+        if (i + 5 < list.size() && (list.get(i + 5).getZgj() - list.get(i).getSpj() > 0)) {
+            analyzeIncreaseDay2.setDay5(analyzeIncreaseDay2.getDay5() + 1.0);
+            return analyzeIncreaseDay2;
+        }
+        return analyzeIncreaseDay2;
+    }
+
+    public static AnalyzeCorssEffectDto getDistribution(double zgj, double spj, AnalyzeCorssEffectDto analyzeCorssEffectDto){
+
+
+        if ((zgj-spj)/spj>=0.1){
+            analyzeCorssEffectDto.setIncrease10(analyzeCorssEffectDto.getIncrease10()+1.0);
+        }
+        if ((zgj-spj)/spj>=0.09){
+            analyzeCorssEffectDto.setIncrease9(analyzeCorssEffectDto.getIncrease9()+1.0);
+        }
+        if ((zgj-spj)/spj>=0.08){
+            analyzeCorssEffectDto.setIncrease8(analyzeCorssEffectDto.getIncrease8()+1.0);
+        }
+        if ((zgj-spj)/spj>=0.07){
+            analyzeCorssEffectDto.setIncrease7(analyzeCorssEffectDto.getIncrease7()+1.0);
+        }
+        if ((zgj-spj)/spj>=0.06){
+            analyzeCorssEffectDto.setIncrease6(analyzeCorssEffectDto.getIncrease6()+1.0);
+        }
+        if ((zgj-spj)/spj>=0.05){
+            analyzeCorssEffectDto.setIncrease5(analyzeCorssEffectDto.getIncrease5()+1.0);
+        }
+        if ((zgj-spj)/spj>=0.04){
+            analyzeCorssEffectDto.setIncrease4(analyzeCorssEffectDto.getIncrease4()+1.0);
+        }
+        if ((zgj-spj)/spj>=0.03){
+            analyzeCorssEffectDto.setIncrease3(analyzeCorssEffectDto.getIncrease3()+1.0);
+        }
+        if ((zgj-spj)/spj>=0.02){
+            analyzeCorssEffectDto.setIncrease2(analyzeCorssEffectDto.getIncrease2()+1.0);
+        }
+        if ((zgj-spj)/spj>=0.01){
+            analyzeCorssEffectDto.setIncrease1(analyzeCorssEffectDto.getIncrease1()+1.0);
+        }
+        if ((zgj-spj)/spj>=0){
+            analyzeCorssEffectDto.setIncrease0(analyzeCorssEffectDto.getIncrease0()+1.0);
+        }
+        return  analyzeCorssEffectDto;
+    }
+
+
 
     public static AnalyzeIncreaseDay2 getIncreaseEffectFinalDay(AnalyzeIncreaseDay2 analyzeIncreaseInsert, AnalyzeIncreaseDay2 analyzeIncreaseReturn) {
         analyzeIncreaseReturn.setDay1(analyzeIncreaseReturn.getDay1() + analyzeIncreaseInsert.getDay1());
@@ -1331,6 +1406,11 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
             AnalyzeIncreaseDay2   analyzeIncreaseDay01_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "01", "02");
             AnalyzeIncreaseDay2   analyzeIncreaseDay00_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "00", "02");
 
+            AnalyzeIncreaseDay2   analyzeIncreaseDay11_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "11", "03");
+            AnalyzeIncreaseDay2   analyzeIncreaseDay10_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "10", "03");
+            AnalyzeIncreaseDay2   analyzeIncreaseDay01_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "01", "03");
+            AnalyzeIncreaseDay2   analyzeIncreaseDay00_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "00", "03");
+
 
             for (int i = 1; i < list.size(); i++) {
                 Map<String, String> map = iStockInfoMacdServices.haveCross(list.get(i).getStockDate(), beforeDIF, beforeDEA, list.get(i).getDIF(), list.get(i).getEMAMACD());
@@ -1361,6 +1441,17 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
                             analyzeIncreaseDay10_02 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay10_02);
                         case "11":
                             analyzeIncreaseDay11_02 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay11_02);
+                    }
+
+                    switch (map.get("type")) {
+                        case "00":
+                            analyzeIncreaseDay00_03 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay00_03);
+                        case "01":
+                            analyzeIncreaseDay01_03 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay01_03);
+                        case "10":
+                            analyzeIncreaseDay10_03 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay10_03);
+                        case "11":
+                            analyzeIncreaseDay11_03 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay11_03);
                     }
 
                 }
