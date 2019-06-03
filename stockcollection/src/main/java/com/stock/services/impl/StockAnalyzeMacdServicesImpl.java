@@ -777,45 +777,44 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
         return analyzeIncreaseDay2;
     }
 
-    public static AnalyzeCorssEffectDto getDistribution(double zgj, double spj, AnalyzeCorssEffectDto analyzeCorssEffectDto){
+    public static AnalyzeCorssEffectDto getDistribution(double zgj, double spj, AnalyzeCorssEffectDto analyzeCorssEffectDto) {
 
 
-        if ((zgj-spj)/spj>=0.1){
-            analyzeCorssEffectDto.setIncrease10(analyzeCorssEffectDto.getIncrease10()+1.0);
+        if ((zgj - spj) / spj >= 0.1) {
+            analyzeCorssEffectDto.setIncrease10(analyzeCorssEffectDto.getIncrease10() + 1.0);
         }
-        if ((zgj-spj)/spj>=0.09){
-            analyzeCorssEffectDto.setIncrease9(analyzeCorssEffectDto.getIncrease9()+1.0);
+        if ((zgj - spj) / spj >= 0.09) {
+            analyzeCorssEffectDto.setIncrease9(analyzeCorssEffectDto.getIncrease9() + 1.0);
         }
-        if ((zgj-spj)/spj>=0.08){
-            analyzeCorssEffectDto.setIncrease8(analyzeCorssEffectDto.getIncrease8()+1.0);
+        if ((zgj - spj) / spj >= 0.08) {
+            analyzeCorssEffectDto.setIncrease8(analyzeCorssEffectDto.getIncrease8() + 1.0);
         }
-        if ((zgj-spj)/spj>=0.07){
-            analyzeCorssEffectDto.setIncrease7(analyzeCorssEffectDto.getIncrease7()+1.0);
+        if ((zgj - spj) / spj >= 0.07) {
+            analyzeCorssEffectDto.setIncrease7(analyzeCorssEffectDto.getIncrease7() + 1.0);
         }
-        if ((zgj-spj)/spj>=0.06){
-            analyzeCorssEffectDto.setIncrease6(analyzeCorssEffectDto.getIncrease6()+1.0);
+        if ((zgj - spj) / spj >= 0.06) {
+            analyzeCorssEffectDto.setIncrease6(analyzeCorssEffectDto.getIncrease6() + 1.0);
         }
-        if ((zgj-spj)/spj>=0.05){
-            analyzeCorssEffectDto.setIncrease5(analyzeCorssEffectDto.getIncrease5()+1.0);
+        if ((zgj - spj) / spj >= 0.05) {
+            analyzeCorssEffectDto.setIncrease5(analyzeCorssEffectDto.getIncrease5() + 1.0);
         }
-        if ((zgj-spj)/spj>=0.04){
-            analyzeCorssEffectDto.setIncrease4(analyzeCorssEffectDto.getIncrease4()+1.0);
+        if ((zgj - spj) / spj >= 0.04) {
+            analyzeCorssEffectDto.setIncrease4(analyzeCorssEffectDto.getIncrease4() + 1.0);
         }
-        if ((zgj-spj)/spj>=0.03){
-            analyzeCorssEffectDto.setIncrease3(analyzeCorssEffectDto.getIncrease3()+1.0);
+        if ((zgj - spj) / spj >= 0.03) {
+            analyzeCorssEffectDto.setIncrease3(analyzeCorssEffectDto.getIncrease3() + 1.0);
         }
-        if ((zgj-spj)/spj>=0.02){
-            analyzeCorssEffectDto.setIncrease2(analyzeCorssEffectDto.getIncrease2()+1.0);
+        if ((zgj - spj) / spj >= 0.02) {
+            analyzeCorssEffectDto.setIncrease2(analyzeCorssEffectDto.getIncrease2() + 1.0);
         }
-        if ((zgj-spj)/spj>=0.01){
-            analyzeCorssEffectDto.setIncrease1(analyzeCorssEffectDto.getIncrease1()+1.0);
+        if ((zgj - spj) / spj >= 0.01) {
+            analyzeCorssEffectDto.setIncrease1(analyzeCorssEffectDto.getIncrease1() + 1.0);
         }
-        if ((zgj-spj)/spj>=0){
-            analyzeCorssEffectDto.setIncrease0(analyzeCorssEffectDto.getIncrease0()+1.0);
+        if ((zgj - spj) / spj >= 0) {
+            analyzeCorssEffectDto.setIncrease0(analyzeCorssEffectDto.getIncrease0() + 1.0);
         }
-        return  analyzeCorssEffectDto;
+        return analyzeCorssEffectDto;
     }
-
 
 
     public static AnalyzeIncreaseDay2 getIncreaseEffectFinalDay(AnalyzeIncreaseDay2 analyzeIncreaseInsert, AnalyzeIncreaseDay2 analyzeIncreaseReturn) {
@@ -1367,7 +1366,7 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
         List<AnalyzeIncreaseDay2> listAll = iStockAnalyzeIncreaseDay2Dao.getEntryByEntry(analyzeIncreaseDay2);
 
         if (listAll == null || listAll.size() == 0) {
-            crossEffectInitNewFinalAll(stockDate);
+            crossEffectInitNewFinalAll(stockDate, searchType);
             listAll = iStockAnalyzeIncreaseDay2Dao.getEntryByEntry(analyzeIncreaseDay2);
         }
         resultmap.put("crossEffectALL", listAll.get(0));
@@ -1401,15 +1400,15 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
             AnalyzeIncreaseDay2 analyzeIncreaseDay00 = new AnalyzeIncreaseDay2(stockCode, stockDate, "00", "01");
 
 
-            AnalyzeIncreaseDay2   analyzeIncreaseDay11_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "11", "02");
-            AnalyzeIncreaseDay2   analyzeIncreaseDay10_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "10", "02");
-            AnalyzeIncreaseDay2   analyzeIncreaseDay01_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "01", "02");
-            AnalyzeIncreaseDay2   analyzeIncreaseDay00_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "00", "02");
+            AnalyzeIncreaseDay2 analyzeIncreaseDay11_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "11", "02");
+            AnalyzeIncreaseDay2 analyzeIncreaseDay10_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "10", "02");
+            AnalyzeIncreaseDay2 analyzeIncreaseDay01_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "01", "02");
+            AnalyzeIncreaseDay2 analyzeIncreaseDay00_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "00", "02");
 
-            AnalyzeIncreaseDay2   analyzeIncreaseDay11_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "11", "03");
-            AnalyzeIncreaseDay2   analyzeIncreaseDay10_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "10", "03");
-            AnalyzeIncreaseDay2   analyzeIncreaseDay01_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "01", "03");
-            AnalyzeIncreaseDay2   analyzeIncreaseDay00_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "00", "03");
+            AnalyzeIncreaseDay2 analyzeIncreaseDay11_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "11", "03");
+            AnalyzeIncreaseDay2 analyzeIncreaseDay10_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "10", "03");
+            AnalyzeIncreaseDay2 analyzeIncreaseDay01_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "01", "03");
+            AnalyzeIncreaseDay2 analyzeIncreaseDay00_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "00", "03");
 
 
             for (int i = 1; i < list.size(); i++) {
@@ -1472,63 +1471,41 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
     }
 
 
-    public void crossEffectInitNewFinalAll(String stockDate) {
+    public void crossEffectInitNewFinalAll(String stockDate, String searchType) {
         //删除历史数据
-        iStockAnalyzeIncreaseDay2Dao.delByStockCode("000000", "");
+        iStockAnalyzeIncreaseDay2Dao.delByStockCode("000000", searchType);
 
-        for (int ii = 0; ii < 2; ii++) {
+        AnalyzeIncreaseDay2 analyzeIncreaseDay11 = new AnalyzeIncreaseDay2("000000", stockDate, "11", searchType);
+        AnalyzeIncreaseDay2 analyzeIncreaseDay10 = new AnalyzeIncreaseDay2("000000", stockDate, "10", searchType);
+        AnalyzeIncreaseDay2 analyzeIncreaseDay01 = new AnalyzeIncreaseDay2("000000", stockDate, "01", searchType);
+        AnalyzeIncreaseDay2 analyzeIncreaseDay00 = new AnalyzeIncreaseDay2("000000", stockDate, "00", searchType);
 
+        AnalyzeIncreaseDay2 analyzeIncreaseDay2 = new AnalyzeIncreaseDay2();
+        analyzeIncreaseDay2.setSearchType(searchType);
+        List<AnalyzeIncreaseDay2> entryByEntry = iStockAnalyzeIncreaseDay2Dao.getEntryByEntry(analyzeIncreaseDay2);
 
-            AnalyzeIncreaseDay2 analyzeIncreaseDay11 = new AnalyzeIncreaseDay2("000000", stockDate, "11", "01");
-            AnalyzeIncreaseDay2 analyzeIncreaseDay10 = new AnalyzeIncreaseDay2("000000", stockDate, "10", "01");
-            AnalyzeIncreaseDay2 analyzeIncreaseDay01 = new AnalyzeIncreaseDay2("000000", stockDate, "01", "01");
-            AnalyzeIncreaseDay2 analyzeIncreaseDay00 = new AnalyzeIncreaseDay2("000000", stockDate, "00", "01");
-
-            AnalyzeIncreaseDay2 analyzeIncreaseDay2 = new AnalyzeIncreaseDay2();
-
-            if (ii==1){
-                analyzeIncreaseDay2.setSearchType("01");
+        for (int i = 0; i < entryByEntry.size(); i++) {
+            switch (entryByEntry.get(i).getCrossType()) {
+                case "00":
+                    analyzeIncreaseDay00 = getIncreaseEffectFinalDay(entryByEntry.get(i), analyzeIncreaseDay00);
+                    break;
+                case "01":
+                    analyzeIncreaseDay01 = getIncreaseEffectFinalDay(entryByEntry.get(i), analyzeIncreaseDay01);
+                    break;
+                case "10":
+                    analyzeIncreaseDay10 = getIncreaseEffectFinalDay(entryByEntry.get(i), analyzeIncreaseDay10);
+                    break;
+                case "11":
+                    analyzeIncreaseDay11 = getIncreaseEffectFinalDay(entryByEntry.get(i), analyzeIncreaseDay11);
+                    break;
             }
-            if (ii==2){
-                analyzeIncreaseDay2.setSearchType("02");
-            }
-
-            List<AnalyzeIncreaseDay2> entryByEntry = iStockAnalyzeIncreaseDay2Dao.getEntryByEntry(analyzeIncreaseDay2);
-            if (ii==1) {
-                 analyzeIncreaseDay11 = new AnalyzeIncreaseDay2("000000", stockDate, "11", "01");
-                 analyzeIncreaseDay10 = new AnalyzeIncreaseDay2("000000", stockDate, "10", "01");
-                 analyzeIncreaseDay01 = new AnalyzeIncreaseDay2("000000", stockDate, "01", "01");
-                 analyzeIncreaseDay00 = new AnalyzeIncreaseDay2("000000", stockDate, "00", "01");
-            }
-            if (ii==2) {
-                 analyzeIncreaseDay11 = new AnalyzeIncreaseDay2("000000", stockDate, "11", "02");
-                 analyzeIncreaseDay10 = new AnalyzeIncreaseDay2("000000", stockDate, "10", "02");
-                 analyzeIncreaseDay01 = new AnalyzeIncreaseDay2("000000", stockDate, "01", "02");
-                 analyzeIncreaseDay00 = new AnalyzeIncreaseDay2("000000", stockDate, "00", "02");
-            }
-
-            for (int i = 0; i < entryByEntry.size(); i++) {
-                switch (entryByEntry.get(i).getCrossType()) {
-                    case "00":
-                        analyzeIncreaseDay00 = getIncreaseEffectFinalDay(entryByEntry.get(i), analyzeIncreaseDay00);
-                        break;
-                    case "01":
-                        analyzeIncreaseDay01 = getIncreaseEffectFinalDay(entryByEntry.get(i), analyzeIncreaseDay01);
-                        break;
-                    case "10":
-                        analyzeIncreaseDay10 = getIncreaseEffectFinalDay(entryByEntry.get(i), analyzeIncreaseDay10);
-                        break;
-                    case "11":
-                        analyzeIncreaseDay11 = getIncreaseEffectFinalDay(entryByEntry.get(i), analyzeIncreaseDay11);
-                        break;
-                }
-            }
-            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay00);
-            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay01);
-            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay10);
-            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay11);
-
         }
+        iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay00);
+        iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay01);
+        iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay10);
+        iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay11);
+
+
     }
 
 

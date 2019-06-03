@@ -40,11 +40,25 @@
             <img src="../../img/5.jpg" alt="Image" class="tm-image">
         </div>
         <div class="col-lg-6 col-md-6 background last ">
-            <h2 class="section-title">金叉-平均影响</h2>
-            <p class="about-text">金叉-平均影响</p>
+            <h2 class="section-title">金叉-收盘价</h2>
+            <p class="about-text">后面几天收盘价 超过金叉出现的价格</p>
             <p class="about-text">金叉</p>
             <div>
                 <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex1()">推荐</button>
+            </div>
+        </div>
+    </footer>
+
+    <footer class="col-md-12 content" >
+        <div class="col-lg-6 col-md-6 last">
+            <img src="../../img/5.jpg" alt="Image" class="tm-image">
+        </div>
+        <div class="col-lg-6 col-md-6 background last ">
+            <h2 class="section-title">金叉-最高价</h2>
+            <p class="about-text">后面几天收盘价 超过金叉出现的价格</p>
+            <p class="about-text">金叉</p>
+            <div>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex4()">推荐</button>
             </div>
         </div>
     </footer>
@@ -98,14 +112,20 @@
         window.location.href = "/stock/toStockActualtime"
     }
     function toIndex1() {
-        window.location.href = "/stock/toStockCrossIncreaseEffectNew2?effectType=1&stockCode=000001"
+        window.location.href = "/stock/toStockCrossIncreaseEffectNew2?searchType=01&stockCode=000001"
     }
+    function toIndex4() {
+        window.location.href = "/stock/toStockCrossIncreaseEffectNew2?searchType=02&stockCode=000001"
+    }
+
+
     function toIndex2() {
         window.location.href = "/stock/toStockCrossIncreaseEffectNew?effectType=0&stockCode=000001"
     }
     function toIndex3() {
-        window.location.href = "/stock/toStockCrossIncreaseEffectNew?effectType=1&stockCode=000001"
+        window.location.href = "/stock/toStockCrossIncreaseEffectNew?effectType=01&stockCode=000001"
     }
+
 
 
 

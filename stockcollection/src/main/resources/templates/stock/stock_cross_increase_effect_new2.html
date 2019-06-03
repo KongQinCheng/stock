@@ -28,7 +28,7 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th>stockCodesz</th>
+                    <th>stockCode</th>
                     <th>上涨后第一天</th>
                     <th>上涨后第二天</th>
                     <th>上涨后第三天</th>
@@ -66,7 +66,7 @@
 
     function getNominate() {
 
-        var str = {"stockCode": getUrlParam("stockCode"), "searchType": "01"}
+        var str = {"stockCode": getUrlParam("stockCode"), "searchType": getUrlParam("searchType")}
 
         $.ajax({
             type: "post",
@@ -142,36 +142,44 @@
         temphtml += getHtml("0下死叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
         temphtml += getHtml("0下死叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
 
+        console.log(temphtml)
+
         return temphtml;
     }
 
 
     function getHtml(title, val1, val2, val3, val4, val5, count) {
 
+        var val11;
+        var val22;
+        var val33;
+        var val44;
+        var val55;
+
         if (count != 0) {
-            val1 = toDecimal2(val1 / count)
-            val2 = toDecimal2(val2 / count)
-            val3 = toDecimal2(val3 / count)
-            val4 = toDecimal2(val4 / count)
-            val5 = toDecimal2(val5 / count)
+            val11 = toDecimal2(val1 / count)
+            val22 = toDecimal2(val2 / count)
+            val33 = toDecimal2(val3 / count)
+            val44 = toDecimal2(val4 / count)
+            val55 = toDecimal2(val5 / count)
         } else {
-            val1 = 0
-            val2 = 0
-            val3 = 0
-            val4 = 0
-            val5 = 0
+            val11 = 0
+            val22 = 0
+            val33 = 0
+            val44 = 0
+            val55 = 0
         }
 
 
         var temphtml = "";
         temphtml += "<tr>";
-        temphtml += "<td>" + title + "</td>";
+        temphtml += "<td width=\"50px;\">" + title + "</td>";
 
-        temphtml += "<td>" + getHtmlsub(val1) + "-"+val1+"/"+count+"</td>";
-        temphtml += "<td>" + getHtmlsub(val2) + "-"+val2+"/"+count+"</td>";
-        temphtml += "<td>" + getHtmlsub(val3) + "-"+val3+"/"+count+"</td>";
-        temphtml += "<td>" + getHtmlsub(val4) + "-"+val4+"/"+count+"</td>";
-        temphtml += "<td>" + getHtmlsub(val4) + "-"+val5+"/"+count+"</td>";
+        temphtml += "<td>" + getHtmlsub(val11) + "-"+val1+"/"+count+"</td>";
+        temphtml += "<td>" + getHtmlsub(val22) + "-"+val2+"/"+count+"</td>";
+        temphtml += "<td>" + getHtmlsub(val33) + "-"+val3+"/"+count+"</td>";
+        temphtml += "<td>" + getHtmlsub(val44) + "-"+val4+"/"+count+"</td>";
+        temphtml += "<td>" + getHtmlsub(val55) + "-"+val5+"/"+count+"</td>";
 
         temphtml += "<tr>";
         return temphtml;
