@@ -1394,10 +1394,10 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
             double beforeDIF = list.get(0).getDIF();
             double beforeDEA = list.get(0).getEMAMACD();
 
-            AnalyzeIncreaseDay2 analyzeIncreaseDay11 = new AnalyzeIncreaseDay2(stockCode, stockDate, "11", "01");
-            AnalyzeIncreaseDay2 analyzeIncreaseDay10 = new AnalyzeIncreaseDay2(stockCode, stockDate, "10", "01");
-            AnalyzeIncreaseDay2 analyzeIncreaseDay01 = new AnalyzeIncreaseDay2(stockCode, stockDate, "01", "01");
-            AnalyzeIncreaseDay2 analyzeIncreaseDay00 = new AnalyzeIncreaseDay2(stockCode, stockDate, "00", "01");
+            AnalyzeIncreaseDay2 analyzeIncreaseDay11_01 = new AnalyzeIncreaseDay2(stockCode, stockDate, "11", "01");
+            AnalyzeIncreaseDay2 analyzeIncreaseDay10_01 = new AnalyzeIncreaseDay2(stockCode, stockDate, "10", "01");
+            AnalyzeIncreaseDay2 analyzeIncreaseDay01_01 = new AnalyzeIncreaseDay2(stockCode, stockDate, "01", "01");
+            AnalyzeIncreaseDay2 analyzeIncreaseDay00_01 = new AnalyzeIncreaseDay2(stockCode, stockDate, "00", "01");
 
 
             AnalyzeIncreaseDay2 analyzeIncreaseDay11_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "11", "02");
@@ -1420,13 +1420,13 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
 
                     switch (map.get("type")) {
                         case "00":
-                            analyzeIncreaseDay00 = getIncreaseEffectFinal(list, i, analyzeIncreaseDay00);
+                            analyzeIncreaseDay00_01 = getIncreaseEffectFinal(list, i, analyzeIncreaseDay00_01);
                         case "01":
-                            analyzeIncreaseDay01 = getIncreaseEffectFinal(list, i, analyzeIncreaseDay01);
+                            analyzeIncreaseDay01_01 = getIncreaseEffectFinal(list, i, analyzeIncreaseDay01_01);
                         case "10":
-                            analyzeIncreaseDay10 = getIncreaseEffectFinal(list, i, analyzeIncreaseDay10);
+                            analyzeIncreaseDay10_01 = getIncreaseEffectFinal(list, i, analyzeIncreaseDay10_01);
                         case "11":
-                            analyzeIncreaseDay11 = getIncreaseEffectFinal(list, i, analyzeIncreaseDay11);
+                            analyzeIncreaseDay11_01 = getIncreaseEffectFinal(list, i, analyzeIncreaseDay11_01);
 
                     }
 
@@ -1455,19 +1455,30 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
 
                 }
             }
+            List<AnalyzeIncreaseDay2> ll =new ArrayList<>();
+            ll.add(analyzeIncreaseDay11_01);
+            ll.add(analyzeIncreaseDay10_01);
+            ll.add(analyzeIncreaseDay00_01);
+            ll.add(analyzeIncreaseDay01_01);
 
-            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay00);
-            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay01);
-            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay10);
-            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay11);
+            ll.add(analyzeIncreaseDay11_02);
+            ll.add(analyzeIncreaseDay10_02);
+            ll.add(analyzeIncreaseDay00_02);
+            ll.add(analyzeIncreaseDay01_02);
 
-            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay00_02);
-            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay01_02);
-            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay10_02);
-            iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay11_02);
+            ll.add(analyzeIncreaseDay11_03);
+            ll.add(analyzeIncreaseDay10_03);
+            ll.add(analyzeIncreaseDay00_03);
+            ll.add(analyzeIncreaseDay01_03);
 
+            iStockAnalyzeIncreaseDay2Dao.insert(ll);
         }
         System.out.println("金叉出现之后一定会涨 stockCode=" + stockCode);
+    }
+
+    @Override
+    public void crossEffectInitNewFinalMaxValue(String stockCode) {
+
     }
 
 

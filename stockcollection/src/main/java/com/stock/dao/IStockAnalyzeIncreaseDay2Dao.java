@@ -10,6 +10,9 @@ public interface IStockAnalyzeIncreaseDay2Dao {
 
     void insert(AnalyzeIncreaseDay2 analyzeIncreaseDay);
 
+    void insert(List<AnalyzeIncreaseDay2> list);
+
+
     List<AnalyzeIncreaseDay2> getListAll(String crossType);
 
 

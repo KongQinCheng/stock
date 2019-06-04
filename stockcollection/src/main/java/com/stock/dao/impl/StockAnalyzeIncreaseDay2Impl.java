@@ -22,6 +22,13 @@ StockAnalyzeIncreaseDay2Mapper stockAnalyzeIncreaseDay2Mapper;
         stockAnalyzeIncreaseDay2Mapper.insert(analyzeIncreaseDay);
     }
 
+    @Override
+    public void insert(List<AnalyzeIncreaseDay2> list) {
+        for (int i = 0; i < list.size(); i++) {
+            stockAnalyzeIncreaseDay2Mapper.insert(list.get(i));
+        }
+    }
+
 
     @Override
     public void delByStockCode(String stockCode,String increaseType) {

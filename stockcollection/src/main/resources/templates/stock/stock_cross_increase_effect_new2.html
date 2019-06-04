@@ -15,6 +15,7 @@
     <div class="container">
         <div class="navbar-header">
             <a class="navbar-brand" onclick="javascript:history.go(-1);"><</a>
+        </div>
     </div>
 </div>
 
@@ -40,15 +41,10 @@
                 <tbody id="tbody">
 
                 </tbody>
-                <tbody id="tbody2">
 
-                </tbody>
             </table>
-
-
         </div>
     </section>
-
 </div>
 
 <div class="text-center footer">
@@ -67,7 +63,6 @@
     function getNominate() {
 
         var str = {"stockCode": getUrlParam("stockCode"), "searchType": getUrlParam("searchType")}
-
         $.ajax({
             type: "post",
             async: true,
@@ -77,37 +72,17 @@
             contentType: "application/json",
             success: function (result) {
                 var temphtml = "";
-                temphtml= getAllHtml(result)
+                temphtml = getAllHtml(result)
                 $("#tbody").html(temphtml)
             },
             error: function (errorMsg) {
                 alert("图表请求数据失败!");
             }
         })
-
-
-        var str1 = {"stockCode": getUrlParam("stockCode"), "searchType": "02"}
-        $.ajax({
-            type: "post",
-            async: true,
-            url: "/stock/getStockCrossEffectNewFinal",
-            data: JSON.stringify(str1),
-            dataType: "text",        //返回数据形式为json
-            contentType: "application/json",
-            success: function (result) {
-                var temphtml = "";
-                temphtml= getAllHtml(result)
-                $("#tbody2").html(result)
-            },
-            error: function (errorMsg) {
-                alert("图表请求数据失败!");
-            }
-        })
-
     }
 
 
-    function  getAllHtml(result) {
+    function getAllHtml(result) {
 
         var jsonObj = JSON.parse(result);//转换为json对象
         var temphtml = "";
@@ -117,8 +92,8 @@
         var jsonObj10 = jsonObj.map10;
         var jsonObj11 = jsonObj.map11;
 
-        var jsonObj00sub ="" ;
-        var jsonObj00all ="";
+        var jsonObj00sub = "";
+        var jsonObj00all = "";
 
         jsonObj00sub = jsonObj11.crossEffect;
         jsonObj00all = jsonObj11.crossEffectALL;
@@ -141,8 +116,6 @@
         jsonObj00all = jsonObj00.crossEffectALL;
         temphtml += getHtml("0下死叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
         temphtml += getHtml("0下死叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
-
-        console.log(temphtml)
 
         return temphtml;
     }
@@ -175,11 +148,11 @@
         temphtml += "<tr>";
         temphtml += "<td width=\"50px;\">" + title + "</td>";
 
-        temphtml += "<td>" + getHtmlsub(val11) + "-"+val1+"/"+count+"</td>";
-        temphtml += "<td>" + getHtmlsub(val22) + "-"+val2+"/"+count+"</td>";
-        temphtml += "<td>" + getHtmlsub(val33) + "-"+val3+"/"+count+"</td>";
-        temphtml += "<td>" + getHtmlsub(val44) + "-"+val4+"/"+count+"</td>";
-        temphtml += "<td>" + getHtmlsub(val55) + "-"+val5+"/"+count+"</td>";
+        temphtml += "<td>" + getHtmlsub(val11) + val1 + "/" + count + "</td>";
+        temphtml += "<td>" + getHtmlsub(val22) + val2 + "/" + count + "</td>";
+        temphtml += "<td>" + getHtmlsub(val33) + val3 + "/" + count + "</td>";
+        temphtml += "<td>" + getHtmlsub(val44) + val4 + "/" + count + "</td>";
+        temphtml += "<td>" + getHtmlsub(val55) + val5 + "/" + count + "</td>";
 
         temphtml += "<tr>";
         return temphtml;

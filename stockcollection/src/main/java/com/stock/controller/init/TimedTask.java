@@ -61,13 +61,13 @@ public class TimedTask {
     }
 
 
-    @Scheduled(cron = "0 0-59/2 14 * * ?")
+    @Scheduled(cron = "0 30-59/2 14 * * ?")
     public void getStockMACDActualTime() throws Exception {
         StockMACDActualTime();
     }
 
 
-    private static final double THREAD_NUMBER = 100.0;
+    private static final double THREAD_NUMBER = 30.0;
 
     public void getStockNewData() {
         List<StockList> stockList = iStockListServices.getStockList();
