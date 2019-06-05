@@ -6,7 +6,7 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../css/templatemo-style.css">
-    <title>金交对后几天涨幅的影响</title>
+    <title>金交对后几天平均涨幅的影响</title>
     <script src="../../js/common.js"></script>
 </head>
 
@@ -15,32 +15,35 @@
     <div class="container">
         <div class="navbar-header">
             <a class="navbar-brand" onclick="javascript:history.go(-1);"><</a>
+        </div>
     </div>
 </div>
 
 
 <div class="container" id="home">
 
+
     <section class="col-md-12 content" id="">
         <div style="width: 100%;min-height: 800px;background-color: #fff">
+
+            <select id="crossType" onchange="getNominate()">
+                <option  value="11" selected="selected">11</option>
+                <option  value="10">10</option>
+                <option  value="01">01</option>
+                <option  value="00">00</option>
+            </select>
 
 
             <table class="table">
                 <thead>
                 <tr>
-                    <th>stockCodesz</th>
-                    <th>上涨后第一天</th>
-                    <th>上涨后第二天</th>
-                    <th>上涨后第三天</th>
-                    <th>上涨后第四天</th>
-                    <th>上涨后第五天</th>
+                    <th>stockCode</th>
+                    <th>本-1</th>
 
+                    <th>全-1</th>
                 </tr>
                 </thead>
                 <tbody id="tbody">
-
-                </tbody>
-                <tbody id="tbody2">
 
                 </tbody>
             </table>
@@ -55,7 +58,6 @@
     <div class="container">Copyright &copy; 2019.GWQ & CMF Company All rights reserved.</div>
 </div>
 
-
 <script src="../../js//jquery-3.3.1.min.js"></script>
 <script src="../../js//bootstrap.min.js"></script>
 <script src="../../js//jquery.singlePageNav.min.js"></script>
@@ -66,40 +68,42 @@
 
     function getNominate() {
 
-        var str = {"stockCode": getUrlParam("stockCode"), "searchType": "02"}
+        var str = {"stockCode": getUrlParam("stockCode"), "crossType": $("#crossType").val()}
 
         $.ajax({
             type: "post",
             async: true,
-            url: "/stock/getStockCrossEffectNewFinal",
+            url: "/stock/getStockCrossDistribute",
             data: JSON.stringify(str),
             dataType: "text",        //返回数据形式为json
             contentType: "application/json",
             success: function (result) {
+                console.log(result)
+
+                var jsonObj = JSON.parse(result);//转换为json对象
                 var temphtml = "";
-                temphtml= getAllHtml(result)
+
+                var jsonObj_11 = jsonObj.resultMap.crossEffect;
+                var jsonObj_all = jsonObj.resultMap.crossEffectALL;
+                // var jsonObj_all = jsonObj.resultMapAll;
+
+
+                temphtml += getHtml("+10", jsonObj_11.increase10,jsonObj_11.count, jsonObj_all.increase10,jsonObj_all.count);
+                temphtml += getHtml("+9", jsonObj_11.increase9,jsonObj_11.count, jsonObj_all.increase9,jsonObj_all.count);
+                temphtml += getHtml("+8", jsonObj_11.increase8,jsonObj_11.count, jsonObj_all.increase8,jsonObj_all.count);
+                temphtml += getHtml("+7", jsonObj_11.increase7,jsonObj_11.count, jsonObj_all.increase7,jsonObj_all.count);
+                temphtml += getHtml("+6", jsonObj_11.increase6,jsonObj_11.count, jsonObj_all.increase6,jsonObj_all.count);
+                temphtml += getHtml("+5", jsonObj_11.increase5,jsonObj_11.count, jsonObj_all.increase5,jsonObj_all.count);
+                temphtml += getHtml("+4", jsonObj_11.increase4,jsonObj_11.count, jsonObj_all.increase4,jsonObj_all.count);
+                temphtml += getHtml("+3", jsonObj_11.increase3,jsonObj_11.count, jsonObj_all.increase3,jsonObj_all.count);
+                temphtml += getHtml("+2", jsonObj_11.increase2,jsonObj_11.count, jsonObj_all.increase2,jsonObj_all.count);
+                temphtml += getHtml("+1", jsonObj_11.increase1,jsonObj_11.count, jsonObj_all.increase1,jsonObj_all.count);
+                temphtml += getHtml("+0", jsonObj_11.increase0,jsonObj_11.count, jsonObj_all.increase0,jsonObj_all.count);
+
                 $("#tbody").html(temphtml)
             },
             error: function (errorMsg) {
-                alert("图表请求数据失败!");
-            }
-        })
-
-
-        var str1 = {"stockCode": getUrlParam("stockCode"), "searchType": "02"}
-        $.ajax({
-            type: "post",
-            async: true,
-            url: "/stock/getStockCrossEffectNewFinal",
-            data: JSON.stringify(str1),
-            dataType: "text",        //返回数据形式为json
-            contentType: "application/json",
-            success: function (result) {
-                var temphtml = "";
-                temphtml= getAllHtml(result)
-                $("#tbody2").html(result)
-            },
-            error: function (errorMsg) {
+                //请求失败时执行该函数
                 alert("图表请求数据失败!");
             }
         })
@@ -107,71 +111,30 @@
     }
 
 
-    function  getAllHtml(result) {
+    function getHtml(title, val1,count,valall,countall) {
 
-        var jsonObj = JSON.parse(result);//转换为json对象
-        var temphtml = "";
-
-        var jsonObj00 = jsonObj.map00;
-        var jsonObj01 = jsonObj.map01;
-        var jsonObj10 = jsonObj.map10;
-        var jsonObj11 = jsonObj.map11;
-
-        var jsonObj00sub ="" ;
-        var jsonObj00all ="";
-
-        jsonObj00sub = jsonObj11.crossEffect;
-        jsonObj00all = jsonObj11.crossEffectALL;
-        temphtml += getHtml("0上金叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
-        temphtml += getHtml("0上金叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
-
-        jsonObj00sub = jsonObj10.crossEffect;
-        jsonObj00all = jsonObj10.crossEffectALL;
-        temphtml += getHtml("0下金叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
-        temphtml += getHtml("0下金叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
-
-
-        jsonObj00sub = jsonObj01.crossEffect;
-        jsonObj00all = jsonObj01.crossEffectALL;
-        temphtml += getHtml("0上死叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
-        temphtml += getHtml("0上死叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
-
-
-        jsonObj00sub = jsonObj00.crossEffect;
-        jsonObj00all = jsonObj00.crossEffectALL;
-        temphtml += getHtml("0下死叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
-        temphtml += getHtml("0下死叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
-
-        return temphtml;
-    }
-
-
-    function getHtml(title, val1, val2, val3, val4, val5, count) {
-
-        if (count != 0) {
-            val1 = toDecimal2(val1 / count)
-            val2 = toDecimal2(val2 / count)
-            val3 = toDecimal2(val3 / count)
-            val4 = toDecimal2(val4 / count)
-            val5 = toDecimal2(val5 / count)
-        } else {
-            val1 = 0
-            val2 = 0
-            val3 = 0
-            val4 = 0
-            val5 = 0
+        var vvv=val1;
+        if (count!=0) {
+            val1 = toDecimal2(val1/count)
+        }else {
+            val1=0;
         }
+
+        var aaa=valall;
+        if (countall!=0) {
+            valall = toDecimal2(valall/countall)
+        }else {
+            valall=0;
+        }
+
 
 
         var temphtml = "";
         temphtml += "<tr>";
         temphtml += "<td>" + title + "</td>";
+        temphtml += "<td>" + getHtmlsub(val1) + vvv+"/"+count+"</td>";
+        temphtml += "<td>" + getHtmlsub(valall) + aaa+"/"+countall+"</td>";
 
-        temphtml += "<td>" + getHtmlsub(val1) + "-"+val1+"/"+count+"</td>";
-        temphtml += "<td>" + getHtmlsub(val2) + "-"+val2+"/"+count+"</td>";
-        temphtml += "<td>" + getHtmlsub(val3) + "-"+val3+"/"+count+"</td>";
-        temphtml += "<td>" + getHtmlsub(val4) + "-"+val4+"/"+count+"</td>";
-        temphtml += "<td>" + getHtmlsub(val4) + "-"+val5+"/"+count+"</td>";
 
         temphtml += "<tr>";
         return temphtml;
@@ -180,7 +143,7 @@
 
     function getHtmlsub(ownpersent) {
 
-        ownpersent = ownpersent * 100
+        ownpersent=ownpersent*100
         ownpersent = toDecimal2(ownpersent)
 
         var html = "";

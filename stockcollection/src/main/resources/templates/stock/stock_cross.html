@@ -94,6 +94,7 @@
 
                     <th>涨幅</th>
                     <th>涨幅影响</th>
+                    <th>金叉后最高价范围</th>
                     <th>时间</th>
                     <th>综合</th>
                     <th>MACD</th>
@@ -172,6 +173,7 @@
                     temphtml += "<td>" + jsonObj[i].zdf + "</td>";
                     temphtml += "<td><a target='_blank' href='/stock/toStockCrossIncreaseEffectNew2?stockCode="+jsonObj[i].stockCode+"'>当前涨幅对后续的影响</a></td>";
                     temphtml += "<td><a target='_blank' href='/stock/toStockCrossIncreaseEffectNew2?stockCode="+jsonObj[i].stockCode+"'>金叉后会涨吗</a></td>";
+                    temphtml += "<td><a target='_blank' href='/stock/toStockCrossDistributeMaxval?stockCode="+jsonObj[i].stockCode+"'>金叉后最高价的范围</a></td>";
                     temphtml += "<td>" + tempdate + "</td>";
                     temphtml += "<td><a target='_blank' href='/stock/toStockInfoList?stockCode="+jsonObj[i].stockCode+"'>综合</a></td>";
                     temphtml += "<td><a target='_blank' href='/stock/toStockMacd?stockCode="+jsonObj[i].stockCode+"'>MACD</a></td>";

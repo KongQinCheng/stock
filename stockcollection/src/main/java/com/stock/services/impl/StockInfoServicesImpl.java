@@ -127,6 +127,7 @@ public class StockInfoServicesImpl implements IStockInfoServices {
         html = strings[0];
         html = html.replaceAll("<span class=\"op-stockdynamic-moretab-cur-num c-gap-right-small\">", "");
 
+
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
         Date day = new Date();
         String stockDate = sdf2.format(day);

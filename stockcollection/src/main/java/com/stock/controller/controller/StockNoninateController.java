@@ -3,6 +3,7 @@ package com.stock.controller.controller;
 import com.alibaba.fastjson.JSON;
 import com.stock.Enum.CrossType;
 import com.stock.Enum.SortType;
+import com.stock.bean.po.StockCrossDistribution;
 import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockNewData;
 import com.stock.bean.to.StockNominateTo;
@@ -18,10 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("/stock")
@@ -58,6 +57,13 @@ public class StockNoninateController {
     public String toStockMultiple() {
         return "stock/stock_multiple";
     }
+
+    @RequestMapping("/toStockCrossDistributeMaxval")
+    public String toStockCrossDistributeMaxval() {
+        return "stock/stock_cross_distribute_maxval";
+    }
+
+
 
 
     /***
@@ -353,6 +359,29 @@ public class StockNoninateController {
         resultMap.put("map10",resultMap10);
         resultMap.put("map01",resultMap01);
         resultMap.put("map00",resultMap00);
+        String jsonStr = JSON.toJSONString(resultMap);
+        return jsonStr;
+    }
+
+
+
+    /***
+     * 判断出现金叉或者死叉之后出 前几天出现上涨的概率
+     * @param
+     * @return
+     */
+    @PostMapping(value = "/getStockCrossDistribute", consumes = "application/json")
+    @ResponseBody
+    public String getStockCrossDistribute(@RequestBody StockSearchVo stockSearchVo) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        Date date = c.getTime();
+        String stockDate = sdf.format(date);
+        Map<String, Object> resultMapreturn =  iStockAnalyzeMacdServices.crossEffectInitNewFinalMaxValue(stockSearchVo.getStockCode(), stockDate, stockSearchVo.getCrossType(), "1");
+        Map<String, Object> resultMapAll = iStockAnalyzeMacdServices.crossEffectInitNewFinalMaxValue("000000", stockDate, stockSearchVo.getCrossType(), "1");
+        Map<String, Object> resultMap =new HashMap<>();
+        resultMap.put("resultMap",resultMapreturn);
+        resultMap.put("resultMapAll",resultMapAll);
         String jsonStr = JSON.toJSONString(resultMap);
         return jsonStr;
     }

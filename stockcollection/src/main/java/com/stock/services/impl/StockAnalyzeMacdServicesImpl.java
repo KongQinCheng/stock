@@ -3,15 +3,13 @@ package com.stock.services.impl;
 import com.alibaba.fastjson.JSON;
 import com.stock.bean.dto.AnalyzeCorssEffectDto;
 import com.stock.bean.po.*;
-import com.stock.dao.IStockAnalyzeIncreaseDay2Dao;
-import com.stock.dao.IStockAnalyzeIncreaseDayDao;
-import com.stock.dao.IStockCrossDao;
-import com.stock.dao.IStockInfoDao;
+import com.stock.dao.*;
 import com.stock.services.IStockAnalyzeMacdServices;
 import com.stock.services.IStockInfoMacdServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -35,6 +33,8 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
     @Autowired
     IStockAnalyzeIncreaseDay2Dao iStockAnalyzeIncreaseDay2Dao;
 
+    @Autowired
+    IStockCrossDistributionDao iStockCrossDistributionDao;
 
     @Override
     public void crossEffectInit(String stockCode, String type) {
@@ -743,77 +743,81 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
     }
 
     /***
-     * 判断各种交叉 出现之后 后面是否一定会上涨
      *
      * @param list
      * @param i
-     * @param analyzeIncreaseDay2
      * @return
      */
-    public static AnalyzeIncreaseDay2 getIncreaseEffectMaxValueDistribution(List<StockInfo> list, int i, AnalyzeIncreaseDay2 analyzeIncreaseDay2) {
+    public static StockCrossDistribution getIncreaseEffectMaxValueDistribution(List<StockInfo> list, int i, StockCrossDistribution stockCrossDistribution) {
 
-        analyzeIncreaseDay2.setCount(analyzeIncreaseDay2.getCount() + 1.0);
 
+        stockCrossDistribution.setCount(stockCrossDistribution.getCount()+1.0);
         if (i + 1 < list.size() && (list.get(i + 1).getZgj() - list.get(i).getSpj() > 0)) {
-            analyzeIncreaseDay2.setDay1(analyzeIncreaseDay2.getDay1() + 1.0);
-            return analyzeIncreaseDay2;
+            stockCrossDistribution = getDistribution(list.get(i + 1).getZgj(), list.get(i).getSpj(), stockCrossDistribution);
         }
-        if (i + 2 < list.size() && (list.get(i + 2).getZgj() - list.get(i).getSpj() > 0)) {
-            analyzeIncreaseDay2.setDay2(analyzeIncreaseDay2.getDay2() + 1.0);
-            return analyzeIncreaseDay2;
-        }
-        if (i + 3 < list.size() && (list.get(i + 3).getZgj() - list.get(i).getSpj() > 0)) {
-            analyzeIncreaseDay2.setDay3(analyzeIncreaseDay2.getDay3() + 1.0);
-            return analyzeIncreaseDay2;
-        }
-        if (i + 4 < list.size() && (list.get(i + 4).getZgj() - list.get(i).getSpj() > 0)) {
-            analyzeIncreaseDay2.setDay4(analyzeIncreaseDay2.getDay4() + 1.0);
-            return analyzeIncreaseDay2;
-        }
-        if (i + 5 < list.size() && (list.get(i + 5).getZgj() - list.get(i).getSpj() > 0)) {
-            analyzeIncreaseDay2.setDay5(analyzeIncreaseDay2.getDay5() + 1.0);
-            return analyzeIncreaseDay2;
-        }
-        return analyzeIncreaseDay2;
+//        if (i + 2 < list.size() && (list.get(i + 2).getZgj() - list.get(i).getSpj() > 0)) {
+//            distribuitonList[1] = getDistribution(list.get(i + 2).getZgj(), list.get(i).getSpj(), distribuitonList[1]);
+//        }
+//        if (i + 3 < list.size() && (list.get(i + 3).getZgj() - list.get(i).getSpj() > 0)) {
+//            distribuitonList[2] = getDistribution(list.get(i + 3).getZgj(), list.get(i).getSpj(), distribuitonList[2]);
+//        }
+//        if (i + 4 < list.size() && (list.get(i + 4).getZgj() - list.get(i).getSpj() > 0)) {
+//            distribuitonList[3] = getDistribution(list.get(i + 4).getZgj(), list.get(i).getSpj(), distribuitonList[3]);
+//        }
+//        if (i + 5 < list.size() && (list.get(i + 5).getZgj() - list.get(i).getSpj() > 0)) {
+//            distribuitonList[4] = getDistribution(list.get(i + 5).getZgj(), list.get(i).getSpj(), distribuitonList[4]);
+//        }
+        return stockCrossDistribution;
     }
 
-    public static AnalyzeCorssEffectDto getDistribution(double zgj, double spj, AnalyzeCorssEffectDto analyzeCorssEffectDto) {
+    public static StockCrossDistribution getDistribution(double zgj, double spj, StockCrossDistribution stockCrossDistribution) {
 
 
         if ((zgj - spj) / spj >= 0.1) {
-            analyzeCorssEffectDto.setIncrease10(analyzeCorssEffectDto.getIncrease10() + 1.0);
+            stockCrossDistribution.setIncrease10(stockCrossDistribution.getIncrease10() + 1.0);
+            return stockCrossDistribution;
         }
         if ((zgj - spj) / spj >= 0.09) {
-            analyzeCorssEffectDto.setIncrease9(analyzeCorssEffectDto.getIncrease9() + 1.0);
+            stockCrossDistribution.setIncrease9(stockCrossDistribution.getIncrease9() + 1.0);
+            return stockCrossDistribution;
         }
         if ((zgj - spj) / spj >= 0.08) {
-            analyzeCorssEffectDto.setIncrease8(analyzeCorssEffectDto.getIncrease8() + 1.0);
+            stockCrossDistribution.setIncrease8(stockCrossDistribution.getIncrease8() + 1.0);
+            return stockCrossDistribution;
         }
         if ((zgj - spj) / spj >= 0.07) {
-            analyzeCorssEffectDto.setIncrease7(analyzeCorssEffectDto.getIncrease7() + 1.0);
+            stockCrossDistribution.setIncrease7(stockCrossDistribution.getIncrease7() + 1.0);
+            return stockCrossDistribution;
         }
         if ((zgj - spj) / spj >= 0.06) {
-            analyzeCorssEffectDto.setIncrease6(analyzeCorssEffectDto.getIncrease6() + 1.0);
+            stockCrossDistribution.setIncrease6(stockCrossDistribution.getIncrease6() + 1.0);
+            return stockCrossDistribution;
         }
         if ((zgj - spj) / spj >= 0.05) {
-            analyzeCorssEffectDto.setIncrease5(analyzeCorssEffectDto.getIncrease5() + 1.0);
+            stockCrossDistribution.setIncrease5(stockCrossDistribution.getIncrease5() + 1.0);
+            return stockCrossDistribution;
         }
         if ((zgj - spj) / spj >= 0.04) {
-            analyzeCorssEffectDto.setIncrease4(analyzeCorssEffectDto.getIncrease4() + 1.0);
+            stockCrossDistribution.setIncrease4(stockCrossDistribution.getIncrease4() + 1.0);
+            return stockCrossDistribution;
         }
         if ((zgj - spj) / spj >= 0.03) {
-            analyzeCorssEffectDto.setIncrease3(analyzeCorssEffectDto.getIncrease3() + 1.0);
+            stockCrossDistribution.setIncrease3(stockCrossDistribution.getIncrease3() + 1.0);
+            return stockCrossDistribution;
         }
         if ((zgj - spj) / spj >= 0.02) {
-            analyzeCorssEffectDto.setIncrease2(analyzeCorssEffectDto.getIncrease2() + 1.0);
+            stockCrossDistribution.setIncrease2(stockCrossDistribution.getIncrease2() + 1.0);
+            return stockCrossDistribution;
         }
         if ((zgj - spj) / spj >= 0.01) {
-            analyzeCorssEffectDto.setIncrease1(analyzeCorssEffectDto.getIncrease1() + 1.0);
+            stockCrossDistribution.setIncrease1(stockCrossDistribution.getIncrease1() + 1.0);
+            return stockCrossDistribution;
         }
         if ((zgj - spj) / spj >= 0) {
-            analyzeCorssEffectDto.setIncrease0(analyzeCorssEffectDto.getIncrease0() + 1.0);
+            stockCrossDistribution.setIncrease0(stockCrossDistribution.getIncrease0() + 1.0);
+            return stockCrossDistribution;
         }
-        return analyzeCorssEffectDto;
+        return stockCrossDistribution;
     }
 
 
@@ -825,6 +829,22 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
         analyzeIncreaseReturn.setDay5(analyzeIncreaseReturn.getDay5() + analyzeIncreaseInsert.getDay5());
         analyzeIncreaseReturn.setCount(analyzeIncreaseReturn.getCount() + analyzeIncreaseInsert.getCount());
         return analyzeIncreaseReturn;
+    }
+
+    public static StockCrossDistribution getIncreaseEffectFinalDayMaxvalue(StockCrossDistribution stockCrossDistribution, StockCrossDistribution stockCrossDistributionReturn) {
+        stockCrossDistributionReturn.setCount(stockCrossDistributionReturn.getCount()+stockCrossDistribution.getCount());
+        stockCrossDistributionReturn.setIncrease10(stockCrossDistributionReturn.getIncrease10()+stockCrossDistribution.getIncrease10());
+        stockCrossDistributionReturn.setIncrease9(stockCrossDistributionReturn.getIncrease9()+stockCrossDistribution.getIncrease9());
+        stockCrossDistributionReturn.setIncrease8(stockCrossDistributionReturn.getIncrease8()+stockCrossDistribution.getIncrease8());
+        stockCrossDistributionReturn.setIncrease7(stockCrossDistributionReturn.getIncrease7()+stockCrossDistribution.getIncrease7());
+        stockCrossDistributionReturn.setIncrease6(stockCrossDistributionReturn.getIncrease6()+stockCrossDistribution.getIncrease6());
+        stockCrossDistributionReturn.setIncrease5(stockCrossDistributionReturn.getIncrease5()+stockCrossDistribution.getIncrease5());
+        stockCrossDistributionReturn.setIncrease4(stockCrossDistributionReturn.getIncrease4()+stockCrossDistribution.getIncrease4());
+        stockCrossDistributionReturn.setIncrease3(stockCrossDistributionReturn.getIncrease3()+stockCrossDistribution.getIncrease3());
+        stockCrossDistributionReturn.setIncrease2(stockCrossDistributionReturn.getIncrease2()+stockCrossDistribution.getIncrease2());
+        stockCrossDistributionReturn.setIncrease1(stockCrossDistributionReturn.getIncrease1()+stockCrossDistribution.getIncrease1());
+        stockCrossDistributionReturn.setIncrease0(stockCrossDistributionReturn.getIncrease0()+stockCrossDistribution.getIncrease0());
+        return stockCrossDistributionReturn;
     }
 
     @Override
@@ -1405,11 +1425,6 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
             AnalyzeIncreaseDay2 analyzeIncreaseDay01_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "01", "02");
             AnalyzeIncreaseDay2 analyzeIncreaseDay00_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "00", "02");
 
-            AnalyzeIncreaseDay2 analyzeIncreaseDay11_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "11", "03");
-            AnalyzeIncreaseDay2 analyzeIncreaseDay10_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "10", "03");
-            AnalyzeIncreaseDay2 analyzeIncreaseDay01_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "01", "03");
-            AnalyzeIncreaseDay2 analyzeIncreaseDay00_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "00", "03");
-
 
             for (int i = 1; i < list.size(); i++) {
                 Map<String, String> map = iStockInfoMacdServices.haveCross(list.get(i).getStockDate(), beforeDIF, beforeDEA, list.get(i).getDIF(), list.get(i).getEMAMACD());
@@ -1442,20 +1457,11 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
                             analyzeIncreaseDay11_02 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay11_02);
                     }
 
-                    switch (map.get("type")) {
-                        case "00":
-                            analyzeIncreaseDay00_03 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay00_03);
-                        case "01":
-                            analyzeIncreaseDay01_03 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay01_03);
-                        case "10":
-                            analyzeIncreaseDay10_03 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay10_03);
-                        case "11":
-                            analyzeIncreaseDay11_03 = getIncreaseEffectMaxValue(list, i, analyzeIncreaseDay11_03);
-                    }
+
 
                 }
             }
-            List<AnalyzeIncreaseDay2> ll =new ArrayList<>();
+            List<AnalyzeIncreaseDay2> ll = new ArrayList<>();
             ll.add(analyzeIncreaseDay11_01);
             ll.add(analyzeIncreaseDay10_01);
             ll.add(analyzeIncreaseDay00_01);
@@ -1466,18 +1472,96 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
             ll.add(analyzeIncreaseDay00_02);
             ll.add(analyzeIncreaseDay01_02);
 
-            ll.add(analyzeIncreaseDay11_03);
-            ll.add(analyzeIncreaseDay10_03);
-            ll.add(analyzeIncreaseDay00_03);
-            ll.add(analyzeIncreaseDay01_03);
-
             iStockAnalyzeIncreaseDay2Dao.insert(ll);
+
+
+
         }
         System.out.println("金叉出现之后一定会涨 stockCode=" + stockCode);
     }
 
+
+    /***
+     * 金叉出现之后 最高价的 区间
+     * @param stockCode
+     */
+    public void crossEffectInitNewFinalMaxvalue(String stockCode) {
+
+        //删除历史数据
+        iStockCrossDistributionDao.del(stockCode);
+
+        List<StockInfo> list = iStockInfoDao.getStockListByStockCode(stockCode, 999999999);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        Date date = c.getTime();
+        String stockDate = sdf.format(date);
+
+        if (list != null && list.size() > 0) {
+
+            double beforeDIF = list.get(0).getDIF();
+            double beforeDEA = list.get(0).getEMAMACD();
+
+            StockCrossDistribution stockCrossDistribution00 = new StockCrossDistribution(stockCode, stockDate, "00", "1");
+            StockCrossDistribution stockCrossDistribution01 = new StockCrossDistribution(stockCode, stockDate, "01", "1");
+            StockCrossDistribution stockCrossDistribution10 = new StockCrossDistribution(stockCode, stockDate, "10", "1");
+            StockCrossDistribution stockCrossDistribution11 = new StockCrossDistribution(stockCode, stockDate, "11", "1");
+
+
+            for (int i = 1; i < list.size(); i++) {
+                Map<String, String> map = iStockInfoMacdServices.haveCross(list.get(i).getStockDate(), beforeDIF, beforeDEA, list.get(i).getDIF(), list.get(i).getEMAMACD());
+                beforeDIF = list.get(i).getDIF();
+                beforeDEA = list.get(i).getEMAMACD();
+
+                if (!"-1".equals(map.get("type"))) { //有出现交叉 保存下来
+
+                    switch (map.get("type")) {
+                        case "00":
+                            stockCrossDistribution00 = getIncreaseEffectMaxValueDistribution(list, i, stockCrossDistribution00);
+                        case "01":
+                            stockCrossDistribution01 = getIncreaseEffectMaxValueDistribution(list, i, stockCrossDistribution01);
+                        case "10":
+                            stockCrossDistribution10 = getIncreaseEffectMaxValueDistribution(list, i, stockCrossDistribution10);
+                        case "11":
+                            stockCrossDistribution11 = getIncreaseEffectMaxValueDistribution(list, i, stockCrossDistribution11);
+                    }
+
+                }
+            }
+
+            iStockCrossDistributionDao.insert(stockCrossDistribution00);
+            iStockCrossDistributionDao.insert(stockCrossDistribution01);
+            iStockCrossDistributionDao.insert(stockCrossDistribution10);
+            iStockCrossDistributionDao.insert(stockCrossDistribution11);
+
+
+        }
+        System.out.println("金叉出现之后最高价的区间 stockCode=" + stockCode);
+    }
+
     @Override
-    public void crossEffectInitNewFinalMaxValue(String stockCode) {
+    public Map<String, Object> crossEffectInitNewFinalMaxValue(String  stockCode, String stockDate,String crossType,String dayNum) {
+
+        Map<String, Object> resultmap = new HashMap<>();
+
+        List<StockCrossDistribution> listOwn = iStockCrossDistributionDao.getStockCrosstDistributionList(stockCode, stockDate,crossType,dayNum);
+
+        if (listOwn == null || listOwn.size() == 0) {
+            crossEffectInitNewFinalMaxvalue(stockCode);
+            listOwn = iStockCrossDistributionDao.getStockCrosstDistributionList(stockCode, stockDate,crossType,dayNum);
+        }
+        resultmap.put("crossEffect", listOwn.get(0));
+
+
+        List<StockCrossDistribution> listAll = iStockCrossDistributionDao.getStockCrosstDistributionList("000000", stockDate,crossType,dayNum);
+
+        if (listAll == null || listAll.size() == 0) {
+            crossEffectInitNewFinalAllMaxvalue(stockDate, "1");
+            listAll = iStockCrossDistributionDao.getStockCrosstDistributionList("000000", stockDate,crossType,dayNum);
+        }
+        resultmap.put("crossEffectALL", listAll.get(0));
+
+        return resultmap;
+
 
     }
 
@@ -1517,6 +1601,38 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
         iStockAnalyzeIncreaseDay2Dao.insert(analyzeIncreaseDay11);
 
 
+    }
+
+    public void crossEffectInitNewFinalAllMaxvalue(String stockDate, String dayNum) {
+        //删除历史数据
+       iStockCrossDistributionDao.del("000000");
+        StockCrossDistribution stockCrossDistribution11 = new StockCrossDistribution("000000", stockDate, "11", dayNum);
+        StockCrossDistribution stockCrossDistribution10 = new StockCrossDistribution("000000", stockDate, "10", dayNum);
+        StockCrossDistribution stockCrossDistribution01 = new StockCrossDistribution("000000", stockDate, "01", dayNum);
+        StockCrossDistribution stockCrossDistribution00 = new StockCrossDistribution("000000", stockDate, "00", dayNum);
+
+        List<StockCrossDistribution> entryByEntry = iStockCrossDistributionDao.getStockCrossList();
+
+        for (int i = 0; i < entryByEntry.size(); i++) {
+            switch (entryByEntry.get(i).getCrossType()) {
+                case "00":
+                    stockCrossDistribution00 = getIncreaseEffectFinalDayMaxvalue(entryByEntry.get(i), stockCrossDistribution00);
+                    break;
+                case "01":
+                    stockCrossDistribution01 = getIncreaseEffectFinalDayMaxvalue(entryByEntry.get(i), stockCrossDistribution01);
+                    break;
+                case "10":
+                    stockCrossDistribution10 = getIncreaseEffectFinalDayMaxvalue(entryByEntry.get(i), stockCrossDistribution10);
+                    break;
+                case "11":
+                    stockCrossDistribution11 = getIncreaseEffectFinalDayMaxvalue(entryByEntry.get(i), stockCrossDistribution11);
+                    break;
+            }
+        }
+        iStockCrossDistributionDao.insert(stockCrossDistribution00);
+        iStockCrossDistributionDao.insert(stockCrossDistribution01);
+        iStockCrossDistributionDao.insert(stockCrossDistribution10);
+        iStockCrossDistributionDao.insert(stockCrossDistribution11);
     }
 
 

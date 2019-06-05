@@ -54,11 +54,25 @@
             <img src="../../img/5.jpg" alt="Image" class="tm-image">
         </div>
         <div class="col-lg-6 col-md-6 background last ">
-            <h2 class="section-title">金叉-最高价</h2>
-            <p class="about-text">后面几天收盘价 超过金叉出现的价格</p>
+            <h2 class="section-title">金叉-最高价-概率</h2>
+            <p class="about-text">后面几天收盘价 超过金叉出现的价格的概率</p>
             <p class="about-text">金叉</p>
             <div>
                 <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex4()">推荐</button>
+            </div>
+        </div>
+    </footer>
+
+    <footer class="col-md-12 content" >
+        <div class="col-lg-6 col-md-6 last">
+            <img src="../../img/5.jpg" alt="Image" class="tm-image">
+        </div>
+        <div class="col-lg-6 col-md-6 background last ">
+            <h2 class="section-title">金叉-最高价-区间</h2>
+            <p class="about-text">后面几天收盘价 超过金叉出现的价格之后-价格的区间</p>
+            <p class="about-text">金叉</p>
+            <div>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex5()">推荐</button>
             </div>
         </div>
     </footer>
@@ -116,6 +130,9 @@
     }
     function toIndex4() {
         window.location.href = "/stock/toStockCrossIncreaseEffectNew2?searchType=02&stockCode=000001"
+    }
+    function toIndex5() {
+        window.location.href = "/stock/toStockCrossDistributeMaxval?effectType=01&stockCode=000001"
     }
 
 

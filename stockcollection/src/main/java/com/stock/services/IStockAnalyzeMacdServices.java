@@ -1,6 +1,8 @@
 package com.stock.services;
 
 
+import com.stock.bean.po.StockCrossDistribution;
+
 import java.util.Map;
 
 public interface IStockAnalyzeMacdServices {
@@ -61,8 +63,7 @@ public interface IStockAnalyzeMacdServices {
      * @param stockCode
      * @return
      */
-    void crossEffectInitNewFinalMaxValue(String stockCode);
-
+    Map<String, Object> crossEffectInitNewFinalMaxValue(String  stockCode, String stockDate, String crossType, String dayNum);
 
 
 
