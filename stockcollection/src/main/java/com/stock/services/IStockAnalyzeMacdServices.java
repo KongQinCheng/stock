@@ -57,6 +57,9 @@ public interface IStockAnalyzeMacdServices {
      */
      void crossEffectInitNewFinal(String stockCode);
 
+
+    void crossEffectInitNewFinalMaxvalue(String stockCode);
+
     /***
      * 统计所有数据的 出现金叉之后对后续的影响
      * 统计所有数据的 出现金叉之后最高价涨幅

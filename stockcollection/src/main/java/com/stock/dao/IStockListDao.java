@@ -14,6 +14,12 @@ public interface IStockListDao {
     public  List<StockList> getStockList()  ;
 
     /***
+     * 获取所有的列表
+     * @return
+     */
+    public  List<StockList> getStockListDesc()  ;
+
+    /***
      * 获取指定条数的数据
      * @param limit
      * @return

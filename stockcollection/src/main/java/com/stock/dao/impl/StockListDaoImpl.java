@@ -21,6 +21,11 @@ public class StockListDaoImpl implements IStockListDao {
     }
 
     @Override
+    public List<StockList> getStockListDesc() {
+        return  stockListMapper.getStockListDesc();
+    }
+
+    @Override
     public List<StockList> getStockListLimit(int limit) {
         return  stockListMapper.getStockListLimit(limit);
     }

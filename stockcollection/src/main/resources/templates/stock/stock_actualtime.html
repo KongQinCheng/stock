@@ -65,12 +65,17 @@
                 <thead>
                 <tr>
                     <th>stockCode</th>
-                    <th>spj</th>
+                    <th>收盘价</th>
+                    <th>涨跌幅</th>
+
+                    <th>涨幅</th>
+                    <th>涨幅影响</th>
+                    <th>金叉后最高价范围</th>
+                    <th>时间</th>
                     <th>综合</th>
                     <th>MACD</th>
-                    <th>金交之后涨幅</th>
-                    <th>后某一天上涨</th>
-                    <th>最终某一天上涨</th>
+                    <th>价格</th>
+                    <th>影响</th>
                 </tr>
                 </thead>
                 <tbody id="tbody">
@@ -137,14 +142,20 @@
 
                 var temphtml = "";
                 for (var i = 0; i < jsonObj.length; i++) {
+                    var tempdate =jsonObj[i].stockDate;
+                    tempdate = tempdate.replace("00:00:00.0","")
                     temphtml += "<tr>";
-                    temphtml += "<td><a target='_blank' href='/stock/toStockInfoList?stockCode="+jsonObj[i].stockCode+"'>"+jsonObj[i].stockCode+"</a></td>";
-                    temphtml += "<td>"+jsonObj[i].spj +"</td>";
+                    temphtml += "<td><a target='_blank' href='/stock/toStockInfoList?stockCode="+jsonObj[i].stockCode+"'>" + jsonObj[i].stockCode + "</a></td>";
+                    temphtml += "<td>" + jsonObj[i].spj + "</td>";
+                    temphtml += "<td>" + jsonObj[i].zdf + "</td>";
+                    temphtml += "<td><a target='_blank' href='/stock/toStockCrossIncreaseEffectNew?stockCode="+jsonObj[i].stockCode+"'>当前涨幅对后续的影响</a></td>";
+                    temphtml += "<td><a target='_blank' href='/stock/toStockCrossIncreaseEffectNew2?stockCode="+jsonObj[i].stockCode+"'>金叉后会涨吗</a></td>";
+                    temphtml += "<td><a target='_blank' href='/stock/toStockCrossDistributeMaxval?stockCode="+jsonObj[i].stockCode+"'>金叉后最高价的范围</a></td>";
+                    temphtml += "<td>" + tempdate + "</td>";
                     temphtml += "<td><a target='_blank' href='/stock/toStockInfoList?stockCode="+jsonObj[i].stockCode+"'>综合</a></td>";
                     temphtml += "<td><a target='_blank' href='/stock/toStockMacd?stockCode="+jsonObj[i].stockCode+"'>MACD</a></td>";
-                    temphtml += "<td><a target='_blank' href='/stock/toStockCrossIncreaseEffectNew2?stockCode="+jsonObj[i].stockCode+"'>预测涨幅</a></td>";
-                    temphtml += "<td><a target='_blank' href='/stock/toStockCrossIncreaseEffectNew?effectType=0&stockCode="+jsonObj[i].stockCode+"'>后某一天上涨</a></td>";
-                    temphtml += "<td><a target='_blank' href='/stock/toStockCrossIncreaseEffectNew?effectType=1&stockCode="+jsonObj[i].stockCode+"'>后几天最终上涨</a></td>";
+                    temphtml += "<td><a target='_blank' href='/stock/toStockPrice?stockCode="+jsonObj[i].stockCode+"'>价格</a></td>";
+                    temphtml += "<td><a target='_blank' href='/stock/toStockCrossEffect?stockCode="+jsonObj[i].stockCode+"'>影响</a></td>";
                     temphtml += "</tr>";
                 }
 

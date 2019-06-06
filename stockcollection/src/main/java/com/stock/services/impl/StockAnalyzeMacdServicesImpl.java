@@ -1485,6 +1485,7 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
      * 金叉出现之后 最高价的 区间
      * @param stockCode
      */
+    @Override
     public void crossEffectInitNewFinalMaxvalue(String stockCode) {
 
         //删除历史数据

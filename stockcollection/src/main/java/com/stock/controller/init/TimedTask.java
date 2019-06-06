@@ -2,6 +2,7 @@ package com.stock.controller.init;
 
 import com.stock.bean.po.StockList;
 import com.stock.dao.IStockInfoDao;
+import com.stock.dao.IStockListDao;
 import com.stock.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -165,6 +166,15 @@ public class TimedTask {
                         System.out.println("iStockAnalyzeMacdServices.crossEffectInitNew 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
                     }
 
+                    try {
+                        //金叉出现后后一天的涨幅的区间
+                        iStockAnalyzeMacdServices.crossEffectInitNewFinalMaxvalue(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("iStockAnalyzeMacdServices.crossEffectInitNewFinalMaxvalue 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+                    }
+
+
 
 
                 }
@@ -178,9 +188,11 @@ public class TimedTask {
 
 
 
+    @Autowired
+    IStockListDao iStockListDao;
 
     public void StockMACDActualTime() {
-        List<StockList> stockList = iStockListServices.getStockList();
+        List<StockList> stockList = iStockListDao.getStockListDesc();
         ExecutorService fixedThreadPool = Executors.newFixedThreadPool((int) THREAD_NUMBER);
         int listSize = stockList.size();
 

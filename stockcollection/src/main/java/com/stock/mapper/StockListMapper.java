@@ -21,6 +21,12 @@ public interface StockListMapper {
             @Result(column = "stockCode", property = "stockCode")})
     public List<StockList> getStockList();
 
+    @Select("select * from stock_list where 1=1 order by stockCode desc")
+    @ResultMap("stockListResults")
+    public List<StockList> getStockListDesc();
+
+
+
     @Select("select * from stock_list where 1=1 limit #{limitNum}")
     @ResultMap("stockListResults")
     public List<StockList> getStockListLimit(@Param("limitNum") int limitNum);
