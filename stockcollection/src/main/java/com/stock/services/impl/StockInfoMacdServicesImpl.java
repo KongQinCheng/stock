@@ -10,6 +10,7 @@ import com.stock.services.IStockInfoMacdServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -33,7 +34,7 @@ public class StockInfoMacdServicesImpl implements IStockInfoMacdServices {
             stockListByStockCode = iStockInfoDao.getStockListByStockCode(stockCode, 999999999);
         }
         if (type == 1) {
-            stockListByStockCode = iStockInfoDao.getStockListByStockCodeLimit(stockCode, 10);
+            stockListByStockCode = iStockInfoDao.getStockListByStockCodeLimit(stockCode, 20);
         }
 
         double lastDayEma12 = 0;
@@ -50,6 +51,20 @@ public class StockInfoMacdServicesImpl implements IStockInfoMacdServices {
                     lastDayEma12 = stockInfo.getEMA12();
                     lastDayEma26 = stockInfo.getEMA26();
                     lastDEAMACD = stockInfo.getEMAMACD();
+                    continue;
+                }
+            }
+            if (type==0){
+                if (i==0){
+                    lastDayEma12 = stockInfo.getSpj();
+                    lastDayEma26 = stockInfo.getSpj();
+
+                    stockInfo.setEMA12(lastDayEma12);
+                    stockInfo.setEMA26(lastDayEma26);
+                    stockInfo.setEMAMACD(lastDEAMACD);
+                    stockInfo.setDIF(todayDif);
+                    stockInfo.setBAR(todayBar);
+                    iStockInfoDao.updateStockInfoMacd(stockInfo);
                     continue;
                 }
             }
@@ -167,10 +182,13 @@ public class StockInfoMacdServicesImpl implements IStockInfoMacdServices {
     }
 
 
+    static DecimalFormat df = new DecimalFormat("#.0000");
+
     //    EMA（12）= 前一日EMA（12）×11/13＋今日收盘价×2/13
     public static double getEMA12(double lastDayEMA12, double todaySpj) {
         double result = 0;
         result = lastDayEMA12 * 11 / 13.0 + todaySpj * 2 / 13.0;
+        result=Double.valueOf(df.format(result));
         return result;
     }
 
@@ -178,6 +196,7 @@ public class StockInfoMacdServicesImpl implements IStockInfoMacdServices {
     public static double getEMA26(double lastDayEMA26, double todaySpj) {
         double result = 0;
         result = lastDayEMA26 * 25 / 27.0 + todaySpj * 2 / 27.0;
+        result=Double.valueOf(df.format(result));
         return result;
     }
 
@@ -185,6 +204,7 @@ public class StockInfoMacdServicesImpl implements IStockInfoMacdServices {
     public static double getDIFF(double lastDayEMA12, double lastDayEMA26) {
         double result = 0;
         result = lastDayEMA12 - lastDayEMA26;
+        result=Double.valueOf(df.format(result));
         return result;
     }
 
@@ -192,6 +212,7 @@ public class StockInfoMacdServicesImpl implements IStockInfoMacdServices {
     public static double getDEAMACD(double lastDEA, double todayDIFF) {
         double result = 0;
         result = lastDEA * 8 / 10.0 + todayDIFF * 2 / 10.0;
+        result=Double.valueOf(df.format(result));
         return result;
     }
 
@@ -199,6 +220,7 @@ public class StockInfoMacdServicesImpl implements IStockInfoMacdServices {
     public static double getBAR(double DEA, double todayDIFF) {
         double result = 0;
         result = 2 * (todayDIFF - DEA);
+        result=Double.valueOf(df.format(result));
         return result;
     }
 
@@ -212,6 +234,10 @@ public class StockInfoMacdServicesImpl implements IStockInfoMacdServices {
         System.out.println(getDIFF(getEMA12(55.01, 53.7), getEMA26(55.01, 53.7)));
         System.out.println(getDEAMACD(0, getDIFF(getEMA12(55.01, 53.7), getEMA26(55.01, 53.7))));
         System.out.println(getBAR(getDEAMACD(0, getDIFF(getEMA12(55.01, 53.7), getEMA26(55.01, 53.7))), getDIFF(getEMA12(55.01, 53.7), getEMA26(55.01, 53.7))));
+
+
+
+
     }
 
 }

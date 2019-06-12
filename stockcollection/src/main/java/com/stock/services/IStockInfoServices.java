@@ -21,6 +21,9 @@ public interface IStockInfoServices {
 
     void updateStockInfoMacd(StockInfo stockInfo);
 
+    void updateStockInfoMacdNoDate(StockInfo stockInfo);
+
+
 
     /***
      * 获取股票的历史消息

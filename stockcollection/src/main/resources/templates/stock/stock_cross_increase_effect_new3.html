@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../css/templatemo-style.css">
+    <title>金交对后几天涨幅的影响</title>
+    <script src="../../js/common.js"></script>
+</head>
+
+<body>
+<div class="fixed-header">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" onclick="javascript:history.go(-1);"><</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="container" id="home">
+
+    <section class="col-md-12 content" id="">
+        <div style="width: 100%;min-height: 800px;background-color: #fff">
+<div style="width: 100%;text-align: center;line-height: 50px">
+    金叉出现之后 ，后面几天的上涨概率
+</div>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>stockCode</th>
+                    <th>第一天</th>
+                    <th>第二天</th>
+                    <th>第三天</th>
+                    <th>第四天</th>
+                    <th>第五天</th>
+
+                </tr>
+                </thead>
+                <tbody id="tbody">
+
+                </tbody>
+
+            </table>
+        </div>
+    </section>
+</div>
+
+<div class="text-center footer">
+    <div class="container">Copyright &copy; 2019.GWQ & CMF Company All rights reserved.</div>
+</div>
+
+
+<script src="../../js//jquery-3.3.1.min.js"></script>
+<script src="../../js//bootstrap.min.js"></script>
+<script src="../../js//jquery.singlePageNav.min.js"></script>
+<script src="../js/common.js"></script>
+<script>
+
+    window.onload = getNominate;
+
+    function getNominate() {
+
+        var str = {"stockCode": getUrlParam("stockCode"), "searchType": getUrlParam("searchType")}
+        $.ajax({
+            type: "post",
+            async: true,
+            url: "/stock/getStockCrossEffectNewFinal",
+            data: JSON.stringify(str),
+            dataType: "text",        //返回数据形式为json
+            contentType: "application/json",
+            success: function (result) {
+                var temphtml = "";
+                temphtml = getAllHtml(result)
+                $("#tbody").html(temphtml)
+            },
+            error: function (errorMsg) {
+                alert("图表请求数据失败!");
+            }
+        })
+    }
+
+
+    function getAllHtml(result) {
+
+        var jsonObj = JSON.parse(result);//转换为json对象
+        var temphtml = "";
+
+        var jsonObj00 = jsonObj.map00;
+        var jsonObj01 = jsonObj.map01;
+        var jsonObj10 = jsonObj.map10;
+        var jsonObj11 = jsonObj.map11;
+
+        var jsonObj00sub = "";
+        var jsonObj00all = "";
+
+        jsonObj00sub = jsonObj11.crossEffect;
+        jsonObj00all = jsonObj11.crossEffectALL;
+        temphtml += getHtml("0上金叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
+        temphtml += getHtml("0上金叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
+
+        jsonObj00sub = jsonObj10.crossEffect;
+        jsonObj00all = jsonObj10.crossEffectALL;
+        temphtml += getHtml("0下金叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
+        temphtml += getHtml("0下金叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
+
+
+        jsonObj00sub = jsonObj01.crossEffect;
+        jsonObj00all = jsonObj01.crossEffectALL;
+        temphtml += getHtml("0上死叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
+        temphtml += getHtml("0上死叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
+
+
+        jsonObj00sub = jsonObj00.crossEffect;
+        jsonObj00all = jsonObj00.crossEffectALL;
+        temphtml += getHtml("0下死叉 当前", jsonObj00sub.day1, jsonObj00sub.day2, jsonObj00sub.day3, jsonObj00sub.day4, jsonObj00sub.day5, jsonObj00sub.count);
+        temphtml += getHtml("0下死叉 全部", jsonObj00all.day1, jsonObj00all.day2, jsonObj00all.day3, jsonObj00all.day4, jsonObj00all.day5, jsonObj00all.count);
+
+        return temphtml;
+    }
+
+
+    function getHtml(title, val1, val2, val3, val4, val5, count) {
+
+        var val11;
+        var val22;
+        var val33;
+        var val44;
+        var val55;
+
+        if (count != 0) {
+            val11 = toDecimal2(val1 / count)
+            val22 = toDecimal2(val2 / count)
+            val33 = toDecimal2(val3 / count)
+            val44 = toDecimal2(val4 / count)
+            val55 = toDecimal2(val5 / count)
+        } else {
+            val11 = 0
+            val22 = 0
+            val33 = 0
+            val44 = 0
+            val55 = 0
+        }
+
+
+        var temphtml = "";
+        temphtml += "<tr>";
+        temphtml += "<td width=\"70px;\">" + title + "</td>";
+
+        temphtml += "<td>" + getHtmlsub(val11) + val1 + "/" + count + "</td>";
+        temphtml += "<td>" + getHtmlsub(val22) + val2 + "/" + count + "</td>";
+        temphtml += "<td>" + getHtmlsub(val33) + val3 + "/" + count + "</td>";
+        temphtml += "<td>" + getHtmlsub(val44) + val4 + "/" + count + "</td>";
+        temphtml += "<td>" + getHtmlsub(val55) + val5 + "/" + count + "</td>";
+
+        temphtml += "<tr>";
+        return temphtml;
+    }
+
+
+    function getHtmlsub(ownpersent) {
+
+        ownpersent = ownpersent * 100
+        ownpersent = toDecimal2(ownpersent)
+
+        var html = "";
+        html += "<div style='width: 100%;background-color: beige'>"
+        html += "<div style='width: " + ownpersent + "%;background-color: #eea236'>"
+        html += ownpersent
+        html += "</div>"
+        html += "</div>"
+
+        return html;
+    }
+
+
+    // Check scroll position and add/remove background to navbar
+    function checkScrollPosition() {
+        if ($(window).scrollTop() > 50) {
+            $(".fixed-header").addClass("scroll");
+        } else {
+            $(".fixed-header").removeClass("scroll");
+        }
+    }
+
+    $(document).ready(function () {
+// Single page nav
+        $('.fixed-header').singlePageNav({
+            offset: 59,
+            filter: ':not(.external)',
+            updateHash: true
+        });
+
+        checkScrollPosition();
+
+// nav bar
+        $('.navbar-toggle').click(function () {
+            $('.main-menu').toggleClass('show');
+        });
+
+        $('.main-menu a').click(function () {
+            $('.main-menu').removeClass('show');
+        });
+    });
+
+    $(window).on("scroll", function () {
+        checkScrollPosition();
+    });
+
+
+</script>
+</body>
+</html>

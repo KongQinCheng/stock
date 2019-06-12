@@ -79,12 +79,20 @@ public class StockInfoServicesImpl implements IStockInfoServices {
         iStockInfoDao.updateStockInfoMacd(stockInfo);
     }
 
+    @Override
+    public void updateStockInfoMacdNoDate(StockInfo stockInfo) {
+        iStockInfoDao.updateStockInfoMacdNoDate(stockInfo);
+    }
+
+
 
     /***
      * 获取 单个 股票的 历史信息
      */
     @Override
     public void getStockInfoHistory(String stockCode) throws Exception {
+
+//        iStockInfoServices.delStockInfo(stockCode,"2019-06-10");
 
         createTableByTableName(stockCode);
         List<String> urlList = getURLbyStockCode(stockCode);

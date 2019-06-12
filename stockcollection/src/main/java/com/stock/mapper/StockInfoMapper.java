@@ -106,6 +106,10 @@ public interface StockInfoMapper {
     public void updateStockInfoMacd(StockInfo stockInfo);
 
 
+    @Update("update stock_info_${stockCode} set EMA12=#{EMA12},EMA26=#{EMA26},DIF=#{DIF} ,EMAMACD=#{EMAMACD} ,BAR=#{BAR} ")
+    public void updateStockInfoMacdNoDate(StockInfo stockInfo);
+
+
 
     @Update("DROP TABLE  stock_info_${stockCode}")
     public void delTableByStockCode(StockInfo stockInfo);

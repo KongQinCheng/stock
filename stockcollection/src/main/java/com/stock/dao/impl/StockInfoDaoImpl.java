@@ -54,6 +54,13 @@ public class StockInfoDaoImpl implements IStockInfoDao {
     }
 
     @Override
+    public void updateStockInfoMacdNoDate(StockInfo stockInfo) {
+        stockInfoMapper.updateStockInfoMacdNoDate(stockInfo);
+    }
+
+
+
+    @Override
     public  boolean isTableExist(String tableName)   {
         boolean isExist=false;
         double tableExist = stockInfoMapper.isTableExist(tableName);

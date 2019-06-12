@@ -742,6 +742,32 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
         return analyzeIncreaseDay2;
     }
 
+
+
+    /***
+     * 统计所有数据的 出现金叉之后对后续的影响，判断前面两天的数据结果 ，
+     * 如果第一天最高价前一天收盘价高，数据加一
+     * 如果第一天最高价低于前一天收盘价 ，但是第二天最高价高于前一天的收盘价，数据加一
+     * 统计最终的百分比
+     * @param stockCode
+     * @return
+     */
+    public static AnalyzeIncreaseDay2 getIncreaseEffectMaxValue3(List<StockInfo> list, int i, AnalyzeIncreaseDay2 analyzeIncreaseDay2) {
+
+        analyzeIncreaseDay2.setCount(analyzeIncreaseDay2.getCount() + 1.0);
+
+        if (i + 1 < list.size() && (list.get(i + 1).getZgj() - list.get(i).getSpj() > 0)) {
+            analyzeIncreaseDay2.setDay1(analyzeIncreaseDay2.getDay1() + 1.0);
+            return analyzeIncreaseDay2;
+        }else {
+            if (i + 2 < list.size() && (list.get(i + 2).getZgj() - list.get(i).getSpj() > 0)) {
+                analyzeIncreaseDay2.setDay1(analyzeIncreaseDay2.getDay1() + 1.0);
+                return analyzeIncreaseDay2;
+            }
+        }
+        return analyzeIncreaseDay2;
+    }
+
     /***
      *
      * @param list
@@ -1425,6 +1451,11 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
             AnalyzeIncreaseDay2 analyzeIncreaseDay01_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "01", "02");
             AnalyzeIncreaseDay2 analyzeIncreaseDay00_02 = new AnalyzeIncreaseDay2(stockCode, stockDate, "00", "02");
 
+            AnalyzeIncreaseDay2 analyzeIncreaseDay11_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "11", "03");
+            AnalyzeIncreaseDay2 analyzeIncreaseDay10_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "10", "03");
+            AnalyzeIncreaseDay2 analyzeIncreaseDay01_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "01", "03");
+            AnalyzeIncreaseDay2 analyzeIncreaseDay00_03 = new AnalyzeIncreaseDay2(stockCode, stockDate, "00", "03");
+
 
             for (int i = 1; i < list.size(); i++) {
                 Map<String, String> map = iStockInfoMacdServices.haveCross(list.get(i).getStockDate(), beforeDIF, beforeDEA, list.get(i).getDIF(), list.get(i).getEMAMACD());
@@ -1458,6 +1489,18 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
                     }
 
 
+                    switch (map.get("type")) {
+                        case "00":
+                            analyzeIncreaseDay00_03 = getIncreaseEffectMaxValue3(list, i, analyzeIncreaseDay00_03);
+                        case "01":
+                            analyzeIncreaseDay01_03 = getIncreaseEffectMaxValue3(list, i, analyzeIncreaseDay01_03);
+                        case "10":
+                            analyzeIncreaseDay10_03 = getIncreaseEffectMaxValue3(list, i, analyzeIncreaseDay10_03);
+                        case "11":
+                            analyzeIncreaseDay11_03 = getIncreaseEffectMaxValue3(list, i, analyzeIncreaseDay11_03);
+                    }
+
+
 
                 }
             }
@@ -1471,6 +1514,11 @@ public class StockAnalyzeMacdServicesImpl implements IStockAnalyzeMacdServices {
             ll.add(analyzeIncreaseDay10_02);
             ll.add(analyzeIncreaseDay00_02);
             ll.add(analyzeIncreaseDay01_02);
+
+            ll.add(analyzeIncreaseDay11_03);
+            ll.add(analyzeIncreaseDay10_03);
+            ll.add(analyzeIncreaseDay00_03);
+            ll.add(analyzeIncreaseDay01_03);
 
             iStockAnalyzeIncreaseDay2Dao.insert(ll);
 

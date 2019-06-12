@@ -47,6 +47,8 @@ public interface IStockInfoDao {
 
      void updateStockInfoMacd(StockInfo stockInfo);
 
+    void updateStockInfoMacdNoDate(StockInfo stockInfo);
+
 
 
     /**

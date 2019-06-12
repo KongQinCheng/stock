@@ -363,6 +363,27 @@ public class StockNoninateController {
         return jsonStr;
     }
 
+    /***
+     * 判断出现金叉或者死叉之后出 前几天出现上涨的概率
+     * @param
+     * @return
+     */
+    @PostMapping(value = "/getStockCrossEffectNew3", consumes = "application/json")
+    @ResponseBody
+    public String getStockCrossEffectNew3(@RequestBody StockSearchVo stockSearchVo) {
+        Map<String, Object> resultMap11 = iStockAnalyzeMacdServices.getStockCrossEffectNewFinal(stockSearchVo.getStockCode(),"11",stockSearchVo.getSearchType());
+        Map<String, Object> resultMap10 = iStockAnalyzeMacdServices.getStockCrossEffectNewFinal(stockSearchVo.getStockCode(),"10",stockSearchVo.getSearchType());
+        Map<String, Object> resultMap01 = iStockAnalyzeMacdServices.getStockCrossEffectNewFinal(stockSearchVo.getStockCode(),"01",stockSearchVo.getSearchType());
+        Map<String, Object> resultMap00 = iStockAnalyzeMacdServices.getStockCrossEffectNewFinal(stockSearchVo.getStockCode(),"00",stockSearchVo.getSearchType());
+        Map<String, Object> resultMap =new HashMap<>();
+        resultMap.put("map11",resultMap11);
+        resultMap.put("map10",resultMap10);
+        resultMap.put("map01",resultMap01);
+        resultMap.put("map00",resultMap00);
+        String jsonStr = JSON.toJSONString(resultMap);
+        return jsonStr;
+    }
+
 
 
     /***
