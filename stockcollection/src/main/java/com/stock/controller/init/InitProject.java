@@ -27,11 +27,16 @@ public class InitProject implements ApplicationRunner {
     @Autowired
     IStockInfoMacdServices iStockInfoMacdServices;
 
+    @Autowired
+    IStockInfoActualtimeServices iStockInfoActualtimeServices;
+
     @Override
     public void run(ApplicationArguments args) {
         //项目初始化执行
 
         try {
+
+//            iStockInfoActualtimeServices.updateEffect(0);
 
             //更新 002032 macd 值
 //            StockInfo stockInfo =new StockInfo();
@@ -47,9 +52,9 @@ public class InitProject implements ApplicationRunner {
 
 
 //            List<StockList> stockList = iStockListServices.getStockList();
-
+//
 //            for (int i = 0; i <stockList.size() ; i++) {
-//                iStockInfoServices.delStockInfo(stockList.get(i).getStockCode().replaceAll("\t", "") + "","2019-06-10");
+//                iStockInfoServices.delStockInfo(stockList.get(i).getStockCode().replaceAll("\t", "") + "","2019-06-13");
 //                System.out.println(stockList.get(i).getStockCode());
 //                System.out.println(i);
 //            }

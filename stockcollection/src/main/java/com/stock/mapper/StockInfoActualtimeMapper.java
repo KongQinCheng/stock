@@ -33,12 +33,21 @@ public interface StockInfoActualtimeMapper {
     public List<StockInfoActualtime> getByStockDate(@Param("stockDate") String stockDate);
 
 
+    @Select("select * from stock_info_actualtime where 1=1  and effectDay1 is  null order by stockDate desc ")
+    @ResultMap("stockinfoActualtimeResults")
+    public List<StockInfoActualtime> getByNullData();
+
+
+
     @Delete("delete  from stock_info_actualtime where stockCode = '${stockCode}' ")
     public void delByStockCode(@Param("stockCode") String stockCode);
 
 
     @Delete("delete  from stock_info_actualtime where stockCode = '${stockCode}'and  stockDate = '${stockDate}' ")
     public void delByStockCodeAndStockDate(@Param("stockCode") String stockCode,@Param("stockDate") String stockDate);
+
+    @Update("update  stock_info_actualtime set effectDay1=${effectDay1}, effectDay2=${effectDay2}, effectDay3=${effectDay3}, effectDay4=${effectDay4}, effectDay5=${effectDay5} where stockCode = '${stockCode}'and  stockDate = '${stockDate}' ")
+    public void update(StockInfoActualtime stockInfoActualtime);
 
 
 

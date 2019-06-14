@@ -23,6 +23,11 @@ public class StockInfoActualtimeDaoImpl implements IStockInfoActualtimeDao {
     }
 
     @Override
+    public List<StockInfoActualtime> getByNullData() {
+        return stockInfoActualtimeMapper.getByNullData();
+    }
+
+    @Override
     public void insert(StockInfoActualtime stockInfoActualtime) {
         stockInfoActualtimeMapper.insert(stockInfoActualtime);
     }
@@ -35,6 +40,11 @@ public class StockInfoActualtimeDaoImpl implements IStockInfoActualtimeDao {
     @Override
     public void deleteByStockCodeAndStockDate(String stockCode,String stockDate) {
         stockInfoActualtimeMapper.delByStockCodeAndStockDate(stockCode,stockDate);
+    }
+
+    @Override
+    public void update(StockInfoActualtime stockInfoActualtime) {
+        stockInfoActualtimeMapper.update( stockInfoActualtime);
     }
 
 }

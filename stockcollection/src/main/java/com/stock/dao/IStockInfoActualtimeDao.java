@@ -9,10 +9,14 @@ public interface IStockInfoActualtimeDao {
 
     List<StockInfoActualtime> getByStockDate(String stockDate);
 
+    List<StockInfoActualtime> getByNullData();
+
     void insert(StockInfoActualtime stockInfoActualtime );
 
     void delete(String stockCode);
 
      void deleteByStockCodeAndStockDate(String stockCode,String stockDate) ;
+
+    void update(StockInfoActualtime stockInfoActualtime) ;
 
 }

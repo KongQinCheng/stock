@@ -16,5 +16,7 @@ public interface IStockInfoActualtimeServices {
 
     void deleteByStockCodeAndStockDate(String stockCode,String stockDate) ;
 
+    void updateEffect(double persent);
+
 
 }
