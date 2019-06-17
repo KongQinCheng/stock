@@ -44,6 +44,9 @@ public class TimedTask {
     @Autowired
     IStockInfoServices iStockInfoServices;
 
+    @Autowired
+    IStockInfoKdjServices iStockInfoKdjServices;
+
 
     @Scheduled(cron = "0 0 17 * * ?")
     public void getStockInfo() throws Exception {
@@ -172,6 +175,14 @@ public class TimedTask {
                     } catch (Exception e) {
                         e.printStackTrace();
                         System.out.println("iStockAnalyzeMacdServices.crossEffectInitNewFinalMaxvalue 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+                    }
+
+                    try {
+                        //KDJ初所化
+                        iStockInfoKdjServices.getKDJValue(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("iStockInfoKdjServices.getKDJValue 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
                     }
 
 
