@@ -106,6 +106,10 @@ public interface StockInfoMapper {
     public void updateStockInfoMacd(StockInfo stockInfo);
 
 
+    @Update("update stock_info_${stockCode} set k_value=#{kValue},d_value=#{dValue},j_value=#{jValue}  where stockDate =#{stockDate}")
+    public void updateStockInfoKDJ(StockInfo stockInfo);
+
+
     @Update("update stock_info_${stockCode} set EMA12=#{EMA12},EMA26=#{EMA26},DIF=#{DIF} ,EMAMACD=#{EMAMACD} ,BAR=#{BAR} ")
     public void updateStockInfoMacdNoDate(StockInfo stockInfo);
 

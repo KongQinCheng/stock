@@ -21,7 +21,7 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
 
     public  void getKDJValue(String stockCode) throws Exception {
 
-        List<StockInfo> stockinfoList = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(),50);
+        List<StockInfo> stockinfoList = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(),99999999);
 
         double[] lszgjArray = new double[9];
         double[] lszdjArray = new double[9];
@@ -36,14 +36,14 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
             lszdjArray[i] = Double.valueOf(stockInfo.getZdj());
         }
 
+        double kValue = 50.0;
+        double dValue = 50.0;
 
-
-        double kValue = 68.02;
-        double dValue = 54.28;
+//        double kValue = 68.02;
+//        double dValue = 54.28;
 
         //从第9天开始计算KDJ值
         for (int i = 9; i <stockinfoList.size() ; i++) {
-
             int insertArrayIndex = i % 9;
             StockInfo stockInfo = stockinfoList.get(i);
             lszgjArray[insertArrayIndex] = Double.valueOf(stockInfo.getZgj());
@@ -56,7 +56,13 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
             kValue = getK(kValue, rsv);
             dValue = getD(dValue, kValue);
             double jValue = getJ(kValue, dValue);
-            System.out.println(kValue +"----"+dValue+"----" +jValue);
+
+           StockInfo  stockInfo1 = stockinfoList.get(i);
+           stockInfo1.setKValue(kValue);
+           stockInfo1.setDValue(dValue);
+           stockInfo1.setJValue(jValue);
+            iStockInfoDao.updateStockInfoMacd(stockInfo1);
+
         }
     }
 

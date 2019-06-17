@@ -54,6 +54,11 @@ public class StockInfoDaoImpl implements IStockInfoDao {
     }
 
     @Override
+    public void updateStockInfoKDJ(StockInfo stockInfo) {
+        stockInfoMapper.updateStockInfoKDJ(stockInfo);
+    }
+
+    @Override
     public void updateStockInfoMacdNoDate(StockInfo stockInfo) {
         stockInfoMapper.updateStockInfoMacdNoDate(stockInfo);
     }
