@@ -1,6 +1,6 @@
 package com.stock.services.impl;
 
-import com.stock.services.IStockAnalyzeKDJservides;
+import com.stock.services.IStockAnalyzeKDJservices;
 import com.stock.util.MathCaclateUtil;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @Service
-public class IStockAnalyzeKDJservidesImpl implements IStockAnalyzeKDJservides {
+public class IStockAnalyzeKDJservicesImpl implements IStockAnalyzeKDJservices {
 
     @Override
     public void MACD(double[] closePrice, int fast, int slow, int signal, double[] macd, double[] dea, double[] diff) {
@@ -75,8 +75,7 @@ public class IStockAnalyzeKDJservidesImpl implements IStockAnalyzeKDJservides {
     }
 
     @Override
-    public void KDJ(double[] maxPrice, double[] minPrice, double[] closePrice, int fastK, int slowK, int slowD,
-            double[] K_R, double[] D_R, double[] J_R) {
+    public void KDJ(double[] maxPrice, double[] minPrice, double[] closePrice, int fastK, int slowK, int slowD, double[] K_R, double[] D_R, double[] J_R) {
         List<Double> highestPriceList = new ArrayList<>();
         List<Double> lowestPriceList = new ArrayList<>();
 

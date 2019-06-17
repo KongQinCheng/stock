@@ -3,7 +3,9 @@ package com.stock.controller.init;
 
 import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockList;
+import com.stock.dao.IStockInfoDao;
 import com.stock.services.*;
+import com.stock.services.impl.StockInfoKdjServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -30,12 +32,17 @@ public class InitProject implements ApplicationRunner {
     @Autowired
     IStockInfoActualtimeServices iStockInfoActualtimeServices;
 
+    @Autowired
+    IStockInfoKdjServices iStockInfoKdjServices;
+
     @Override
     public void run(ApplicationArguments args) {
         //项目初始化执行
 
         try {
 
+
+            iStockInfoKdjServices.getKDJValue("000001");
 //            iStockInfoActualtimeServices.updateEffect(0);
 
             //更新 002032 macd 值

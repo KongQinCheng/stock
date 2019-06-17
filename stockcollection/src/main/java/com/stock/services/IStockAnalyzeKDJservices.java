@@ -1,6 +1,6 @@
 package com.stock.services;
 
-public interface IStockAnalyzeKDJservides {
+public interface IStockAnalyzeKDJservices {
 
     /**
      * 计算MACD指标数据

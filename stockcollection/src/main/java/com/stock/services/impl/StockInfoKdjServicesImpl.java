@@ -1,56 +1,69 @@
 package com.stock.services.impl;
 
+import com.stock.Enum.SortType;
 import com.stock.bean.po.StockInfo;
+import com.stock.dao.IStockInfoDao;
 import com.stock.mapper.StockInfoMapper;
+import com.stock.services.IStockInfoKdjServices;
 import com.stock.util.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
-public class StockInfoKdjServicesImpl {
-
-
-    static StockInfoMapper stockInfoMapper = SpringUtil.getBean(StockInfoMapper.class);
+@Service
+public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
 
 
-    public static void getKDJValue(String stockCode) throws Exception {
+    @Autowired
+    IStockInfoDao iStockInfoDao;
 
-        List<StockInfo> stockListByStockCode = getStockListByStockCode(stockCode,999999999);
 
-        StockInfo stockInfo0 = stockListByStockCode.get(0);
+    public  void getKDJValue(String stockCode) throws Exception {
 
-        double kValue = 0;
-        double dValue = 0;
-        //判断是否有初始数据，没有就进行初始化赋值
-        if (stockInfo0.getDValue() == 0 || stockInfo0.getDValue() == 0) {
-            double rsv = getRsv((double) (stockInfo0.getSpj()), (double) (stockInfo0.getZgj()), (double) (stockInfo0.getZdj()));
-            kValue = getK(50, rsv);
-            dValue = getD(50, kValue);
-            double jValue = getJ(kValue, dValue);
-            stockInfo0.setKValue(kValue);
-            stockInfo0.setDValue(dValue);
-            stockInfo0.setJValue(jValue);
-            stockInfoMapper.updateStockInfo(stockInfo0);
+        List<StockInfo> stockinfoList = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(),50);
+
+        double[] lszgjArray = new double[9];
+        double[] lszdjArray = new double[9];
+
+        double maxValue=0.0;
+        double minVaule=0.0;
+
+        //将前面9天的数据保存的列表中
+        for (int i = 0; i <9 ; i++) {
+            StockInfo stockInfo = stockinfoList.get(i);
+            lszgjArray[i] = Double.valueOf(stockInfo.getZgj());
+            lszdjArray[i] = Double.valueOf(stockInfo.getZdj());
         }
 
-        int dayNum = 9;  //9日RSV=（C－L9）÷（H9－L9）×100
-        getRSVLase(stockListByStockCode, dayNum, kValue, dValue);
 
 
+        double kValue = 68.02;
+        double dValue = 54.28;
+
+        //从第9天开始计算KDJ值
+        for (int i = 9; i <stockinfoList.size() ; i++) {
+
+            int insertArrayIndex = i % 9;
+            StockInfo stockInfo = stockinfoList.get(i);
+            lszgjArray[insertArrayIndex] = Double.valueOf(stockInfo.getZgj());
+            lszdjArray[insertArrayIndex] = Double.valueOf(stockInfo.getZdj());
+
+            maxValue = getValueByType(lszgjArray, 1);
+            minVaule = getValueByType(lszdjArray, 0);
+
+            double rsv = getRsv((double) (stockinfoList.get(i).getSpj()), (double)maxValue, minVaule);
+            kValue = getK(kValue, rsv);
+            dValue = getD(dValue, kValue);
+            double jValue = getJ(kValue, dValue);
+            System.out.println(kValue +"----"+dValue+"----" +jValue);
+        }
     }
-
-
-    public static List<StockInfo> getStockListByStockCode(String stockCode,int limitNum) {
-        List<StockInfo> stockListByStockCode = stockInfoMapper.getStockListByStockCode(stockCode,limitNum);
-        return stockListByStockCode;
-
-    }
-
 
 
 
     //https://zhidao.baidu.com/question/575561429.html
-    public static int getRSVLase(List<StockInfo> list, int dayNum, double kValue, double dValue) throws Exception {
+    public  int getRSVLase(List<StockInfo> list, int dayNum, double kValue, double dValue) throws Exception {
 
 //        for (int i = 1; i <list.size() ; i++) {  //从第二个数据开始进行处理，第一个已经在最外层进行赋值了
 
@@ -73,7 +86,7 @@ public class StockInfoKdjServicesImpl {
     }
 
 
-    public static double[] RSVInit(List<StockInfo> list, int dayNum, int position, double kValueinput, double dValueinput) throws Exception {
+    public  double[] RSVInit(List<StockInfo> list, int dayNum, int position, double kValueinput, double dValueinput) throws Exception {
         //根据时间排序获取最新的9条数据 按照时间倒序排列 最旧的数据排第一位
         //小于9条的 第一天需要设置为 50
 
@@ -108,16 +121,18 @@ public class StockInfoKdjServicesImpl {
         double dValue = getD(dValueinput, kValue);
         double jValue = getJ(kValue, dValue);
 
-        StockInfo stockInfoUpdate = list.get(position - 1);
-        stockInfoUpdate.setKValue(kValue);
-        stockInfoUpdate.setDValue(dValue);
-        stockInfoUpdate.setJValue(jValue);
-        stockInfoMapper.updateStockInfo(stockInfoUpdate);
 
-        double[] resultArr = new double[2];
-        resultArr[0] = kValue;
-        resultArr[1] = dValue;
-        return resultArr;
+        System.out.println(kValue +"----"+dValue+"----" +jValue);
+
+//        StockInfo stockInfoUpdate = list.get(position - 1);
+//        stockInfoUpdate.setKValue(kValue);
+//        stockInfoUpdate.setDValue(dValue);
+//        stockInfoUpdate.setJValue(jValue);
+//        stockInfoMapper.updateStockInfo(stockInfoUpdate);
+//        double[] resultArr = new double[2];
+//        resultArr[0] = kValue;
+//        resultArr[1] = dValue;
+        return null;
     }
 
     /***
