@@ -1,5 +1,6 @@
 package com.stock.controller.init;
 
+import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockList;
 import com.stock.dao.IStockInfoDao;
 import com.stock.dao.IStockListDao;
@@ -48,7 +49,7 @@ public class TimedTask {
     IStockInfoKdjServices iStockInfoKdjServices;
 
 
-    @Scheduled(cron = "0 0 17 * * ?")
+    @Scheduled(cron = "0 0 16 * * ?")
     public void getStockInfo() throws Exception {
         //获取新上市的新股票
         iStockListServices.getStockNewList();
@@ -118,11 +119,13 @@ public class TimedTask {
         public void run() {
             try {
                 for (int i = 0; i < listInput.size(); i++) {
+
+                    List<StockInfo> list = iStockInfoServices.getStockListByStockCode(listInput.get(i).getStockCode().replaceAll("\t", "") + "",10000000);
+
                     try {
                         //删除表中当天的数据（计算实时的MACD的时候，添加进去的，数据不准）
                         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
                         Date day = new Date();
-
                         iStockInfoServices.delStockInfo(listInput.get(i).getStockCode().replaceAll("\t", ""), sdf2.format(day));
 
                         //获取股票的最新信息
@@ -138,44 +141,6 @@ public class TimedTask {
                         e.printStackTrace();
                         System.out.println("iStockInfoMacdServices.getStockInfoMacd 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
                     }
-                    try {
-                        //保存最新的数据到表中。
-                        iStockNewDataServices.getNewDataToTable(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        System.out.println("iStockNewDataServices.getNewDataToTable 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
-                    }
-                    try {
-                        //计算每只股票前一天涨幅对后一天的影响
-//                        iStockAnalyzeIncreaseServices.getStockAnalyzeIncreaseAll(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        System.out.println("iStockAnalyzeIncreaseServices.getStockIncreaseEffectInit 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
-                    }
-
-                    try {
-                        //金叉出现后对后一天的影响
-                        iStockAnalyzeMacdServices.crossEffectInitNew(listInput.get(i).getStockCode().replaceAll("\t", "") + "", "");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        System.out.println("iStockAnalyzeMacdServices.crossEffectInitNew 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
-                    }
-
-                    try {
-                        //金叉出现后有多少的前面几天内一定会涨
-                        iStockAnalyzeMacdServices.crossEffectInitNewFinal(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        System.out.println("iStockAnalyzeMacdServices.crossEffectInitNew 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
-                    }
-
-                    try {
-                        //金叉出现后后一天的涨幅的区间
-                        iStockAnalyzeMacdServices.crossEffectInitNewFinalMaxvalue(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        System.out.println("iStockAnalyzeMacdServices.crossEffectInitNewFinalMaxvalue 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
-                    }
 
                     try {
                         //KDJ初所化
@@ -185,6 +150,44 @@ public class TimedTask {
                         System.out.println("iStockInfoKdjServices.getKDJValue 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
                     }
 
+                    try {
+                        //保存最新的数据到表中。
+                        iStockNewDataServices.getNewDataToTable(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("iStockNewDataServices.getNewDataToTable 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+                    }
+//                    try {
+//                        //计算每只股票前一天涨幅对后一天的影响
+////                        iStockAnalyzeIncreaseServices.getStockAnalyzeIncreaseAll(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                        System.out.println("iStockAnalyzeIncreaseServices.getStockIncreaseEffectInit 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+//                    }
+//
+//                    try {
+//                        //金叉出现后对后一天的影响
+//                        iStockAnalyzeMacdServices.crossEffectInitNew(listInput.get(i).getStockCode().replaceAll("\t", "") + "", "");
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                        System.out.println("iStockAnalyzeMacdServices.crossEffectInitNew 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+//                    }
+//
+//                    try {
+//                        //金叉出现后有多少的前面几天内一定会涨
+//                        iStockAnalyzeMacdServices.crossEffectInitNewFinal(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                        System.out.println("iStockAnalyzeMacdServices.crossEffectInitNew 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+//                    }
+//
+//                    try {
+//                        //金叉出现后后一天的涨幅的区间
+//                        iStockAnalyzeMacdServices.crossEffectInitNewFinalMaxvalue(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                        System.out.println("iStockAnalyzeMacdServices.crossEffectInitNewFinalMaxvalue 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+//                    }
 
 
 

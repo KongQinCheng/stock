@@ -23,8 +23,10 @@
 </div>
 
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-<div class="flowDiv">
+<div class="flowDiv" style="height: 1600px;">
     <div id="main" style="height:800px;width: 5000px;"></div>
+
+    <div id="main2" style="height:800px;width: 5000px;"></div>
 </div>
 
 <div class="text-center footer">
@@ -42,18 +44,15 @@
     }
 
     function init() {
-
-
         var stockCode = $("#stockCode").val();
-
         if (stockCode == "" || stockCode == undefined)
             stockCode = "000001"
-
 
         var limitnum = $("#limitNum").val();
         var str = {"stockCode": stockCode, "limitNum": limitnum, "stockBeginTime": "", "stockEndTime": ""}
         // 基于准备好的dom，初始化echarts图表
         var myChart = echarts.init(document.getElementById('main'));
+        var myChart2 = echarts.init(document.getElementById('main2'));
 
         var date = [];    //类别数组（实际用来盛放X轴坐标值）
         var DIF = [];
@@ -62,6 +61,11 @@
 
         var minvalue = 0;
         var maxvalue = 0
+
+
+        var Kvalue = [];
+        var Dvalue = [];
+        var Jvalue = [];
 
 
         $.ajax({
@@ -73,12 +77,18 @@
             contentType: "application/json",
             success: function (result) {
 
+
                 var jsonObj = JSON.parse(result);//转换为json对象
                 for (var i = 0; i < jsonObj.length; i++) {
                     date.push(jsonObj[i].stockDate.replace(" 00:00:00", "").replace(".0", ""));    //挨个取出类别并填入类别数组
                     DIF.push(jsonObj[i].dIF);    //挨个取出类别并填入类别数组
                     DEA.push(jsonObj[i].eMAMACD);    //挨个取出类别并填入类别数组
                     MACD.push(jsonObj[i].bAR);    //挨个取出类别并填入类别数组
+
+                    Kvalue.push(jsonObj[i].kValue);
+                    Dvalue.push(jsonObj[i].dValue);
+                    Jvalue.push(jsonObj[i].jValue);
+
 
                     if (i == 1) {
                         minvalue = jsonObj[i].dIF;
@@ -159,8 +169,64 @@
                         }
                     ]
                 };
+
+
+                var option2 = {
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data: ['Kvalue', 'Dvalue', 'Jvalue']
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {  //工具栏
+                            // mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            // magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            // restore : {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    // calculable : true,  //是否可拖动
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: date
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            min: -10,
+                            max: 110,
+                            splitNumber: 20
+                        }
+                    ],
+
+                    series: [
+                        {
+                            name: 'Kvalue',
+                            type: 'line',
+                            data: Kvalue
+                        },
+                        {
+                            name: 'Dvalue',
+                            type: 'line',
+                            data: Dvalue
+                        },
+                        {
+                            name: 'Jvalue',
+                            type: 'line',
+                            data: Jvalue
+                        }
+                    ]
+                };
+
                 // 为echarts对象加载数据
                 myChart.setOption(option);
+
+                myChart2.setOption(option2);
 
             },
             error: function (errorMsg) {

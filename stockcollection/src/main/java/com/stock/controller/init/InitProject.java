@@ -12,6 +12,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class InitProject implements ApplicationRunner {
@@ -42,30 +43,22 @@ public class InitProject implements ApplicationRunner {
         try {
 
 
-            iStockInfoKdjServices.getKDJValue("000001");
-//            iStockInfoActualtimeServices.updateEffect(0);
+            List<StockList> stockList = iStockListServices.getStockList();
 
-            //更新 002032 macd 值
-//            StockInfo stockInfo =new StockInfo();
-//            stockInfo.setStockCode("002032");
-//            stockInfo.setDIF(0);
-//            stockInfo.setEMA12(0);
-//            stockInfo.setEMA26(0);
-//            stockInfo.setEMAMACD(0);
-//            stockInfo.setBAR(0);
-//            iStockInfoServices.updateStockInfoMacdNoDate(stockInfo);
-//            iStockInfoMacdServices.getStockInfoMacd("002032", 0);
+            for (int i = 0; i <stockList.size() ; i++) {
+
+                List<StockInfo> list = iStockInfoServices.getStockListByStockCode(stockList.get(i).getStockCode().replaceAll("\t", "") + "",10000000);
+
+                iStockInfoServices.delStockInfo(stockList.get(i).getStockCode().replaceAll("\t", "") + "","2019-06-18");
+                iStockInfoServices.delStockInfo(stockList.get(i).getStockCode().replaceAll("\t", "") + "","2019-06-19");
+//                iStockInfoServices.delStockInfo(stockList.get(i).getStockCode().replaceAll("\t", "") + "","2019-06-16");
+//                iStockInfoServices.delStockInfo(stockList.get(i).getStockCode().replaceAll("\t", "") + "","2019-06-17");
+                System.out.println(stockList.get(i).getStockCode());
+                System.out.println(i);
+            }
 
 
-
-//            List<StockList> stockList = iStockListServices.getStockList();
-//
-//            for (int i = 0; i <stockList.size() ; i++) {
-//                iStockInfoServices.delStockInfo(stockList.get(i).getStockCode().replaceAll("\t", "") + "","2019-06-13");
-//                System.out.println(stockList.get(i).getStockCode());
-//                System.out.println(i);
-//            }
-//            System.out.println("全部处理完成");
+            System.out.println("全部处理完成");
 
 
 //            iStockInfoServices.getStockInfoActualTime("603383");

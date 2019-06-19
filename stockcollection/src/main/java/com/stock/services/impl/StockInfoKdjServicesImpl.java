@@ -2,32 +2,47 @@ package com.stock.services.impl;
 
 import com.stock.Enum.SortType;
 import com.stock.bean.po.StockInfo;
+import com.stock.bean.po.StockList;
+import com.stock.bean.vo.StockSearchVo;
 import com.stock.dao.IStockInfoDao;
+import com.stock.dao.IStockListDao;
 import com.stock.mapper.StockInfoMapper;
 import com.stock.services.IStockInfoKdjServices;
 import com.stock.util.SpringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
 
+    static DecimalFormat df = new java.text.DecimalFormat("#.###");
 
     @Autowired
     IStockInfoDao iStockInfoDao;
 
+    @Autowired
+    IStockListDao iStockListDao;
 
+    @Override
     public  void getKDJValue(String stockCode) throws Exception {
 
-        List<StockInfo> stockinfoList = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(),99999999);
+        List<StockInfo> stockinfoList = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(),20);
 
         double[] lszgjArray = new double[9];
         double[] lszdjArray = new double[9];
 
         double maxValue=0.0;
         double minVaule=0.0;
+
+        if (stockinfoList.size()<10){
+            return;
+        }
 
         //将前面9天的数据保存的列表中
         for (int i = 0; i <9 ; i++) {
@@ -44,10 +59,17 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
 
         //从第9天开始计算KDJ值
         for (int i = 9; i <stockinfoList.size() ; i++) {
+
             int insertArrayIndex = i % 9;
             StockInfo stockInfo = stockinfoList.get(i);
             lszgjArray[insertArrayIndex] = Double.valueOf(stockInfo.getZgj());
             lszdjArray[insertArrayIndex] = Double.valueOf(stockInfo.getZdj());
+
+            if (!(stockinfoList.get(i).getKValue()==0.0&& stockinfoList.get(i).getDValue()==0.0&& stockinfoList.get(i).getJValue()==0.0)){
+                kValue =stockinfoList.get(i).getKValue();
+                dValue=stockinfoList.get(i).getDValue();
+                continue;
+            }
 
             maxValue = getValueByType(lszgjArray, 1);
             minVaule = getValueByType(lszdjArray, 0);
@@ -58,88 +80,98 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
             double jValue = getJ(kValue, dValue);
 
            StockInfo  stockInfo1 = stockinfoList.get(i);
+           stockInfo1.setStockCode(stockCode);
            stockInfo1.setKValue(kValue);
            stockInfo1.setDValue(dValue);
            stockInfo1.setJValue(jValue);
-            iStockInfoDao.updateStockInfoMacd(stockInfo1);
-
+           stockInfo1.setStockDate(stockinfoList.get(i).getStockDate());
+            iStockInfoDao.updateStockInfoKDJ(stockInfo1);
         }
+        System.out.println("KDJ 更新完毕stockCode=" + stockCode);
     }
 
+    @Override
+    public Map<String, Object> getKdjCross(String stockCode,int dayNum, String crossType) {
+        List<StockInfo> stockInfoList = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), dayNum+2);
+        Map<String, Object> existCross = isExistCross(stockInfoList, dayNum, crossType);
+        return existCross;
+    }
 
+    @Override
+    public List<Map<String, Object>> getKdjCrossAll(StockSearchVo stockSearchVo) {
+        List<Map<String, Object>> list =new ArrayList<>();
 
-    //https://zhidao.baidu.com/question/575561429.html
-    public  int getRSVLase(List<StockInfo> list, int dayNum, double kValue, double dValue) throws Exception {
+        List<StockList> stockList = iStockListDao.getStockList();
+        for (int i = 0; i < 100; i++) {
+//        for (int i = 0; i < stockList.size(); i++) {
+            Map<String, Object> kdjCross = getKdjCross(stockList.get(i).getStockCode().replaceAll("\t", "") + "",stockSearchVo.getDayNum() , stockSearchVo.getCrossType());
+            if ((boolean)kdjCross.get("result")==true){
+                list.add(kdjCross);
+            }
+        }
+        return list;
+    }
 
-//        for (int i = 1; i <list.size() ; i++) {  //从第二个数据开始进行处理，第一个已经在最外层进行赋值了
+    private Map<String, Object> isExistCross(List<StockInfo> list, int dayNum, String crossType) {
 
-        double[] doubles = new double[2];
-        doubles[0] = kValue;
-        doubles[1] = dValue;
-        for (int i = 1; i < list.size(); i++) {  //从第二个数据开始进行处理，第一个已经在最外层进行赋值了
-            StockInfo stockInfo = list.get(i);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("result", false);
+        if (list.size() < 1) {
+            return resultMap;
+        }
 
+        double beforeK = list.get(0).getKValue();
+        double beforeD = list.get(0).getDValue();
+        double beforeJ = list.get(0).getJValue();
 
-            if (i > dayNum) {
-                doubles = RSVInit(list, dayNum, i + 1, doubles[0], doubles[1]);
-            } else {
-                doubles = RSVInit(list, i + 1, i + 1, doubles[0], doubles[1]);
+        //查找 K 值和 D 值 最后的值
+        String stockCode =list.get(0).getStockCode();
+        for (int i = 1; i < list.size(); i++) {
+            Map<String, String> map = haveCross(list.get(i).getStockDate(), beforeK, beforeD, list.get(i).getKValue(), list.get(i).getDValue());
+            beforeK = list.get(i).getKValue();
+            beforeD = list.get(i).getDValue();
+
+            if (crossType.equals(map.get("type"))) {
+                resultMap.put("result", true);
+                resultMap.put("stockCode",stockCode );
+                resultMap.put("spj",list.get(list.size()-1).getSpj());
+                resultMap.put("zdf",list.get(list.size()-1).getZdf());
+                resultMap.put("stockDate", list.get(i).getStockDate());
+                return resultMap;
             }
 
         }
-
-        return 0;
+        return resultMap;
     }
 
+    private Map<String, String> haveCross(String day, double beforeK , double beforeD, double todayK , double todayD) {
 
-    public  double[] RSVInit(List<StockInfo> list, int dayNum, int position, double kValueinput, double dValueinput) throws Exception {
-        //根据时间排序获取最新的9条数据 按照时间倒序排列 最旧的数据排第一位
-        //小于9条的 第一天需要设置为 50
 
-        double[] lszgjArray = new double[dayNum];
-        double[] lszdjArray = new double[dayNum];
+        Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("type", "-1");
 
-        double lszgj = 0;  //历史最高价格
-        double lszdj = 0;  //历史最低价格
-        double jrspj = 0;  //今日收盘价
-        double rsv = 0;  //今日rsv
-
-        int beginIndex = position - dayNum;
-        int endIndex = position;
-
-        for (int i = beginIndex; i < endIndex; i++) {
-
-            //往数组里面插入数据 使用循环数组  i%dayNum
-            int insertArrayIndex = i % dayNum;
-
-            StockInfo stockInfo = list.get(i);
-            lszgjArray[insertArrayIndex] = Double.valueOf(stockInfo.getZgj());
-            lszdjArray[insertArrayIndex] = Double.valueOf(stockInfo.getZdj());
-            jrspj = Double.valueOf(stockInfo.getSpj());
+        //出现金叉    beforeD-beforeK>0   &&  todayD - todayK < 0
+        // KDJ有效金叉,条件是：K>=D20%
+        if (beforeD - beforeK > 0 && todayD - todayK < 0) {
+            if (beforeK < 20 && beforeD < 20 &&  beforeK> 0.2*beforeD) {  //超买
+                resultMap.put("type", "11");
+                resultMap.put("time", day);
+                resultMap.put("desc", "出现 KDJ 金叉 超买");
+            }
         }
-        lszgj = getValueByType(lszgjArray, 1);
-        lszdj = getValueByType(lszdjArray, 0);
 
-        jrspj = list.get(dayNum - 1).getSpj();
-
-        rsv = getRsv(jrspj, lszgj, lszdj);
-        double kValue = getK(kValueinput, rsv);
-        double dValue = getD(dValueinput, kValue);
-        double jValue = getJ(kValue, dValue);
-
-
-        System.out.println(kValue +"----"+dValue+"----" +jValue);
-
-//        StockInfo stockInfoUpdate = list.get(position - 1);
-//        stockInfoUpdate.setKValue(kValue);
-//        stockInfoUpdate.setDValue(dValue);
-//        stockInfoUpdate.setJValue(jValue);
-//        stockInfoMapper.updateStockInfo(stockInfoUpdate);
-//        double[] resultArr = new double[2];
-//        resultArr[0] = kValue;
-//        resultArr[1] = dValue;
-        return null;
+        //出现死叉
+        if (beforeD - beforeK < 0 && todayD - todayK > 0) {
+            if (todayD > 80 && todayK > 80) { //超卖
+                resultMap.put("type", "00");
+                resultMap.put("time", day);
+                resultMap.put("desc", "出现 KDJ 死叉 超卖");
+            }
+        }
+        return resultMap;
     }
+
+
 
     /***
      *
@@ -164,36 +196,29 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
         return result;
     }
 
-
     public static double getRsv(double spj, double zgj, double zdj) {
         //RSV=（收盘价－最低价）/（最高价－最低价）×100
-        return (spj - zdj) / (zgj - zdj) * 100;
+        return Double.valueOf(df.format((spj - zdj) / (zgj - zdj) * 100)) ;
     }
-
 
     public static double getK(double beforeDayK, double todayRSV) {
 
         // K值=2/3×第8日K值+1/3×第9日RSV
-        return (2 / 3.0000 * beforeDayK) + (1 / 3.0000 * todayRSV);
+        return Double.valueOf(df.format((2 / 3.0000 * beforeDayK) + (1 / 3.0000 * todayRSV)));
     }
 
     public static double getD(double beforeDayD, double todayK) throws Exception {
 
         // D值=2/3×第8日D值+1/3×第9日K值
-        return 2 / 3.0000 * beforeDayD + 1 / 3.0000 * todayK;
+        return Double.valueOf(df.format(2 / 3.0000 * beforeDayD + 1 / 3.0000 * todayK));
     }
 
     public static double getJ(double todayK, double todayD) throws Exception {
 
         // J值=3*第9日K值-2*第9日D值
-        return 3 * todayK - 2 * todayD;
+        return Double.valueOf(df.format(3 * todayK - 2 * todayD));
     }
 
-    public static void main(String[] args) throws Exception {
 
-        System.out.println(getK(50, 40));
-        System.out.println(getD(50, 40));
-        System.out.println(getJ(50, 40));
-    }
 
 }
