@@ -28,6 +28,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static com.stock.controller.test.shareTest.splitByExpression;
+import static com.stock.util.HtmlUtil.getHtmlByExpression;
+import static com.stock.util.HtmlUtil.getHtmlByURL;
+
 @Service
 public class StockInfoServicesImpl implements IStockInfoServices {
 
@@ -103,12 +107,12 @@ public class StockInfoServicesImpl implements IStockInfoServices {
         List<String> urlList = getURLbyStockCode(stockCode);
 
         for (int i = 0; i < urlList.size(); i++) {
-            String html = htmlUtil.getHtmlByURL(urlList.get(i), "UTF-8");
+            String html = getHtmlByURL(urlList.get(i), "UTF-8");
             //获取需要的正文
-            html = htmlUtil.getHtmlByExpression("</thead[\\s\\S]*</tr>    </table>", html);
+            html = getHtmlByExpression("</thead[\\s\\S]*</tr>    </table>", html);
             html = htmlUtil.replaceHtml(" class='cGreen'", html);
             html = htmlUtil.replaceHtml(" class='cRed'", html);
-            html = htmlUtil.getHtmlByExpression("<td>(.*?)</td>", html);
+            html = getHtmlByExpression("<td>(.*?)</td>", html);
             String[] strings = htmlUtil.splitByExpression("</td>", html);
             if ("".equals(strings[0])) {
                 continue;
@@ -139,25 +143,23 @@ public class StockInfoServicesImpl implements IStockInfoServices {
     public void getStockInfoActualTime(String stockCode) throws Exception {
 
         String url = "http://www.baidu.com/s?wd=" + stockCode;
-        String htmlAll = htmlUtil.getHtmlByURL(url, "UTF-8");
+        String htmlAll = getHtmlByURL(url, "UTF-8");
         String html ="";
-        html = htmlUtil.getHtmlByExpression("<span class=\"op-stockdynamic-moretab-cur-num c-gap-right-small\">(.*?)</span>", htmlAll);
+        html = getHtmlByExpression("<span class=\"op-stockdynamic-moretab-cur-num c-gap-right-small\">(.*?)</span>", htmlAll);
         String[] strings = htmlUtil.splitByExpression("</span>", html);
         html = strings[0];
         html = html.replaceAll("<span class=\"op-stockdynamic-moretab-cur-num c-gap-right-small\">", "");
 
         String maxValue ="";
         String minValue ="";
-        maxValue = htmlUtil.getHtmlByExpression("<ul class=\"op-stockdynamic-moretab-info\">(.*?)</ul>", htmlAll);
-        String[] stringsVaule = htmlUtil.splitByExpression("</li>", maxValue);
-        maxValue =stringsVaule[2];
-        maxValue = htmlUtil.getHtmlByExpression("<span class=\"op-stockdynamic-moretab-info-value\">(.*?)</span>", maxValue);
-        maxValue = maxValue.replaceAll("<span class=\"op-stockdynamic-moretab-info-value\">", "");
+        maxValue = getHtmlByExpression("<ul class=\"op-stockdynamic-moretab-info\">(.*?)</ul>", htmlAll);
+        maxValue = getHtmlByExpression("<span class=\"op-stockdynamic-moretab-info-value\"style=\"color:#f54545\">(.*?)</span>", maxValue);
+        String[] stringssss = splitByExpression("</span>", maxValue);
+        maxValue = stringssss[1].replaceAll("<span class=\"op-stockdynamic-moretab-info-value\"style=\"color:#f54545\">", "");
         maxValue = maxValue.replaceAll("</span>", "");
 
-        minValue =stringsVaule[3];
-        minValue = htmlUtil.getHtmlByExpression("<span class=\"op-stockdynamic-moretab-info-value\">(.*?)</span>", minValue);
-        minValue = minValue.replaceAll("<span class=\"op-stockdynamic-moretab-info-value\">", "");
+        minValue = getHtmlByExpression("<span class=\"op-stockdynamic-moretab-info-value\"style=\"color:#0f990f\">(.*?)</span>", htmlAll);
+        minValue = minValue.replaceAll("<span class=\"op-stockdynamic-moretab-info-value\"style=\"color:#0f990f\">", "");
         minValue = minValue.replaceAll("</span>", "");
 
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
@@ -396,6 +398,36 @@ public class StockInfoServicesImpl implements IStockInfoServices {
             }
         }
         //System.out.println(rrrr);
+    }
+
+    public static void main(String[] args) throws Exception {
+
+        String stockCode="603383";
+        String url = "http://www.baidu.com/s?wd=" + stockCode;
+        String htmlAll = getHtmlByURL(url, "UTF-8");
+        String html ="";
+        html = getHtmlByExpression("<span class=\"op-stockdynamic-moretab-cur-num c-gap-right-small\">(.*?)</span>", htmlAll);
+        String[] strings = splitByExpression("</span>", html);
+        html = strings[0];
+        html = html.replaceAll("<span class=\"op-stockdynamic-moretab-cur-num c-gap-right-small\">", "");
+        System.out.println(html);
+
+
+        String maxValue ="";
+        String minValue ="";
+        maxValue = getHtmlByExpression("<ul class=\"op-stockdynamic-moretab-info\">(.*?)</ul>", htmlAll);
+        maxValue = getHtmlByExpression("<span class=\"op-stockdynamic-moretab-info-value\"style=\"color:#f54545\">(.*?)</span>", maxValue);
+        String[] stringssss = splitByExpression("</span>", maxValue);
+        maxValue = stringssss[1].replaceAll("<span class=\"op-stockdynamic-moretab-info-value\"style=\"color:#f54545\">", "");
+        maxValue = maxValue.replaceAll("</span>", "");
+        System.out.println(maxValue);
+
+        minValue = getHtmlByExpression("<span class=\"op-stockdynamic-moretab-info-value\"style=\"color:#0f990f\">(.*?)</span>", htmlAll);
+        minValue = minValue.replaceAll("<span class=\"op-stockdynamic-moretab-info-value\"style=\"color:#0f990f\">", "");
+        minValue = minValue.replaceAll("</span>", "");
+        System.out.println(minValue);
+
+
     }
 
 }
