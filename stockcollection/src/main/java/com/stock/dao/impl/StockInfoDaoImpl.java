@@ -27,8 +27,11 @@ public class StockInfoDaoImpl implements IStockInfoDao {
         return stockListByStockCode;
     }
 
-
-
+    @Override
+    public List<StockInfo> getStockListByStockCodeAndStockDateLimit(String stockCode, String stockDate) {
+        List<StockInfo> stockListByStockCode = stockInfoMapper.getStockListByStockCodeAndStockDateLimit(stockCode,stockDate);
+        return stockListByStockCode;
+    }
 
 
     @Override
@@ -83,6 +86,11 @@ public class StockInfoDaoImpl implements IStockInfoDao {
     @Override
     public void delStockInfo(String stockCode, String stockDate) {
         stockInfoMapper.delStockInfo(stockCode,stockDate);
+    }
+
+    @Override
+    public void delEmptyStockInfo(String stockCode) {
+        stockInfoMapper.delEmptyStockInfo(stockCode);
     }
 
 

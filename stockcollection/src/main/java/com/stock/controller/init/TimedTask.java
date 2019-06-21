@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -52,7 +53,7 @@ public class TimedTask {
     @Scheduled(cron = "0 0 16 * * ?")
     public void getStockInfo() throws Exception {
         //获取新上市的新股票
-        iStockListServices.getStockNewList();
+//        iStockListServices.getStockNewList();
 
         //获取每一只最新的股票信息
         getStockNewData();
@@ -75,7 +76,24 @@ public class TimedTask {
     private static final double THREAD_NUMBER = 30.0;
 
     public void getStockNewData() {
-        List<StockList> stockList = iStockListServices.getStockList();
+
+        List<StockList> stockList2 = iStockListServices.getStockList();
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        Date day = new Date();
+        int count =0;
+        List<StockList> stockList =new ArrayList<>();
+        for (int i = 0; i <stockList2.size() ; i++) {
+            List<StockInfo> list = iStockInfoServices.getStockListByStockCodeAndStockDateLimit(stockList2.get(i).getStockCode().replaceAll("\t", "") + "",sdf2.format(day));
+            if (list.size()==0){
+                stockList.add(stockList2.get(i));
+                System.out.println(stockList2.get(i).getStockCode());
+                count++;
+                System.out.println(count);
+            }
+        }
+
+
+//        List<StockList> stockList = iStockListServices.getStockList();
         CountDownLatch CountDownLatch_getStockNewData = new CountDownLatch((int) THREAD_NUMBER);
         ExecutorService fixedThreadPool = Executors.newFixedThreadPool((int) THREAD_NUMBER);
         int listSize = stockList.size();
@@ -124,9 +142,7 @@ public class TimedTask {
 
                     try {
                         //删除表中当天的数据（计算实时的MACD的时候，添加进去的，数据不准）
-                        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-                        Date day = new Date();
-                        iStockInfoServices.delStockInfo(listInput.get(i).getStockCode().replaceAll("\t", ""), sdf2.format(day));
+                        iStockInfoServices.delEmptyStockInfo(listInput.get(i).getStockCode().replaceAll("\t", ""));
 
                         //获取股票的最新信息
                         iStockInfoServices.getStockInfoHistory(listInput.get(i).getStockCode().replaceAll("\t", "") + "");

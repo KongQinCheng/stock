@@ -20,8 +20,8 @@ import java.util.List;
 @Mapper
 public interface StockNewDataMapper {
 
-    @Insert("insert into stock_new_data (stockCode,stockDate,kpj,zgj,zdj,spj,zde,zdf,cjl,cjje,zf,hsl,EMA12,EMA26,DIF,EMAMACD,BAR) "
-            + "values('${stockCode}','${stockDate}',${kpj},${zgj},${zdj},${spj},${zde},${zdf},${cjl},${cjje},${zf},${hsl},${EMA12},${EMA26},${DIF},${EMAMACD},${BAR})")
+    @Insert("insert into stock_new_data (stockCode,stockDate,kpj,zgj,zdj,spj,zde,zdf,cjl,cjje,zf,hsl,k_value,d_value,j_value,EMA12,EMA26,DIF,EMAMACD,BAR) "
+            + "values('${stockCode}','${stockDate}',${kpj},${zgj},${zdj},${spj},${zde},${zdf},${cjl},${cjje},${zf},${hsl},${kValue},${dValue},${jValue},${EMA12},${EMA26},${DIF},${EMAMACD},${BAR})")
     public void insert(StockInfo stockInfo);
 
     @Delete("DELETE from stock_new_data WHERE 1=1")

@@ -17,6 +17,10 @@ public interface IStockInfoServices {
 
       List<StockInfo> getStockListByStockCode(String stockCode, int limitNum);
 
+    List<StockInfo> getStockListByStockCodeAndStockDateLimit(String stockCode, String stockDate);
+
+
+
 //    public void createTableByTableName(String tableName);
 
     void updateStockInfoMacd(StockInfo stockInfo);
@@ -34,6 +38,8 @@ public interface IStockInfoServices {
 
 
     void delStockInfo(String stockCode, String stockDate)  ;
+
+    void delEmptyStockInfo(String stockCode)  ;
 
 
     /***

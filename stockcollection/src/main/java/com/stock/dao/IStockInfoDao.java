@@ -27,6 +27,7 @@ public interface IStockInfoDao {
     List<StockInfo>   getStockListByStockCodeLimit(String stockCode, int limitNum);
 
 
+    List<StockInfo>   getStockListByStockCodeAndStockDateLimit(String stockCode, String stockDate);
 
     /***
      * 获取最新的的股票信息，按照
@@ -73,6 +74,14 @@ public interface IStockInfoDao {
      * @param stockCode
      */
     void delStockInfo(String stockCode,String stockDate);
+
+
+    /***
+     * 删除 股票的信息
+     * @param stockCode
+     */
+    void delEmptyStockInfo(String stockCode);
+
 
     /***
      * 判断数据是否已经存在

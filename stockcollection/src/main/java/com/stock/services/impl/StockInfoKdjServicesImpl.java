@@ -39,6 +39,7 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
 
         double maxValue=0.0;
         double minVaule=0.0;
+        double jValue=0.0;
 
         if (stockinfoList.size()<10){
             return;
@@ -65,19 +66,20 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
             lszgjArray[insertArrayIndex] = Double.valueOf(stockInfo.getZgj());
             lszdjArray[insertArrayIndex] = Double.valueOf(stockInfo.getZdj());
 
-            if (!(stockinfoList.get(i).getKValue()==0.0&& stockinfoList.get(i).getDValue()==0.0&& stockinfoList.get(i).getJValue()==0.0)){
-                kValue =stockinfoList.get(i).getKValue();
-                dValue=stockinfoList.get(i).getDValue();
-                continue;
-            }
+//            if (!(stockinfoList.get(i).getKValue()==0.0&& stockinfoList.get(i).getDValue()==0.0&& stockinfoList.get(i).getJValue()==0.0)){
+//                kValue =stockinfoList.get(i).getKValue();
+//                dValue=stockinfoList.get(i).getDValue();
+//                continue;
+//            }
 
             maxValue = getValueByType(lszgjArray, 1);
             minVaule = getValueByType(lszdjArray, 0);
-
-            double rsv = getRsv((double) (stockinfoList.get(i).getSpj()), (double)maxValue, minVaule);
-            kValue = getK(kValue, rsv);
-            dValue = getD(dValue, kValue);
-            double jValue = getJ(kValue, dValue);
+            if (maxValue !=minVaule){
+                double rsv = getRsv((double) (stockinfoList.get(i).getSpj()), (double)maxValue, minVaule);
+                kValue = getK(kValue, rsv);
+                dValue = getD(dValue, kValue);
+                jValue = getJ(kValue, dValue);
+            }
 
            StockInfo  stockInfo1 = stockinfoList.get(i);
            stockInfo1.setStockCode(stockCode);

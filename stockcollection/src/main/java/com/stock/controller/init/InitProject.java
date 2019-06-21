@@ -11,6 +11,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,39 +37,33 @@ public class InitProject implements ApplicationRunner {
     @Autowired
     IStockInfoKdjServices iStockInfoKdjServices;
 
+    @Autowired
+    IStockInfoDao iStockInfoDao;
+
     @Override
     public void run(ApplicationArguments args) {
         //项目初始化执行
 
         try {
-
-
-            List<StockList> stockList = iStockListServices.getStockList();
-
-            for (int i = 0; i <stockList.size() ; i++) {
-
-                List<StockInfo> list = iStockInfoServices.getStockListByStockCode(stockList.get(i).getStockCode().replaceAll("\t", "") + "",10000000);
-
-                iStockInfoServices.delStockInfo(stockList.get(i).getStockCode().replaceAll("\t", "") + "","2019-06-18");
-                iStockInfoServices.delStockInfo(stockList.get(i).getStockCode().replaceAll("\t", "") + "","2019-06-19");
-//                iStockInfoServices.delStockInfo(stockList.get(i).getStockCode().replaceAll("\t", "") + "","2019-06-16");
-//                iStockInfoServices.delStockInfo(stockList.get(i).getStockCode().replaceAll("\t", "") + "","2019-06-17");
-                System.out.println(stockList.get(i).getStockCode());
-                System.out.println(i);
-            }
-
-
-            System.out.println("全部处理完成");
-
-
-//            iStockInfoServices.getStockInfoActualTime("603383");
-//            iStockAnalyzeMacdServices.getStockCrossEffectNewFinal("603383","11");
+//            List<StockList> stockList = iStockListServices.getStockList();
+//
+//            List<StockList> returnlist =new ArrayList<>();
+//            for (int i = 0; i <stockList.size() ; i++) {
+//
+//                List<StockInfo> list = iStockInfoServices.getStockListByStockCodeAndStockDateLimit(stockList.get(i).getStockCode().replaceAll("\t", "") + "","2019-06-18");
+//                if (list.size()>0){
+//                    returnlist.add(stockList.get(i));
+//                }
+//                System.out.println(stockList.get(i).getStockCode());
+//                System.out.println(i);
+//            }
+//
+//            System.out.println("全部处理完成");
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("出现异常");
+        } finally {
         }
-
 
     }
 }

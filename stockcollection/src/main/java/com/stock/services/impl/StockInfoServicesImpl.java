@@ -68,6 +68,11 @@ public class StockInfoServicesImpl implements IStockInfoServices {
         return iStockInfoDao.getStockListByStockCode(stockCode, limitNum);
     }
 
+    @Override
+    public List<StockInfo> getStockListByStockCodeAndStockDateLimit(String stockCode, String stockDate) {
+        return iStockInfoDao.getStockListByStockCodeAndStockDateLimit(stockCode, stockDate);
+    }
+
 //    @Override
 //    public void createTableByTableName(String tableName) {
 //        iStockInfoDao.createTableByTableName(tableName);
@@ -121,6 +126,11 @@ public class StockInfoServicesImpl implements IStockInfoServices {
         iStockInfoDao.delStockInfo(stockCode, stockDate);
     }
 
+    @Override
+    public void delEmptyStockInfo(String stockCode) {
+        iStockInfoDao.delEmptyStockInfo(stockCode);
+    }
+
 
     /***
      * 获取 单个 股票的 实时信息
@@ -129,19 +139,33 @@ public class StockInfoServicesImpl implements IStockInfoServices {
     public void getStockInfoActualTime(String stockCode) throws Exception {
 
         String url = "http://www.baidu.com/s?wd=" + stockCode;
-        String html = htmlUtil.getHtmlByURL(url, "UTF-8");
-        html = htmlUtil.getHtmlByExpression("<span class=\"op-stockdynamic-moretab-cur-num c-gap-right-small\">(.*?)</span>", html);
+        String htmlAll = htmlUtil.getHtmlByURL(url, "UTF-8");
+        String html ="";
+        html = htmlUtil.getHtmlByExpression("<span class=\"op-stockdynamic-moretab-cur-num c-gap-right-small\">(.*?)</span>", htmlAll);
         String[] strings = htmlUtil.splitByExpression("</span>", html);
         html = strings[0];
         html = html.replaceAll("<span class=\"op-stockdynamic-moretab-cur-num c-gap-right-small\">", "");
 
+        String maxValue ="";
+        String minValue ="";
+        maxValue = htmlUtil.getHtmlByExpression("<ul class=\"op-stockdynamic-moretab-info\">(.*?)</ul>", htmlAll);
+        String[] stringsVaule = htmlUtil.splitByExpression("</li>", maxValue);
+        maxValue =stringsVaule[2];
+        maxValue = htmlUtil.getHtmlByExpression("<span class=\"op-stockdynamic-moretab-info-value\">(.*?)</span>", maxValue);
+        maxValue = maxValue.replaceAll("<span class=\"op-stockdynamic-moretab-info-value\">", "");
+        maxValue = maxValue.replaceAll("</span>", "");
+
+        minValue =stringsVaule[3];
+        minValue = htmlUtil.getHtmlByExpression("<span class=\"op-stockdynamic-moretab-info-value\">(.*?)</span>", minValue);
+        minValue = minValue.replaceAll("<span class=\"op-stockdynamic-moretab-info-value\">", "");
+        minValue = minValue.replaceAll("</span>", "");
 
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
         Date day = new Date();
         String stockDate = sdf2.format(day);
 
         // 进行相关处理
-        String crossStockCode = insertStockInfoActualTime(stockCode, html);
+        String crossStockCode = insertStockInfoActualTime(stockCode, html,maxValue,minValue);
         if (!"".equals(crossStockCode)) {
             //删除 推荐表中的数据
             iStockInfoActualtimeDao.deleteByStockCodeAndStockDate(stockCode, stockDate);
@@ -159,10 +183,12 @@ public class StockInfoServicesImpl implements IStockInfoServices {
     }
 
 
-    public String insertStockInfoActualTime(String stockCode, String price) {
+    public String insertStockInfoActualTime(String stockCode, String price, String maxValue, String minValue) {
 
         try {
             Double.parseDouble(price);
+            Double.parseDouble(maxValue);
+            Double.parseDouble(minValue);
         } catch (Exception e) {
             System.out.println("Double.parseDouble(price)= " + stockCode);
             return "";
@@ -179,6 +205,8 @@ public class StockInfoServicesImpl implements IStockInfoServices {
 
         //添加数据到数据库
         StockInfo stockInfo = new StockInfo();
+        stockInfo.setZgj(Double.parseDouble(maxValue));
+        stockInfo.setZdj(Double.parseDouble(minValue));
         stockInfo.setStockCode(stockCode);
         stockInfo.setStockDate(stockDate);
         stockInfo.setSpj(Double.parseDouble(price));

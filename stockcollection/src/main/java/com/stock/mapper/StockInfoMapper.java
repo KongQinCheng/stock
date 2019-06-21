@@ -55,6 +55,11 @@ public interface StockInfoMapper {
     public List<StockInfo> getStockListByStockCodeLimit(@Param("stockCode") String stockCode, @Param("limitNum") int limitNum);
 
 
+    @Select("select * from stock_info_${stockCode} where stockDate ='${stockDate}' ")
+    @ResultMap("stockBeanResults")
+    public List<StockInfo> getStockListByStockCodeAndStockDateLimit(@Param("stockCode") String stockCode, @Param("stockDate") String stockDate);
+
+
 
     @Insert("insert into stock_info_${stockCode} (stockCode,stockDate,kpj,zgj,zdj,spj,zde,zdf,cjl,cjje,zf,hsl) "
             + "values('${stockCode}','${stockDate}',${kpj},${zgj},${zdj},${spj},${zde},${zdf},${cjl},${cjje},${zf},${hsl})")
@@ -133,6 +138,11 @@ public interface StockInfoMapper {
 
     @Delete("delete from  stock_info_${stockCode} where stockDate='${stockDate}' ")
     public void delStockInfo(@Param("stockCode") String stockCode,@Param("stockDate") String stockDate);
+
+
+    @Delete("delete from  stock_info_${stockCode} where kpj='0.0' ")
+    public void delEmptyStockInfo(@Param("stockCode") String stockCode);
+
 
 
 }
