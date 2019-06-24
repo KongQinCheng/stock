@@ -4,6 +4,7 @@ import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockNewData;
 
 import com.stock.bean.vo.StockNewDataVo;
+import com.stock.bean.vo.StockSearchVo;
 import com.stock.dao.IStockNewDataDao;
 import com.stock.mapper.StockNewDataMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +46,10 @@ public class StockNewDataDaoImpl implements IStockNewDataDao {
     @Override
     public List<StockNewData> getStockListByStockCode(String stockCode, int limitNum) {
         return stockNewDataMapper.getStockListByStockCode(stockCode, limitNum);
+    }
+
+    @Override
+    public List<StockNewData> getStockKdjValueRegion(StockNewDataVo stockNewDataVo) {
+        return stockNewDataMapper.getStockKdjValueRegion(stockNewDataVo);
     }
 }

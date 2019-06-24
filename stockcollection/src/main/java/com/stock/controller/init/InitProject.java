@@ -57,8 +57,12 @@ public class InitProject implements ApplicationRunner {
 //                System.out.println(stockList.get(i).getStockCode());
 //                System.out.println(i);
 //            }
-//
-//            System.out.println("全部处理完成");
+
+
+            iStockInfoKdjServices.getKDJValue("300691");
+
+
+            System.out.println("全部处理完成");
 
         } catch (Exception e) {
             e.printStackTrace();

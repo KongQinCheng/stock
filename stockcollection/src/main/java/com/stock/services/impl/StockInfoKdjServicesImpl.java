@@ -3,9 +3,12 @@ package com.stock.services.impl;
 import com.stock.Enum.SortType;
 import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockList;
+import com.stock.bean.po.StockNewData;
+import com.stock.bean.vo.StockNewDataVo;
 import com.stock.bean.vo.StockSearchVo;
 import com.stock.dao.IStockInfoDao;
 import com.stock.dao.IStockListDao;
+import com.stock.dao.IStockNewDataDao;
 import com.stock.mapper.StockInfoMapper;
 import com.stock.services.IStockInfoKdjServices;
 import com.stock.util.SpringUtil;
@@ -29,10 +32,13 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
     @Autowired
     IStockListDao iStockListDao;
 
+    @Autowired
+    IStockNewDataDao iStockNewDataDao ;
+
     @Override
     public  void getKDJValue(String stockCode) throws Exception {
 
-        List<StockInfo> stockinfoList = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(),20);
+        List<StockInfo> stockinfoList = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(),15);
 
         double[] lszgjArray = new double[9];
         double[] lszdjArray = new double[9];
@@ -66,11 +72,11 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
             lszgjArray[insertArrayIndex] = Double.valueOf(stockInfo.getZgj());
             lszdjArray[insertArrayIndex] = Double.valueOf(stockInfo.getZdj());
 
-//            if (!(stockinfoList.get(i).getKValue()==0.0&& stockinfoList.get(i).getDValue()==0.0&& stockinfoList.get(i).getJValue()==0.0)){
-//                kValue =stockinfoList.get(i).getKValue();
-//                dValue=stockinfoList.get(i).getDValue();
-//                continue;
-//            }
+            if (!(stockinfoList.get(i).getKValue()==0.0&& stockinfoList.get(i).getDValue()==0.0&& stockinfoList.get(i).getJValue()==0.0)){
+                kValue =stockinfoList.get(i).getKValue();
+                dValue=stockinfoList.get(i).getDValue();
+                continue;
+            }
 
             maxValue = getValueByType(lszgjArray, 1);
             minVaule = getValueByType(lszdjArray, 0);
@@ -112,6 +118,11 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
             }
         }
         return list;
+    }
+
+    @Override
+    public List<StockNewData> getStockKdjValueRegion(StockNewDataVo stockNewDataVo) {
+        return iStockNewDataDao.getStockKdjValueRegion(stockNewDataVo);
     }
 
     private Map<String, Object> isExistCross(List<StockInfo> list, int dayNum, String crossType) {
@@ -200,25 +211,25 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
 
     public static double getRsv(double spj, double zgj, double zdj) {
         //RSV=（收盘价－最低价）/（最高价－最低价）×100
-        return Double.valueOf(df.format((spj - zdj) / (zgj - zdj) * 100)) ;
+        return (spj - zdj) / (zgj - zdj) * 100 ;
     }
 
     public static double getK(double beforeDayK, double todayRSV) {
 
         // K值=2/3×第8日K值+1/3×第9日RSV
-        return Double.valueOf(df.format((2 / 3.0000 * beforeDayK) + (1 / 3.0000 * todayRSV)));
+        return (2 / 3.0000 * beforeDayK) + (1 / 3.0000 * todayRSV);
     }
 
     public static double getD(double beforeDayD, double todayK) throws Exception {
 
         // D值=2/3×第8日D值+1/3×第9日K值
-        return Double.valueOf(df.format(2 / 3.0000 * beforeDayD + 1 / 3.0000 * todayK));
+        return 2 / 3.0000 * beforeDayD + 1 / 3.0000 * todayK;
     }
 
     public static double getJ(double todayK, double todayD) throws Exception {
 
         // J值=3*第9日K值-2*第9日D值
-        return Double.valueOf(df.format(3 * todayK - 2 * todayD));
+        return 3 * todayK - 2 * todayD;
     }
 
 

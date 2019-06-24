@@ -3,6 +3,7 @@ package com.stock.dao;
 import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockNewData;
 import com.stock.bean.vo.StockNewDataVo;
+import com.stock.bean.vo.StockSearchVo;
 
 import java.util.List;
 
@@ -44,5 +45,8 @@ public interface IStockNewDataDao {
      * @param stockInfo
      */
     public List<StockNewData> getStockListByStockCode(String stockCode, int limitNum);
+
+
+    List<StockNewData>  getStockKdjValueRegion( StockNewDataVo stockNewDataVo);
 
 }

@@ -3,6 +3,7 @@ package com.stock.mapper;
 import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockNewData;
 import com.stock.bean.vo.StockNewDataVo;
+import com.stock.bean.vo.StockSearchVo;
 import com.stock.sqlProvider.StockNewDataSqlProvider;
 import org.apache.ibatis.annotations.*;
 
@@ -77,6 +78,9 @@ public interface StockNewDataMapper {
     public List<StockNewData> getStockListByStockCode(@Param("stockCode") String stockCode, @Param("limitNum") int limitNum);
 
 
+    @SelectProvider(type = StockNewDataSqlProvider.class,method = "getStockKdjValueRegionByVo")
+    @ResultMap("stockNewDataResults")
+    public List<StockNewData> getStockKdjValueRegion(StockNewDataVo stockNewDataVo);
 
 
 }

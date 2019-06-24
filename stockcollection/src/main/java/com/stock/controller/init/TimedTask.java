@@ -67,9 +67,9 @@ public class TimedTask {
     }
 
 
-    @Scheduled(cron = "0 30-59/2 14 * * ?")
+    @Scheduled(cron = "0 30-59/10 14 * * ?")
     public void getStockMACDActualTime() throws Exception {
-        StockMACDActualTime();
+//        StockMACDActualTime();
     }
 
 
@@ -77,23 +77,23 @@ public class TimedTask {
 
     public void getStockNewData() {
 
-        List<StockList> stockList2 = iStockListServices.getStockList();
-        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-        Date day = new Date();
-        int count =0;
-        List<StockList> stockList =new ArrayList<>();
-        for (int i = 0; i <stockList2.size() ; i++) {
-            List<StockInfo> list = iStockInfoServices.getStockListByStockCodeAndStockDateLimit(stockList2.get(i).getStockCode().replaceAll("\t", "") + "",sdf2.format(day));
-            if (list.size()==0){
-                stockList.add(stockList2.get(i));
-                System.out.println(stockList2.get(i).getStockCode());
-                count++;
-                System.out.println(count);
-            }
-        }
+//        List<StockList> stockList2 = iStockListServices.getStockList();
+//        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+//        Date day = new Date();
+//        int count =0;
+//        List<StockList> stockList =new ArrayList<>();
+//        for (int i = 0; i <stockList2.size() ; i++) {
+//            List<StockInfo> list = iStockInfoServices.getStockListByStockCodeAndStockDateLimit(stockList2.get(i).getStockCode().replaceAll("\t", "") + "",sdf2.format(day));
+//            if (list.size()==0){
+//                stockList.add(stockList2.get(i));
+//                System.out.println(stockList2.get(i).getStockCode());
+//                count++;
+//                System.out.println(count);
+//            }
+//        }
 
 
-//        List<StockList> stockList = iStockListServices.getStockList();
+        List<StockList> stockList = iStockListServices.getStockList();
         CountDownLatch CountDownLatch_getStockNewData = new CountDownLatch((int) THREAD_NUMBER);
         ExecutorService fixedThreadPool = Executors.newFixedThreadPool((int) THREAD_NUMBER);
         int listSize = stockList.size();
@@ -140,7 +140,7 @@ public class TimedTask {
 
                     List<StockInfo> list = iStockInfoServices.getStockListByStockCode(listInput.get(i).getStockCode().replaceAll("\t", "") + "",10000000);
 
-                    try {
+                        try {
                         //删除表中当天的数据（计算实时的MACD的时候，添加进去的，数据不准）
                         iStockInfoServices.delEmptyStockInfo(listInput.get(i).getStockCode().replaceAll("\t", ""));
 

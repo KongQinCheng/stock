@@ -4,7 +4,9 @@ package com.stock.controller.controller;
 import com.alibaba.fastjson.JSON;
 import com.stock.Enum.SortType;
 import com.stock.bean.po.StockInfo;
+import com.stock.bean.po.StockNewData;
 import com.stock.bean.vo.StockInfoVo;
+import com.stock.bean.vo.StockNewDataVo;
 import com.stock.bean.vo.StockSearchVo;
 import com.stock.dao.IStockInfoDao;
 import com.stock.services.IStockInfoKdjServices;
@@ -37,12 +39,34 @@ public class StockKdjController {
         return "stock/stock_kdj_cross";
     }
 
+    @RequestMapping("/toStockKdjRegion")
+    public String toStockKdjRegion(){
+        return "stock/stock_kdj_region";
+    }
+
 
 
     @PostMapping(value = "/getStockKdjCross", consumes = "application/json")
     @ResponseBody
     public String getStockKdjCross(@RequestBody StockSearchVo stockSearchVo) {
         List<Map<String, Object>> stockListByStockCode = iStockInfoKdjServices.getKdjCrossAll(stockSearchVo);
+        String jsonStr = JSON.toJSONString(stockListByStockCode);
+        return jsonStr.toString();
+    }
+
+    @PostMapping(value = "/getStockKdjValueRegion", consumes = "application/json")
+    @ResponseBody
+    public String getStockKdjValueRegion(@RequestBody StockNewDataVo stockNewDataVo) {
+        stockNewDataVo.setKValueMin(0.01);
+        stockNewDataVo.setKValueMax(20);
+
+        stockNewDataVo.setDValueMin(0.01);
+        stockNewDataVo.setDValueMax(20);
+
+        stockNewDataVo.setJValueMin(0.01);
+        stockNewDataVo.setJValueMax(20);
+
+        List<StockNewData> stockListByStockCode = iStockInfoKdjServices.getStockKdjValueRegion(stockNewDataVo);
         String jsonStr = JSON.toJSONString(stockListByStockCode);
         return jsonStr.toString();
     }
