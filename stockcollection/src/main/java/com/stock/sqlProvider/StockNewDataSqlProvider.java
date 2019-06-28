@@ -1,7 +1,6 @@
 package com.stock.sqlProvider;
 
 import com.stock.bean.vo.StockNewDataVo;
-import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.jdbc.SQL;
 public class StockNewDataSqlProvider {
     

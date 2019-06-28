@@ -40,11 +40,17 @@ public class InitProject implements ApplicationRunner {
     @Autowired
     IStockInfoDao iStockInfoDao;
 
+    @Autowired
+    IStockInfoCciServices iStockInfoCciServices;
+
     @Override
     public void run(ApplicationArguments args) {
         //项目初始化执行
 
         try {
+
+            iStockInfoCciServices.getCciValue("601028",14);
+
 //            List<StockList> stockList = iStockListServices.getStockList();
 //
 //            List<StockList> returnlist =new ArrayList<>();
@@ -59,10 +65,10 @@ public class InitProject implements ApplicationRunner {
 //            }
 
 
-            iStockInfoKdjServices.getKDJValue("300691");
+//            iStockInfoKdjServices.getKDJValue("300691");
 
 
-            System.out.println("全部处理完成");
+//            System.out.println("全部处理完成");
 
         } catch (Exception e) {
             e.printStackTrace();

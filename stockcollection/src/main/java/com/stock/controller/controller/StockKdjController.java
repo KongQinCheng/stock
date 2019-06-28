@@ -10,6 +10,7 @@ import com.stock.bean.vo.StockNewDataVo;
 import com.stock.bean.vo.StockSearchVo;
 import com.stock.dao.IStockInfoDao;
 import com.stock.services.IStockInfoKdjServices;
+import com.stock.services.IStockInfoMacdServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,11 @@ public class StockKdjController {
     @Autowired
     IStockInfoKdjServices iStockInfoKdjServices;
 
+    @Autowired
+    IStockInfoMacdServices iStockInfoMacdServices;
+
+    @Autowired
+    IStockInfoDao iStockInfoDao;
 
     /***
      * MACD值
@@ -43,6 +49,12 @@ public class StockKdjController {
     public String toStockKdjRegion(){
         return "stock/stock_kdj_region";
     }
+
+    @RequestMapping("/toStockKdjRegionCross")
+    public String toStockKdjRegionCross(){
+        return "stock/stock_kdj_region_cross";
+    }
+
 
 
 
@@ -68,6 +80,41 @@ public class StockKdjController {
 
         List<StockNewData> stockListByStockCode = iStockInfoKdjServices.getStockKdjValueRegion(stockNewDataVo);
         String jsonStr = JSON.toJSONString(stockListByStockCode);
+        return jsonStr.toString();
+    }
+
+
+    @PostMapping(value = "/getStockKdjValueRegionCross", consumes = "application/json")
+    @ResponseBody
+    public String getStockKdjValueRegionCross(@RequestBody StockNewDataVo stockNewDataVo) {
+        stockNewDataVo.setKValueMin(0.01);
+        stockNewDataVo.setKValueMax(20);
+
+        stockNewDataVo.setDValueMin(0.01);
+        stockNewDataVo.setDValueMax(20);
+
+        stockNewDataVo.setJValueMin(0.01);
+        stockNewDataVo.setJValueMax(20);
+
+        List<StockNewData> stockListByStockCode = iStockInfoKdjServices.getStockKdjValueRegion(stockNewDataVo);
+        List<StockNewData> resultList =new ArrayList<>();
+
+        for (int i = 0; i <stockListByStockCode.size() ; i++) {
+            List<StockInfo> newStockListByStockCodelist = iStockInfoDao.getNewStockListByStockCode(stockListByStockCode.get(i).getStockCode(), SortType.ASC.toString(), 5);
+            Map<String, Object> existCross = iStockInfoMacdServices.isExistCross(newStockListByStockCodelist, 5, "11");
+            if ((boolean)existCross.get("result")){
+                resultList.add(stockListByStockCode.get(i));
+                continue;
+            }
+
+            Map<String, Object> existCross1 = iStockInfoMacdServices.isExistCross(newStockListByStockCodelist, 5, "10");
+            if ((boolean)existCross1.get("result")){
+                resultList.add(stockListByStockCode.get(i));
+                continue;
+            }
+        }
+
+        String jsonStr = JSON.toJSONString(resultList);
         return jsonStr.toString();
     }
 }

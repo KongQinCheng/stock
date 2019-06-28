@@ -110,8 +110,8 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
         List<Map<String, Object>> list =new ArrayList<>();
 
         List<StockList> stockList = iStockListDao.getStockList();
-        for (int i = 0; i < 100; i++) {
-//        for (int i = 0; i < stockList.size(); i++) {
+//        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < stockList.size(); i++) {
             Map<String, Object> kdjCross = getKdjCross(stockList.get(i).getStockCode().replaceAll("\t", "") + "",stockSearchVo.getDayNum() , stockSearchVo.getCrossType());
             if ((boolean)kdjCross.get("result")==true){
                 list.add(kdjCross);

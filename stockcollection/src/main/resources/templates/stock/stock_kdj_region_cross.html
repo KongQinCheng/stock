@@ -6,7 +6,7 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../css/templatemo-style.css">
-    <title>KDJ金叉-死叉推荐</title>
+    <title>KDJ区间-金叉死叉</title>
     <script src="../../js/common.js"></script>
 </head>
 
@@ -39,35 +39,44 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="spjmax" type="email" class="form-control" id="spjmax" placeholder="最高收盘价..." required>
+                        <input name="spjmax" type="text" class="form-control" id="spjmax" placeholder="最高收盘价..." >
                     </div>
                 </div>
 
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <div class="form-group">
-                        <input name="zdfmin" type="text" class="form-control" id="zdfmin" placeholder="最低涨幅..." value="-10"
-                               required>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
+                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="zdfmax" type="email" class="form-control" id="zdfmax" placeholder="最高涨幅..." value="10" required>
+                        <input name="kValueMin" type="text" class="form-control" id="kValueMin" placeholder="最低K值..." value="0.1" >
                     </div>
                 </div>
-
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="spjmax" type="email" class="form-control" id="dayNum" placeholder="限定日期..." required value="5">
+                        <input name="kValueMax" type="text" class="form-control" id="kValueMax" placeholder="最高K值..." value="20" >
                     </div>
                 </div>
+
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
-                    <select  class="form-control" id="crossType">
-                        <option value="11" selected="selected">金叉 0上</option>
-                        <option value="10">金叉 0下</option>
-                        <option value="01">死叉 0上</option>
-                        <option value="00">死叉 0下</option>
-                    </select>
+                    <div class="form-group contact-field">
+                        <input name="dValueMin" type="text" class="form-control" id="dValueMin" placeholder="最低D值..." value="0.1" >
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
+                    <div class="form-group contact-field">
+                        <input name="dValueMax" type="text" class="form-control" id="dValueMax" placeholder="最高D值..." value="20" >
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
+                    <div class="form-group contact-field">
+                        <input name="jValueMin" type="text" class="form-control" id="jValueMin" placeholder="最低J值..." value="0.1" >
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
+                    <div class="form-group contact-field">
+                        <input name="jValueMax" type="text" class="form-control" id="jValueMax" placeholder="最高J值..." value="20" >
+                    </div>
                 </div>
 
 
@@ -91,7 +100,6 @@
                     <th>stockCode</th>
                     <th>收盘价</th>
                     <th>涨跌幅</th>
-
                     <th>涨幅</th>
                     <th>涨幅影响</th>
                     <th>金叉后最高价范围</th>
@@ -128,7 +136,6 @@
 
     function init() {
         // getUrlParam("stockCode")
-
         getNominate();
     }
 
@@ -137,22 +144,41 @@
         var spjminVal = $("#spjmin").val();
         var spjmaxVal = $("#spjmax").val();
 
+        var dValueMin = $("#dValueMin").val();
+        var dValueMax = $("#dValueMax").val();
+
+        // var spjminVal = $("#spjmin").val();
+        // var spjmaxVal = $("#spjmax").val();
+        //
+        // var spjminVal = $("#spjmin").val();
+        // var spjmaxVal = $("#spjmax").val();
+
         if (spjminVal==""||spjminVal==null) {
             spjminVal=0;
             $("#spjmin").val(spjminVal);
         }
         if (spjmaxVal==""||spjmaxVal==null) {
-            spjmaxVal=spjminVal+20;
+            spjmaxVal=spjminVal+30;
             $("#spjmax").val(spjmaxVal);
         }
 
-        var str = {"spjmin": $("#spjmin").val(), "spjmax": $("#spjmax").val(),"dayNum": $("#dayNum").val(),"crossType": $("#crossType").val(),"zdfmin": $("#zdfmin").val(),"zdfmax": $("#zdfmax").val()}
+        if (dValueMin==""||dValueMin==null) {
+            dValueMin=0.01;
+            $("#dValueMin").val(dValueMin);
+        }
+        if (dValueMax==""||dValueMax==null) {
+            dValueMax=dValueMin+20;
+            $("#dValueMax").val(dValueMax);
+        }
+
+
+        var str = {"spjmin": $("#spjmin").val(), "spjmax": $("#spjmax").val(), "kValueMin": $("#kValueMin").val(), "kValueMax": $("#kValueMax").val(), "dValueMin": $("#dValueMin").val(), "dValueMax": $("#dValueMax").val(), "jValueMin": $("#jValueMin").val(), "jValueMax": $("#jValueMax").val()}
 
 
         $.ajax({
             type: "post",
             async: true,
-            url: "/stock/getStockKdjCross",
+            url: "/stock/getStockKdjValueRegionCross",
             data: JSON.stringify(str),
             dataType: "text",        //返回数据形式为json
             contentType: "application/json",

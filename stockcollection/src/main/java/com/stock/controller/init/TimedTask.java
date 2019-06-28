@@ -175,7 +175,7 @@ public class TimedTask {
                     }
 //                    try {
 //                        //计算每只股票前一天涨幅对后一天的影响
-////                        iStockAnalyzeIncreaseServices.getStockAnalyzeIncreaseAll(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+//                        iStockAnalyzeIncreaseServices.getStockAnalyzeIncreaseAll(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
 //                    } catch (Exception e) {
 //                        e.printStackTrace();
 //                        System.out.println("iStockAnalyzeIncreaseServices.getStockIncreaseEffectInit 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));

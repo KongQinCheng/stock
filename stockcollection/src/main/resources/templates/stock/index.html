@@ -50,6 +50,34 @@
         </div>
     </footer>
 
+    <footer class="col-md-12 content" >
+        <div class="col-lg-6 col-md-6 last">
+            <img src="../../img/5.jpg" alt="Image" class="tm-image">
+        </div>
+        <div class="col-lg-6 col-md-6 background last ">
+            <h2 class="section-title">女神推荐-KDJ区间+MACD金叉</h2>
+            <p class="about-text">KDJ区间+MACD金叉</p>
+            <p class="about-text">KDJ区间+MACD金叉</p>
+            <div>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex8()">推荐</button>
+            </div>
+        </div>
+    </footer>
+
+
+    <footer class="col-md-12 content" >
+        <div class="col-lg-6 col-md-6 last">
+            <img src="../../img/5.jpg" alt="Image" class="tm-image">
+        </div>
+        <div class="col-lg-6 col-md-6 background last ">
+            <h2 class="section-title">女神推荐-KDJ 区间</h2>
+            <p class="about-text">KDJ区间获取</p>
+            <p class="about-text">KDJ区间</p>
+            <div>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex7()">推荐</button>
+            </div>
+        </div>
+    </footer>
 
 
     <footer class="col-md-12 content" >
@@ -163,8 +191,13 @@
         window.location.href = "/stock/toStockKdjCross?stockCode=000001"
     }
 
+    function toIndex7() {
+        window.location.href = "/stock/toStockKdjRegion"
+    }
 
-
+    function toIndex8() {
+        window.location.href = "/stock/toStockKdjRegionCross"
+    }
 
 
     // Check scroll position and add/remove background to navbar
