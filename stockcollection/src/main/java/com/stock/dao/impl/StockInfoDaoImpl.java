@@ -62,6 +62,13 @@ public class StockInfoDaoImpl implements IStockInfoDao {
     }
 
     @Override
+    public void updateStockInfoRSI(StockInfo stockInfo) {
+        stockInfoMapper.updateStockInfoRSI(stockInfo);
+    }
+
+
+
+    @Override
     public void updateStockInfoMacdNoDate(StockInfo stockInfo) {
         stockInfoMapper.updateStockInfoMacdNoDate(stockInfo);
     }
@@ -100,4 +107,10 @@ public class StockInfoDaoImpl implements IStockInfoDao {
             return true;
         return  false;
     }
+
+    @Override
+    public void alterTable(String stockCode) {
+        stockInfoMapper.alterTable(stockCode);
+    }
+
 }

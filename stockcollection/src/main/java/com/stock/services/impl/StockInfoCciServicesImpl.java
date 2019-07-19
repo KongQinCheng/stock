@@ -67,7 +67,7 @@ public class StockInfoCciServicesImpl implements IStockInfoCciServices {
         double spjVaule=0.0;
 
         //将前面9天的数据保存的列表中
-        for (int i = 0; i <dayNum ; i++) {
+        for (int i = 0; i <dayNum-1 ; i++) {
             StockInfo stockInfo = stockinfoList.get(i);
             lszgjArray[i] = Double.valueOf(stockInfo.getZgj());
             lszdjArray[i] = Double.valueOf(stockInfo.getZdj());
@@ -76,7 +76,7 @@ public class StockInfoCciServicesImpl implements IStockInfoCciServices {
         }
 
         //从第dayNum天开始计算 CCI 值
-        for (int i = dayNum; i <stockinfoList.size() ; i++) {
+        for (int i = dayNum-1; i <stockinfoList.size() ; i++) {
 
             int insertArrayIndex = i % dayNum;
             StockInfo stockInfo = stockinfoList.get(i);

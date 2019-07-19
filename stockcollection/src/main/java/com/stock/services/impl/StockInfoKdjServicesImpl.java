@@ -38,7 +38,7 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
     @Override
     public  void getKDJValue(String stockCode) throws Exception {
 
-        List<StockInfo> stockinfoList = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(),15);
+        List<StockInfo> stockinfoList = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(),25);
 
         double[] lszgjArray = new double[9];
         double[] lszdjArray = new double[9];
@@ -61,8 +61,6 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
         double kValue = 50.0;
         double dValue = 50.0;
 
-//        double kValue = 68.02;
-//        double dValue = 54.28;
 
         //从第9天开始计算KDJ值
         for (int i = 9; i <stockinfoList.size() ; i++) {

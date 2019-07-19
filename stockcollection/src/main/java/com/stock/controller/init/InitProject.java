@@ -43,19 +43,19 @@ public class InitProject implements ApplicationRunner {
     @Autowired
     IStockInfoCciServices iStockInfoCciServices;
 
+    @Autowired
+    IStockAnalyzeRSIservices iStockAnalyzeRSIservices;
+
     @Override
     public void run(ApplicationArguments args) {
         //项目初始化执行
 
         try {
 
-            iStockInfoCciServices.getCciValue("601028",14);
-
+//            iStockInfoCciServices.getCciValue("601028",14);
 //            List<StockList> stockList = iStockListServices.getStockList();
-//
 //            List<StockList> returnlist =new ArrayList<>();
 //            for (int i = 0; i <stockList.size() ; i++) {
-//
 //                List<StockInfo> list = iStockInfoServices.getStockListByStockCodeAndStockDateLimit(stockList.get(i).getStockCode().replaceAll("\t", "") + "","2019-06-18");
 //                if (list.size()>0){
 //                    returnlist.add(stockList.get(i));
@@ -63,12 +63,13 @@ public class InitProject implements ApplicationRunner {
 //                System.out.println(stockList.get(i).getStockCode());
 //                System.out.println(i);
 //            }
-
-
-//            iStockInfoKdjServices.getKDJValue("300691");
-
-
+//             .getKDJValue("300691");
 //            System.out.println("全部处理完成");
+
+
+
+//            iStockAnalyzeRSIservices.getRSI("600206");
+
 
         } catch (Exception e) {
             e.printStackTrace();

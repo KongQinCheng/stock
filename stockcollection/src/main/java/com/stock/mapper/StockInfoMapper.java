@@ -40,6 +40,10 @@ public interface StockInfoMapper {
             @Result(column = "EMAMACD", property = "EMAMACD"),
             @Result(column = "BAR", property = "BAR"),
 
+            @Result(column = "RSI06", property = "RSI06"),
+            @Result(column = "RSI12", property = "RSI12"),
+            @Result(column = "RSI24", property = "RSI24"),
+
             @Result(column = "shareDate", property = "shareDate")})
     public List<StockInfo> getStockListByStockCode(@Param("stockCode") String stockCode, @Param("limitNum") int limitNum);
 
@@ -115,6 +119,11 @@ public interface StockInfoMapper {
     public void updateStockInfoKDJ(StockInfo stockInfo);
 
 
+    @Update("update stock_info_${stockCode} set RSI06='${RSI06}',RSI12='${RSI12}',RSI24='${RSI24}'  where stockDate ='${stockDate}'")
+    public void updateStockInfoRSI(StockInfo stockInfo);
+
+
+
     @Update("update stock_info_${stockCode} set EMA12=#{EMA12},EMA26=#{EMA26},DIF=#{DIF} ,EMAMACD=#{EMAMACD} ,BAR=#{BAR} ")
     public void updateStockInfoMacdNoDate(StockInfo stockInfo);
 
@@ -142,6 +151,13 @@ public interface StockInfoMapper {
 
     @Delete("delete from  stock_info_${stockCode} where kpj='0.0' ")
     public void delEmptyStockInfo(@Param("stockCode") String stockCode);
+
+
+    @Update(" ALTER TABLE `stock_info_${stockCode}` ADD COLUMN `RSI06`  double NULL AFTER `BAR`, ADD COLUMN `RSI12`  double NULL AFTER `RSI06`, ADD COLUMN `RSI24`  double NULL AFTER `RSI12`;")
+    public void alterTable(@Param("stockCode") String stockCode);
+
+
+
 
 
 

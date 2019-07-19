@@ -32,6 +32,10 @@ public class StockInfo {
     private  double EMAMACD;
     private  double BAR;
 
+    //RSI
+    private  double RSI06;
+    private  double RSI12;
+    private  double RSI24;
 
 
 }

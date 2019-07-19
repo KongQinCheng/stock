@@ -49,6 +49,9 @@ public class TimedTask {
     @Autowired
     IStockInfoKdjServices iStockInfoKdjServices;
 
+    @Autowired
+    IStockAnalyzeRSIservices iStockAnalyzeRSIservices;
+
 
     @Scheduled(cron = "0 0 16 * * ?")
     public void getStockInfo() throws Exception {
@@ -165,6 +168,15 @@ public class TimedTask {
                         e.printStackTrace();
                         System.out.println("iStockInfoKdjServices.getKDJValue 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
                     }
+
+                    try {
+                        //计算RSI初所化
+                        iStockAnalyzeRSIservices.getRSI(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("iStockAnalyzeRSIservices.getRSI 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+                    }
+
 
                     try {
                         //保存最新的数据到表中。

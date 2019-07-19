@@ -49,6 +49,7 @@ public interface IStockInfoDao {
      void updateStockInfoMacd(StockInfo stockInfo);
 
     void updateStockInfoKDJ(StockInfo stockInfo);
+    void updateStockInfoRSI(StockInfo stockInfo);
 
     void updateStockInfoMacdNoDate(StockInfo stockInfo);
 
@@ -89,6 +90,10 @@ public interface IStockInfoDao {
      * @return
      */
      boolean isRoweExist(StockInfo stockInfo);
+
+
+
+    void alterTable(String stockCode);
 
 
 }
