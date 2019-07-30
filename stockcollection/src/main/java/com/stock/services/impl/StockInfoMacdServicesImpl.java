@@ -240,4 +240,7 @@ public class StockInfoMacdServicesImpl implements IStockInfoMacdServices {
 
     }
 
+
+
+
 }

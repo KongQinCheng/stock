@@ -14,17 +14,33 @@ public class StockNewDataVo {
     private double zdfmin;
     private double zdfmax;
 
-    private double kValueMax;
-    private double kValueMin;
+    private double kvaluemax;
+    private double kvaluemin;
 
-    private double dValueMax;
-    private double dValueMin;
+    private double dvaluemax;
+    private double dvaluemin;
 
-    private double jValueMax;
-    private double jValueMin;
+    private double jvaluemax;
+    private double jvaluemin;
 
+
+    private double rsivaluemax1;
+    private double rsivaluemax2;
+    private double rsivaluemax3;
+
+    private double rsivaluemin1;
+    private double rsivaluemin2;
+    private double rsivaluemin3;
 
     private String crossType;
+
+    private double ccivaluemin;
+    private double ccivaluemax;
+
+    private double rsimax;
+
+    private double rsimin;
+
 
     private int dayNum;
 

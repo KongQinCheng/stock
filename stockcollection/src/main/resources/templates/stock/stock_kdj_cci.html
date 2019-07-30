@@ -33,51 +33,66 @@
             <form method="post" name="contact-form" class="contact-form">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <div class="form-group">
-                        <input name="spjmin" type="text" class="form-control" id="spjmin" placeholder="最低收盘价..."
-                               required>
+                        <input name="spjmin" type="text" class="form-control" id="spjmin" placeholder="最低收盘价..." value="0">
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="spjmax" type="text" class="form-control" id="spjmax" placeholder="最高收盘价..." >
+                        <input name="spjmax" type="text" class="form-control" id="spjmax" placeholder="最高收盘价..." value="12">
                     </div>
                 </div>
 
                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="kvaluemin" type="text" class="form-control" id="kvaluemin" placeholder="最低K值..." value="0.01" >
+                        <input name="kvaluemin" type="text" class="form-control" id="kvaluemin" placeholder="最低K值..." value="-10" >
                     </div>
                 </div>
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="kvaluemax" type="text" class="form-control" id="kvaluemax" placeholder="最高K值..." value="15" >
+                        <input name="kValueMax" type="text" class="form-control" id="kvaluemax" placeholder="最高K值..."  value="20" >
                     </div>
                 </div>
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="dvaluemin" type="text" class="form-control" id="dvaluemin" placeholder="最低D值..." value="0.01" >
+                        <input name="dvaluemin" type="text" class="form-control" id="dvaluemin" placeholder="最低D值..."  value="-10">
                     </div>
                 </div>
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="dvaluemax" type="text" class="form-control" id="dvaluemax" placeholder="最高D值..." value="15" >
+                        <input name="dvaluemax" type="text" class="form-control" id="dvaluemax" placeholder="最高D值..."  value="20" >
                     </div>
                 </div>
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="jvaluemin" type="text" class="form-control" id="jvaluemin" placeholder="最低J值..." value="0.01" >
+                        <input name="jvaluemin" type="text" class="form-control" id="jvaluemin" placeholder="最低J值..."  value="-10" >
                     </div>
                 </div>
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="jvaluemax" type="text" class="form-control" id="jvaluemax" placeholder="最高J值..." value="15" >
+                        <input name="jvaluemax" type="text" class="form-control" id="jvaluemax" placeholder="最高J值..."  value="20">
                     </div>
                 </div>
+
+
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
+                    <div class="form-group contact-field">
+                        <input name="ccivaluemin" type="text" class="form-control" id="ccivaluemin" placeholder="最低CCI值..."  value="-1000">
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
+                    <div class="form-group contact-field">
+                        <input name="ccivaluemax" type="text" class="form-control" id="ccivaluemax" placeholder="最高CCI值..."  value="-100">
+                    </div>
+                </div>
+
+
 
 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -97,13 +112,12 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th>编号</th>
                     <th>stockCode</th>
                     <th>收盘价</th>
                     <th>涨跌幅</th>
-                    <!--<th>涨幅</th>-->
-                    <!--<th>涨幅影响</th>-->
-                    <!--<th>金叉后最高价范围</th>-->
+                    <th>涨幅</th>
+                    <th>涨幅影响</th>
+                    <th>金叉后最高价范围</th>
                     <th>时间</th>
                     <th>综合</th>
                     <th>MACD</th>
@@ -159,7 +173,7 @@
             $("#spjmin").val(spjminVal);
         }
         if (spjmaxVal==""||spjmaxVal==null) {
-            spjmaxVal=spjminVal+15;
+            spjmaxVal=spjminVal+30;
             $("#spjmax").val(spjmaxVal);
         }
 
@@ -173,13 +187,13 @@
         }
 
 
-        var str = {"spjmin": $("#spjmin").val(), "spjmax": $("#spjmax").val(), "kvaluemin": $("#kvaluemin").val(), "kvaluemax": $("#kvaluemax").val(), "dvaluemin": $("#dvaluemin").val(), "dvaluemax": $("#dvaluemax").val(), "jvaluemin": $("#jvaluemin").val(), "jvaluemax": $("#jvaluemax").val()}
+        var str = {"spjmin": $("#spjmin").val(), "spjmax": $("#spjmax").val(),"ccivaluemax": $("#ccivaluemax").val(), "ccivaluemin": $("#ccivaluemin").val(), "kvaluemin": $("#kvaluemin").val(), "kvaluemax": $("#kvaluemax").val(), "dvaluemin": $("#dvaluemin").val(), "dvaluemax": $("#dvaluemax").val(), "jvaluemin": $("#jvaluemin").val(), "jvaluemax": $("#jvaluemax").val()}
 
 
         $.ajax({
             type: "post",
             async: true,
-            url: "/stock/getStockKdjValueRegion",
+            url: "/stock/getStockKdjCciValueRegion",
             data: JSON.stringify(str),
             dataType: "text",        //返回数据形式为json
             contentType: "application/json",
@@ -195,13 +209,12 @@
                     var tempdate =jsonObj[i].stockDate;
                     tempdate = tempdate.replace("00:00:00.0","")
                     temphtml += "<tr>";
-                    temphtml +="<td>"+i+"</td>"
                     temphtml += "<td><a target='_blank' href='/stock/toStockInfoList?stockCode="+jsonObj[i].stockCode+"'>" + jsonObj[i].stockCode + "</a></td>";
                     temphtml += "<td>" + jsonObj[i].spj + "</td>";
                     temphtml += "<td>" + jsonObj[i].zdf + "</td>";
-                  //  temphtml += "<td><a target='_blank' href='/stock/toStockCrossIncreaseEffectNew?stockCode="+jsonObj[i].stockCode+"'>当前涨幅对后续的影响</a></td>";
-                  //  temphtml += "<td><a target='_blank' href='/stock/toStockCrossIncreaseEffectNew2?stockCode="+jsonObj[i].stockCode+"'>金叉后会涨吗</a></td>";
-                  //  temphtml += "<td><a target='_blank' href='/stock/toStockCrossDistributeMaxval?stockCode="+jsonObj[i].stockCode+"'>金叉后最高价的范围</a></td>";
+                    temphtml += "<td><a target='_blank' href='/stock/toStockCrossIncreaseEffectNew?stockCode="+jsonObj[i].stockCode+"'>当前涨幅对后续的影响</a></td>";
+                    temphtml += "<td><a target='_blank' href='/stock/toStockCrossIncreaseEffectNew2?stockCode="+jsonObj[i].stockCode+"'>金叉后会涨吗</a></td>";
+                    temphtml += "<td><a target='_blank' href='/stock/toStockCrossDistributeMaxval?stockCode="+jsonObj[i].stockCode+"'>金叉后最高价的范围</a></td>";
                     temphtml += "<td>" + tempdate + "</td>";
                     temphtml += "<td><a target='_blank' href='/stock/toStockInfoList?stockCode="+jsonObj[i].stockCode+"'>综合</a></td>";
                     temphtml += "<td><a target='_blank' href='/stock/toStockMacd?stockCode="+jsonObj[i].stockCode+"'>MACD</a></td>";

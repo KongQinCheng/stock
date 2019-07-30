@@ -25,7 +25,7 @@ public class StockNewDataServicesImpl implements IStockNewDataServices  {
     public void getNewDataToTable(String stockCode) {
         //清空表的内容
         iStockNewDataDao.deleteByStockCode(stockCode);
-        List<StockInfo> newStockListByStockCode = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 30);
+        List<StockInfo> newStockListByStockCode = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 5);
         for (int j = 0; j < newStockListByStockCode.size(); j++) {
             StockInfo stockInfo=newStockListByStockCode.get(j);
             stockInfo.setStockCode(stockCode);

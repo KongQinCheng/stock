@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSON;
 import com.stock.Enum.SortType;
 import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockNewData;
-import com.stock.bean.vo.StockInfoVo;
 import com.stock.bean.vo.StockNewDataVo;
 import com.stock.bean.vo.StockSearchVo;
 import com.stock.dao.IStockInfoDao;
@@ -56,6 +55,16 @@ public class StockKdjController {
     }
 
 
+    @RequestMapping("/toStockKdjRSIRegion")
+    public String toStockKdjRSIRegion(){
+        return "stock/stock_macd_kdj_rsi";
+    }
+
+    @RequestMapping("/toStockKdjCciRegion")
+    public String toStockKdjCciRegion(){
+        return "stock/stock_kdj_cci";
+    }
+
 
 
     @PostMapping(value = "/getStockKdjCross", consumes = "application/json")
@@ -69,14 +78,6 @@ public class StockKdjController {
     @PostMapping(value = "/getStockKdjValueRegion", consumes = "application/json")
     @ResponseBody
     public String getStockKdjValueRegion(@RequestBody StockNewDataVo stockNewDataVo) {
-        stockNewDataVo.setKValueMin(0.01);
-        stockNewDataVo.setKValueMax(20);
-
-        stockNewDataVo.setDValueMin(0.01);
-        stockNewDataVo.setDValueMax(20);
-
-        stockNewDataVo.setJValueMin(0.01);
-        stockNewDataVo.setJValueMax(20);
 
         List<StockNewData> stockListByStockCode = iStockInfoKdjServices.getStockKdjValueRegion(stockNewDataVo);
         String jsonStr = JSON.toJSONString(stockListByStockCode);
@@ -84,17 +85,36 @@ public class StockKdjController {
     }
 
 
+    @PostMapping(value = "/getStockKdjRSIValueRegion", consumes = "application/json")
+    @ResponseBody
+    public String getStockKdjRSIValueRegion(@RequestBody StockNewDataVo stockNewDataVo) {
+        List<StockNewData> stockListByStockCode = iStockInfoKdjServices.getStockKdjValueRegion(stockNewDataVo);
+        String jsonStr = JSON.toJSONString(stockListByStockCode);
+        return jsonStr.toString();
+    }
+
+
+    @PostMapping(value = "/getStockKdjCciValueRegion", consumes = "application/json")
+    @ResponseBody
+    public String getStockKdjCciValueRegion(@RequestBody StockNewDataVo stockNewDataVo) {
+        List<StockNewData> stockListByStockCode = iStockInfoKdjServices.getStockKdjValueRegion(stockNewDataVo);
+        String jsonStr = JSON.toJSONString(stockListByStockCode);
+        return jsonStr.toString();
+    }
+
+
+
     @PostMapping(value = "/getStockKdjValueRegionCross", consumes = "application/json")
     @ResponseBody
     public String getStockKdjValueRegionCross(@RequestBody StockNewDataVo stockNewDataVo) {
-        stockNewDataVo.setKValueMin(0.01);
-        stockNewDataVo.setKValueMax(20);
+        stockNewDataVo.setKvaluemin(0.01);
+        stockNewDataVo.setKvaluemax(20);
 
-        stockNewDataVo.setDValueMin(0.01);
-        stockNewDataVo.setDValueMax(20);
+        stockNewDataVo.setDvaluemin(0.01);
+        stockNewDataVo.setDvaluemax(20);
 
-        stockNewDataVo.setJValueMin(0.01);
-        stockNewDataVo.setJValueMax(20);
+        stockNewDataVo.setJvaluemin(0.01);
+        stockNewDataVo.setJvaluemax(20);
 
         List<StockNewData> stockListByStockCode = iStockInfoKdjServices.getStockKdjValueRegion(stockNewDataVo);
         List<StockNewData> resultList =new ArrayList<>();

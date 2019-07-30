@@ -42,8 +42,8 @@ public class StockInfoDaoImpl implements IStockInfoDao {
 
 
     @Override
-    public void updateStockCode(String stockCode) {
-        stockInfoMapper.updateStockCode(stockCode);
+    public void updateStockInfoAll(StockInfo stockInfo) {
+        stockInfoMapper.updateStockInfoALL(stockInfo);
     }
 
     @Override
@@ -60,6 +60,12 @@ public class StockInfoDaoImpl implements IStockInfoDao {
     public void updateStockInfoKDJ(StockInfo stockInfo) {
         stockInfoMapper.updateStockInfoKDJ(stockInfo);
     }
+    @Override
+    public void updateStockInfoCCI(StockInfo stockInfo) {
+        stockInfoMapper.updateStockInfoCCI(stockInfo);
+    }
+
+
 
     @Override
     public void updateStockInfoRSI(StockInfo stockInfo) {

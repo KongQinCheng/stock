@@ -11,7 +11,8 @@
     <input class="searchInputDiv" id="stockCode" name="stockCode" placeholder="请输入要查询的股票编码: 如000001">
 
     <select id="limitNum" class="searchInputDiv" onchange="init()">
-        <option value="100"  selected="selected">100</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
         <option value="200">200</option>
         <option value="300">300</option>
         <option value="500">500</option>
@@ -23,10 +24,12 @@
 </div>
 
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-<div class="flowDiv" style="height: 1600px;">
-    <div id="main" style="height:800px;width: 5000px;"></div>
+<div class="flowDiv" style="height: 1000px;">
+    <div id="main3" style="height:300px;width: 100%;"></div>
 
-    <div id="main2" style="height:800px;width: 5000px;"></div>
+    <div id="main" style="height:300px;width: 100%;"></div>
+
+    <div id="main2" style="height:300px;width: 100%;"></div>
 </div>
 
 <div class="text-center footer">
@@ -53,6 +56,7 @@
         // 基于准备好的dom，初始化echarts图表
         var myChart = echarts.init(document.getElementById('main'));
         var myChart2 = echarts.init(document.getElementById('main2'));
+        var myChart3 = echarts.init(document.getElementById('main3'));
 
         var date = [];    //类别数组（实际用来盛放X轴坐标值）
         var DIF = [];
@@ -62,10 +66,13 @@
         var minvalue = 0;
         var maxvalue = 0
 
-
         var Kvalue = [];
         var Dvalue = [];
         var Jvalue = [];
+
+        var spj=[];
+        var minspj=0;
+        var maxspj=0
 
 
         $.ajax({
@@ -113,6 +120,25 @@
                         }
                         if (jsonObj[i].bAR > maxvalue) {
                             maxvalue = jsonObj[i].bAR;
+                        }
+                    }
+
+
+
+                    spj.push(jsonObj[i].spj);    //挨个取出类别并填入类别数组
+
+                    if (i==1){
+
+                        minspj=jsonObj[i].spj;
+                        maxspj=jsonObj[i].spj;
+                    } else {
+
+                        if (jsonObj[i].spj<minspj) {
+                            minspj =jsonObj[i].spj;
+                        }
+
+                        if (jsonObj[i].spj>maxspj) {
+                            maxspj =jsonObj[i].spj;
                         }
                     }
 
@@ -223,10 +249,56 @@
                     ]
                 };
 
+
+                var option3 = {
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['收盘价']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            boundaryGap : false,
+                            data :date
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            min:minspj,
+                            max:maxspj,
+                            splitNumber:30
+                        }
+                    ],
+                    series : [{
+                        name:'收盘价',
+                        type:'line',
+                        data:spj
+                    }
+                    ]
+                };
+
+
+
                 // 为echarts对象加载数据
                 myChart.setOption(option);
 
                 myChart2.setOption(option2);
+
+                // 为echarts对象加载数据
+                myChart3.setOption(option3);
 
             },
             error: function (errorMsg) {

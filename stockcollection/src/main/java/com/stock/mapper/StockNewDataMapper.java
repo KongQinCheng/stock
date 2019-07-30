@@ -21,8 +21,8 @@ import java.util.List;
 @Mapper
 public interface StockNewDataMapper {
 
-    @Insert("insert into stock_new_data (stockCode,stockDate,kpj,zgj,zdj,spj,zde,zdf,cjl,cjje,zf,hsl,k_value,d_value,j_value,EMA12,EMA26,DIF,EMAMACD,BAR) "
-            + "values('${stockCode}','${stockDate}',${kpj},${zgj},${zdj},${spj},${zde},${zdf},${cjl},${cjje},${zf},${hsl},${kValue},${dValue},${jValue},${EMA12},${EMA26},${DIF},${EMAMACD},${BAR})")
+    @Insert("insert into stock_new_data (stockCode,stockDate,kpj,zgj,zdj,spj,zde,zdf,cjl,cjje,zf,hsl,k_value,d_value,j_value,EMA12,EMA26,DIF,EMAMACD,BAR,RSI06,RSI12,RSI24) "
+            + "values('${stockCode}','${stockDate}',${kpj},${zgj},${zdj},${spj},${zde},${zdf},${cjl},${cjje},${zf},${hsl},${kValue},${dValue},${jValue},${EMA12},${EMA26},${DIF},${EMAMACD},${BAR},${RSI06},${RSI12},${RSI24})")
     public void insert(StockInfo stockInfo);
 
     @Delete("DELETE from stock_new_data WHERE 1=1")
@@ -57,6 +57,9 @@ public interface StockNewDataMapper {
             @Result(column = "DIF", property = "DIF"),
             @Result(column = "EMAMACD", property = "EMAMACD"),
             @Result(column = "BAR", property = "BAR"),
+            @Result(column = "RSI06", property = "RSI06"),
+            @Result(column = "RSI12", property = "RSI12"),
+            @Result(column = "RSI24", property = "RSI24"),
             @Result(column = "shareDate", property = "shareDate")})
     public  List<StockNewData> getNewDataAll(StockNewDataVo stockNewDataVo);
 

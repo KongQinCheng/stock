@@ -42,13 +42,14 @@ public interface IStockInfoDao {
      * 一次性使用，将stockCode更新
      * @param stockCode
      */
-     void updateStockCode(String stockCode);
+     void updateStockInfoAll(StockInfo stockInfo);
 
      void createTableByTableName(String tableName);
 
      void updateStockInfoMacd(StockInfo stockInfo);
 
     void updateStockInfoKDJ(StockInfo stockInfo);
+    void updateStockInfoCCI(StockInfo stockInfo);
     void updateStockInfoRSI(StockInfo stockInfo);
 
     void updateStockInfoMacdNoDate(StockInfo stockInfo);

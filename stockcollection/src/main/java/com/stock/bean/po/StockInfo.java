@@ -37,5 +37,7 @@ public class StockInfo {
     private  double RSI12;
     private  double RSI24;
 
+    private  double cci;
+
 
 }

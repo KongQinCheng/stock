@@ -45,26 +45,67 @@ public class StockNewDataSqlProvider {
                     WHERE(" a.stockCode = '"+ stockNewDataVo.getStockCode() +"'" );
                 }
 
-                if (stockNewDataVo.getKValueMin() != 0.0) {
-                    WHERE(" a.k_value >= "+ stockNewDataVo.getKValueMin());
+
+                if (stockNewDataVo.getSpjmin() != 0.0) {
+                    WHERE(" a.spj >= "+ stockNewDataVo.getSpjmin());
                 }
-                if (stockNewDataVo.getKValueMax() != 0.0) {
-                    WHERE(" a.k_value <= "+ stockNewDataVo.getKValueMax());
+                if (stockNewDataVo.getSpjmax() != 0.0) {
+                    WHERE(" a.spj <= "+ stockNewDataVo.getSpjmax());
                 }
 
-                if (stockNewDataVo.getDValueMin() != 0.0) {
-                    WHERE(" a.d_value >= "+stockNewDataVo.getDValueMin());
+                if (stockNewDataVo.getKvaluemin() != 0.0) {
+                    WHERE(" a.k_value >= "+ stockNewDataVo.getKvaluemin());
                 }
-                if (stockNewDataVo.getDValueMax() != 0.0) {
-                    WHERE(" a.d_value <= "+stockNewDataVo.getDValueMax());
+                if (stockNewDataVo.getKvaluemax() != 0.0) {
+                    WHERE(" a.k_value <= "+ stockNewDataVo.getKvaluemax());
                 }
 
-                if (stockNewDataVo.getJValueMin() != 0.0) {
-                    WHERE(" a.j_value >= "+stockNewDataVo.getJValueMin());
+                if (stockNewDataVo.getDvaluemin() != 0.0) {
+                    WHERE(" a.d_value >= "+stockNewDataVo.getDvaluemin());
                 }
-                if (stockNewDataVo.getJValueMax() != 0.0) {
-                    WHERE(" a.j_value <= "+stockNewDataVo.getJValueMax());
+                if (stockNewDataVo.getDvaluemax() != 0.0) {
+                    WHERE(" a.d_value <= "+stockNewDataVo.getDvaluemax());
                 }
+
+                if (stockNewDataVo.getJvaluemin() != 0.0) {
+                    WHERE(" a.j_value >= "+stockNewDataVo.getJvaluemin());
+                }
+                if (stockNewDataVo.getJvaluemax() != 0.0) {
+                    WHERE(" a.j_value <= "+stockNewDataVo.getJvaluemax());
+                }
+
+
+                if (stockNewDataVo.getRsivaluemin1() != 0.0) {
+                    WHERE(" a.RSI06 >= "+stockNewDataVo.getRsivaluemin1());
+                }
+                if (stockNewDataVo.getRsivaluemax1() != 0.0) {
+                    WHERE(" a.RSI06 <= "+stockNewDataVo.getRsivaluemax1());
+                }
+
+                if (stockNewDataVo.getRsivaluemin2() != 0.0) {
+                    WHERE(" a.RSI12 >= "+stockNewDataVo.getRsivaluemin2());
+                }
+                if (stockNewDataVo.getRsivaluemax2() != 0.0) {
+                    WHERE(" a.RSI12 <= "+stockNewDataVo.getRsivaluemax2());
+                }
+
+                if (stockNewDataVo.getRsivaluemin3() != 0.0) {
+                    WHERE(" a.RSI24 >= "+stockNewDataVo.getRsivaluemin3());
+                }
+                if (stockNewDataVo.getRsivaluemax3() != 0.0) {
+                    WHERE(" a.RSI24 <= "+stockNewDataVo.getRsivaluemax3());
+                }
+
+
+                if (stockNewDataVo.getCcivaluemin() != 0.0) {
+                    WHERE(" a.cci >= "+stockNewDataVo.getCcivaluemin());
+                }
+                if (stockNewDataVo.getCcivaluemax() != 0.0) {
+                    WHERE(" a.cci <= "+stockNewDataVo.getCcivaluemax());
+                }
+
+
+
 
             }
         }.toString();

@@ -35,6 +35,20 @@
         </div>
     </footer>
 
+    <footer class="col-md-12 content">
+        <div class="col-lg-6 col-md-6 last">
+            <img src="../../img/5.jpg" alt="Image" class="tm-image">
+        </div>
+        <div class="col-lg-6 col-md-6 background last ">
+            <h2 class="section-title">KDJ + CCI 区间</h2>
+            <p class="about-text">KDJ + CCI 区间</p>
+            <p class="about-text">KDJ + CCI 区间</p>
+            <div>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex10()">从新开始</button>
+            </div>
+        </div>
+    </footer>
+
 
     <footer class="col-md-12 content" >
         <div class="col-lg-6 col-md-6 last">
@@ -75,6 +89,20 @@
             <p class="about-text">KDJ区间</p>
             <div>
                 <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex7()">推荐</button>
+            </div>
+        </div>
+    </footer>
+
+    <footer class="col-md-12 content" >
+        <div class="col-lg-6 col-md-6 last">
+            <img src="../../img/5.jpg" alt="Image" class="tm-image">
+        </div>
+        <div class="col-lg-6 col-md-6 background last ">
+            <h2 class="section-title">女神推荐-KDJ RSI 区间</h2>
+            <p class="about-text">KDJ RSI区间获取</p>
+            <p class="about-text">KDJ RSI区间</p>
+            <div>
+                <button type="button" class="btn yellow-btn normal-btn" onclick="toIndex9()">推荐</button>
             </div>
         </div>
     </footer>
@@ -199,6 +227,14 @@
         window.location.href = "/stock/toStockKdjRegionCross"
     }
 
+
+    function toIndex9() {
+        window.location.href = "/stock/toStockKdjRSIRegion"
+    }
+
+    function toIndex10() {
+        window.location.href = "/stock/toStockKdjCciRegion"
+    }
 
     // Check scroll position and add/remove background to navbar
     function checkScrollPosition() {

@@ -119,6 +119,10 @@ public interface StockInfoMapper {
     public void updateStockInfoKDJ(StockInfo stockInfo);
 
 
+    @Update("update stock_info_${stockCode} set cci='${cci}' where stockDate ='${stockDate}'")
+    public void updateStockInfoCCI(StockInfo stockInfo);
+
+
     @Update("update stock_info_${stockCode} set RSI06='${RSI06}',RSI12='${RSI12}',RSI24='${RSI24}'  where stockDate ='${stockDate}'")
     public void updateStockInfoRSI(StockInfo stockInfo);
 
@@ -145,6 +149,12 @@ public interface StockInfoMapper {
     public void updateStockCode(@Param("stockCode") String stockCode);
 
 
+
+    @Update("update stock_info_${stockCode} set k_value='${kValue}',d_value='${dValue}',j_value='${jValue}', EMA12='${EMA12}',EMA26='${EMA26}',DIF='${DIF}' ,EMAMACD='${EMAMACD}' ,BAR='${BAR}',cci='${cci}' where stockCode =#{stockCode} and  stockDate =#{stockDate}")
+    public void updateStockInfoALL( StockInfo stockInfo);
+
+
+
     @Delete("delete from  stock_info_${stockCode} where stockDate='${stockDate}' ")
     public void delStockInfo(@Param("stockCode") String stockCode,@Param("stockDate") String stockDate);
 
@@ -153,7 +163,7 @@ public interface StockInfoMapper {
     public void delEmptyStockInfo(@Param("stockCode") String stockCode);
 
 
-    @Update(" ALTER TABLE `stock_info_${stockCode}` ADD COLUMN `RSI06`  double NULL AFTER `BAR`, ADD COLUMN `RSI12`  double NULL AFTER `RSI06`, ADD COLUMN `RSI24`  double NULL AFTER `RSI12`;")
+    @Update(" ALTER TABLE `stock_info_${stockCode}` ADD COLUMN `CCI`  double NULL AFTER `BAR`;")
     public void alterTable(@Param("stockCode") String stockCode);
 
 

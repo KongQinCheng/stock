@@ -2,23 +2,15 @@ package com.stock.services.impl;
 
 import com.stock.Enum.SortType;
 import com.stock.bean.po.StockInfo;
-import com.stock.bean.po.StockList;
-import com.stock.bean.po.StockNewData;
-import com.stock.bean.vo.StockNewDataVo;
-import com.stock.bean.vo.StockSearchVo;
 import com.stock.dao.IStockInfoDao;
 import com.stock.dao.IStockListDao;
 import com.stock.dao.IStockNewDataDao;
 import com.stock.services.IStockInfoCciServices;
-import com.stock.services.IStockInfoKdjServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.stock.services.impl.StockInfoKdjServicesImpl.getValueByType;
 
@@ -52,49 +44,45 @@ public class StockInfoCciServicesImpl implements IStockInfoCciServices {
 //        AVEDEV＝最近N日TYP的平均绝对偏差
 //        0.015为计算系数，N为计算周期
 
+        List<StockInfo> stockinfoList = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 99999);
 
-        List<StockInfo> stockinfoList = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 30);
+        if(stockinfoList.get(stockinfoList.size()-1).getCci()!=0){
+            System.out.println("CCI  更新完毕stockCode=" + stockCode);
+           return;
+        }
 
-        double[] lszgjArray = new double[dayNum];
-        double[] lszdjArray = new double[dayNum];
+
         double[] spjArray = new double[dayNum];
 
         if (stockinfoList.size()<dayNum+1){
             return;
         }
-        double maxValue=0.0;
-        double minVaule=0.0;
-        double spjVaule=0.0;
 
-        //将前面9天的数据保存的列表中
-        for (int i = 0; i <dayNum-1 ; i++) {
+
+        //将前面n天的数据保存的列表中
+        for (int i = 0; i <dayNum ; i++) {
             StockInfo stockInfo = stockinfoList.get(i);
-            lszgjArray[i] = Double.valueOf(stockInfo.getZgj());
-            lszdjArray[i] = Double.valueOf(stockInfo.getZdj());
             spjArray[i]  =  Double.valueOf(stockInfo.getSpj());
-            spjVaule=Double.valueOf(stockInfo.getSpj());
         }
 
         //从第dayNum天开始计算 CCI 值
-        for (int i = dayNum-1; i <stockinfoList.size() ; i++) {
+        for (int i = dayNum; i <stockinfoList.size() ; i++) {
 
             int insertArrayIndex = i % dayNum;
             StockInfo stockInfo = stockinfoList.get(i);
-            spjVaule=Double.valueOf(stockInfo.getSpj());
-            lszgjArray[insertArrayIndex] = Double.valueOf(stockInfo.getZgj());
-            lszdjArray[insertArrayIndex] = Double.valueOf(stockInfo.getZdj());
             spjArray[insertArrayIndex]   = Double.valueOf(stockInfo.getSpj());
 
-            maxValue = getValueByType(lszgjArray, 1);
-            minVaule = getValueByType(lszdjArray, 0);
-
-            double tpy=getTPY(maxValue,minVaule,spjVaule);
+            double tpy=getTPY(Double.valueOf(stockInfo.getZgj()),Double.valueOf(stockInfo.getZdj()),Double.valueOf(stockInfo.getSpj()));
             double ma =getMA(spjArray);
             double md =getMD(ma ,spjArray);
             double cci =getCci(tpy,ma,md);
 
-            System.out.println(stockinfoList.get(i).getStockDate() +"   =====   "+ cci);
+            stockInfo.setCci(cci);
+            stockInfo.setStockCode(stockCode);
+            iStockInfoDao.updateStockInfoCCI(stockInfo);
+
         }
+        System.out.println("CCI  更新完毕stockCode=" + stockCode);
     }
 
     public  static  double getCci( double tpy,double ma, double md ){

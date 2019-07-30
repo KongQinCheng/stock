@@ -2,16 +2,12 @@ package com.stock.controller.init;
 
 import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockList;
-import com.stock.dao.IStockInfoDao;
 import com.stock.dao.IStockListDao;
 import com.stock.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -19,7 +15,7 @@ import java.util.concurrent.Executors;
 
 
 @Component
-public class TimedTask {
+public class TimedTaskNew {
 
 
     @Autowired
@@ -51,10 +47,6 @@ public class TimedTask {
 
     @Autowired
     IStockAnalyzeRSIservices iStockAnalyzeRSIservices;
-
-    @Autowired
-    IStockInfoCciServices iStockInfoCciServices;
-
 
 
     @Scheduled(cron = "0 0 16 * * ?")
@@ -146,89 +138,50 @@ public class TimedTask {
             try {
                 for (int i = 0; i < listInput.size(); i++) {
 
-//                    List<StockInfo> list = iStockInfoServices.getStockListByStockCode(listInput.get(i).getStockCode().replaceAll("\t", "") + "",10000000);
-//
-//                    try {
-//                        //删除表中当天的数据（计算实时的MACD的时候，添加进去的，数据不准）
-////                        iStockInfoServices.delEmptyStockInfo(listInput.get(i).getStockCode().replaceAll("\t", ""));
-//
-//                        //获取股票的最新信息
-//                        iStockInfoServices.getStockInfoHistory(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        System.out.println(" iStockInfoServices.getStockInfoHistory 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
-//                    }
-//                    try {
-//                        //计算MACD值
-//                        iStockInfoMacdServices.getStockInfoMacd(listInput.get(i).getStockCode().replaceAll("\t", "") + "", 1);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        System.out.println("iStockInfoMacdServices.getStockInfoMacd 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
-//                    }
-//
-//                    try {
-//                        //KDJ初所化
-//                        iStockInfoKdjServices.getKDJValue(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        System.out.println("iStockInfoKdjServices.getKDJValue 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
-//                    }
-//
-//                    try {
-//                        //计算RSI初所化
-//                        iStockAnalyzeRSIservices.getRSI(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        System.out.println("iStockAnalyzeRSIservices.getRSI 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
-//                    }
+                    List<StockInfo> list = iStockInfoServices.getStockListByStockCode(listInput.get(i).getStockCode().replaceAll("\t", "") + "",10000000);
 
                     try {
-                        //计算CCI初所化
-                        iStockInfoCciServices.getCciValue(listInput.get(i).getStockCode().replaceAll("\t", "") + "",14);
+                        //删除表中当天的数据（计算实时的MACD的时候，添加进去的，数据不准）
+//                        iStockInfoServices.delEmptyStockInfo(listInput.get(i).getStockCode().replaceAll("\t", ""));
+
+                        //获取股票的最新信息
+                        iStockInfoServices.getStockInfoHistory(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
                     } catch (Exception e) {
                         e.printStackTrace();
-                        System.out.println("iStockInfoCciServices.getCciValue 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+                        System.out.println(" iStockInfoServices.getStockInfoHistory 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+                    }
+                    try {
+                        //计算MACD值
+                        iStockInfoMacdServices.getStockInfoMacd(listInput.get(i).getStockCode().replaceAll("\t", "") + "", 1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("iStockInfoMacdServices.getStockInfoMacd 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+                    }
+
+                    try {
+                        //KDJ初所化
+                        iStockInfoKdjServices.getKDJValue(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("iStockInfoKdjServices.getKDJValue 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+                    }
+
+                    try {
+                        //计算RSI初所化
+                        iStockAnalyzeRSIservices.getRSI(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("iStockAnalyzeRSIservices.getRSI 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
                     }
 
 
-//                    try {
-//                        //保存最新的数据到表中。
-//                        iStockNewDataServices.getNewDataToTable(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        System.out.println("iStockNewDataServices.getNewDataToTable 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
-//                    }
-//                    try {
-//                        //计算每只股票前一天涨幅对后一天的影响
-//                        iStockAnalyzeIncreaseServices.getStockAnalyzeIncreaseAll(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        System.out.println("iStockAnalyzeIncreaseServices.getStockIncreaseEffectInit 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
-//                    }
-//
-//                    try {
-//                        //金叉出现后对后一天的影响
-//                        iStockAnalyzeMacdServices.crossEffectInitNew(listInput.get(i).getStockCode().replaceAll("\t", "") + "", "");
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        System.out.println("iStockAnalyzeMacdServices.crossEffectInitNew 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
-//                    }
-//
-//                    try {
-//                        //金叉出现后有多少的前面几天内一定会涨
-//                        iStockAnalyzeMacdServices.crossEffectInitNewFinal(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        System.out.println("iStockAnalyzeMacdServices.crossEffectInitNew 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
-//                    }
-//
-//                    try {
-//                        //金叉出现后后一天的涨幅的区间
-//                        iStockAnalyzeMacdServices.crossEffectInitNewFinalMaxvalue(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        System.out.println("iStockAnalyzeMacdServices.crossEffectInitNewFinalMaxvalue 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
-//                    }
+                    try {
+                        //保存最新的数据到表中。
+                        iStockNewDataServices.getNewDataToTable(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("iStockNewDataServices.getNewDataToTable 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+                    }
 
 
 

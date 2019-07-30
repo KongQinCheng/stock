@@ -23,7 +23,7 @@ public class StockInfoRSIServicesImpl implements IStockAnalyzeRSIservices {
     @Override
     public void getRSI(String stockCode ) {
 
-        List<StockInfo> list =iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(),999999); //40条信息 基本上就是 准确的数据
+        List<StockInfo> list =iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(),40); //40条信息 基本上就是 准确的数据
 
         double pp_6;// 用于计算rsi数据
         double np_6;
@@ -113,15 +113,14 @@ public class StockInfoRSIServicesImpl implements IStockAnalyzeRSIservices {
 
         for (int i = 0; i <list.size() ; i++) {
             if (list.get(i).getRSI06()==0.0){
+                list.get(i).setStockCode(stockCode);
                 list.get(i).setRSI06(rsi1[i]);
                 list.get(i).setRSI12(rsi2[i]);
                 list.get(i).setRSI24(rsi3[i]);
                 iStockInfoDao.updateStockInfoRSI(list.get(i));
             }
-
-          ;
-            System.out.println(list.get(i).getStockDate() + "RSI 1="+rsi1[i] +" RSI 2="+rsi2[i] +" RSI 3="+rsi3[i]  );
         }
+        System.out.println("RSI 更新完毕stockCode=" + stockCode);
 
     }
 
