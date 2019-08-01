@@ -24,10 +24,12 @@ public class StockNewData {
     private double  dValue ;  //D
     private double  jValue ;  //J
 
+    private double  cci ;  //J
 
     private double  RSI06 ;  //J
     private double  RSI12 ;  //J
     private double  RSI24 ;  //J
+
 
     //MACD
     private  double EMA12;

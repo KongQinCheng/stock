@@ -48,6 +48,9 @@ public class TimedTaskNew {
     @Autowired
     IStockAnalyzeRSIservices iStockAnalyzeRSIservices;
 
+    @Autowired
+    IStockInfoCciServices iStockInfoCciServices;
+
 
     @Scheduled(cron = "0 0 16 * * ?")
     public void getStockInfo() throws Exception {
@@ -172,6 +175,14 @@ public class TimedTaskNew {
                     } catch (Exception e) {
                         e.printStackTrace();
                         System.out.println("iStockAnalyzeRSIservices.getRSI 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+                    }
+
+                    try {
+                        //计算CCI初所化
+                        iStockInfoCciServices.getCciValue(listInput.get(i).getStockCode().replaceAll("\t", "") + "",14);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("iStockInfoCciServices.getCciValue 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
                     }
 
 

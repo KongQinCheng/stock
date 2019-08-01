@@ -55,6 +55,9 @@ public class TimedTask {
     @Autowired
     IStockInfoCciServices iStockInfoCciServices;
 
+    @Autowired
+    IStockAllTargetUpdateServices iStockAllTargetUpdateServices;
+
 
 
     @Scheduled(cron = "0 0 16 * * ?")
@@ -148,16 +151,30 @@ public class TimedTask {
 
 //                    List<StockInfo> list = iStockInfoServices.getStockListByStockCode(listInput.get(i).getStockCode().replaceAll("\t", "") + "",10000000);
 //
-//                    try {
-//                        //删除表中当天的数据（计算实时的MACD的时候，添加进去的，数据不准）
-////                        iStockInfoServices.delEmptyStockInfo(listInput.get(i).getStockCode().replaceAll("\t", ""));
-//
-//                        //获取股票的最新信息
-//                        iStockInfoServices.getStockInfoHistory(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        System.out.println(" iStockInfoServices.getStockInfoHistory 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
-//                    }
+                    try {
+                        //删除表中当天的数据（计算实时的MACD的时候，添加进去的，数据不准）
+//                        iStockInfoServices.delEmptyStockInfo(listInput.get(i).getStockCode().replaceAll("\t", ""));
+
+                        //获取股票的最新信息
+                        iStockInfoServices.getStockInfoHistory(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println(" iStockInfoServices.getStockInfoHistory 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+                        continue;
+                    }
+
+
+                    try {
+                        //计算所有的指标值
+                        iStockAllTargetUpdateServices.allTargetUpdate(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println(" iStockAllTargetUpdateServices.allTargetUpdate 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+                        continue;
+                    }
+
+
+
 //                    try {
 //                        //计算MACD值
 //                        iStockInfoMacdServices.getStockInfoMacd(listInput.get(i).getStockCode().replaceAll("\t", "") + "", 1);
@@ -182,22 +199,24 @@ public class TimedTask {
 //                        System.out.println("iStockAnalyzeRSIservices.getRSI 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
 //                    }
 
-                    try {
-                        //计算CCI初所化
-                        iStockInfoCciServices.getCciValue(listInput.get(i).getStockCode().replaceAll("\t", "") + "",14);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        System.out.println("iStockInfoCciServices.getCciValue 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
-                    }
-
-
 //                    try {
-//                        //保存最新的数据到表中。
-//                        iStockNewDataServices.getNewDataToTable(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+//                        //计算CCI初所化
+//                        iStockInfoCciServices.getCciValue(listInput.get(i).getStockCode().replaceAll("\t", "") + "",14);
 //                    } catch (Exception e) {
 //                        e.printStackTrace();
-//                        System.out.println("iStockNewDataServices.getNewDataToTable 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+//                        System.out.println("iStockInfoCciServices.getCciValue 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
 //                    }
+
+
+                    try {
+                        //保存最新的数据到表中。
+                        iStockNewDataServices.getNewDataToTable(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("iStockNewDataServices.getNewDataToTable 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
+                        continue;
+                    }
+
 //                    try {
 //                        //计算每只股票前一天涨幅对后一天的影响
 //                        iStockAnalyzeIncreaseServices.getStockAnalyzeIncreaseAll(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
@@ -229,8 +248,6 @@ public class TimedTask {
 //                        e.printStackTrace();
 //                        System.out.println("iStockAnalyzeMacdServices.crossEffectInitNewFinalMaxvalue 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
 //                    }
-
-
 
                 }
                 countDownLatch.countDown();

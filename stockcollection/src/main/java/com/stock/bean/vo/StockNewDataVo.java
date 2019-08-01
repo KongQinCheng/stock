@@ -43,6 +43,7 @@ public class StockNewDataVo {
 
 
     private int dayNum;
+    private int cci;
 
     private double zdf_1 ;
     private double zdf_2 ;

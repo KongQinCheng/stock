@@ -40,6 +40,8 @@ public interface StockInfoMapper {
             @Result(column = "EMAMACD", property = "EMAMACD"),
             @Result(column = "BAR", property = "BAR"),
 
+            @Result(column = "cci", property = "cci"),
+
             @Result(column = "RSI06", property = "RSI06"),
             @Result(column = "RSI12", property = "RSI12"),
             @Result(column = "RSI24", property = "RSI24"),
@@ -150,7 +152,7 @@ public interface StockInfoMapper {
 
 
 
-    @Update("update stock_info_${stockCode} set k_value='${kValue}',d_value='${dValue}',j_value='${jValue}', EMA12='${EMA12}',EMA26='${EMA26}',DIF='${DIF}' ,EMAMACD='${EMAMACD}' ,BAR='${BAR}',cci='${cci}' where stockCode =#{stockCode} and  stockDate =#{stockDate}")
+    @Update("update stock_info_${stockCode} set k_value='${kValue}',d_value='${dValue}',j_value='${jValue}', EMA12='${EMA12}',EMA26='${EMA26}',DIF='${DIF}' ,EMAMACD='${EMAMACD}' ,BAR='${BAR}',cci='${cci}' ,RSI06='${RSI06}',RSI12='${RSI12}',RSI24='${RSI24}'  where stockCode =#{stockCode} and  stockDate =#{stockDate}")
     public void updateStockInfoALL( StockInfo stockInfo);
 
 

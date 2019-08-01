@@ -20,16 +20,25 @@
         <option value="2000">2000</option>
         <option value="999999">All</option>
     </select>
+
+    <select id="styleType" class="searchInputDiv" onchange="styleChange()">
+        <option value="49" >小图</option>
+        <option value="100"  selected="selected">大图</option>
+    </select>
     <div class="searchInputButton" id="searchInputButton" onclick="init()">确定</div>
 </div>
 
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
 <div class="flowDiv" style="height: 1000px;">
-    <div id="main3" style="height:300px;width: 100%;"></div>
+    <div id="main3" style="height:300px;width: 100%;float: left"></div>
 
-    <div id="main" style="height:300px;width: 100%;"></div>
+    <div id="main" style="height:300px;width: 100%;float: left"></div>
 
-    <div id="main2" style="height:300px;width: 100%;"></div>
+    <div id="main2" style="height:300px;width: 100%;float: left"></div>
+
+    <div id="main4" style="height:300px;width: 100%;float: left"></div>
+
+    <div id="main5" style="height:300px;width: 100%;float: left"></div>
 </div>
 
 <div class="text-center footer">
@@ -41,8 +50,23 @@
 <script type="text/javascript">
     window.onload = f();
 
+    function styleChange(){
+        window.location.href="/stock/toStockMacd?stockCode="+getUrlParam("stockCode")+"&styleType="+$("#styleType").val();
+    }
+
     function f() {
         $("#stockCode").val(getUrlParam("stockCode"));
+       var widthval =  getUrlParam("styleType")+"%";
+
+        $("#styleType").val(getUrlParam("styleType"));
+
+        $("#main").width(widthval);
+        $("#main2").width(widthval);
+        $("#main3").width(widthval);
+        $("#main4").width(widthval);
+        $("#main5").width(widthval);
+
+
         init()
     }
 
@@ -57,6 +81,8 @@
         var myChart = echarts.init(document.getElementById('main'));
         var myChart2 = echarts.init(document.getElementById('main2'));
         var myChart3 = echarts.init(document.getElementById('main3'));
+        var myChart4 = echarts.init(document.getElementById('main4'));
+        var myChart5 = echarts.init(document.getElementById('main5'));
 
         var date = [];    //类别数组（实际用来盛放X轴坐标值）
         var DIF = [];
@@ -71,8 +97,19 @@
         var Jvalue = [];
 
         var spj=[];
+        var cci=[];
         var minspj=0;
         var maxspj=0
+
+        var mincci=0;
+        var maxcci=0;
+
+        var RSI06=[];
+        var RSI12=[];
+        var RSI24=[];
+
+        var minrsi=0;
+        var maxrsi=0;
 
 
         $.ajax({
@@ -84,6 +121,7 @@
             contentType: "application/json",
             success: function (result) {
 
+                console.log(result)
 
                 var jsonObj = JSON.parse(result);//转换为json对象
                 for (var i = 0; i < jsonObj.length; i++) {
@@ -95,6 +133,8 @@
                     Kvalue.push(jsonObj[i].kValue);
                     Dvalue.push(jsonObj[i].dValue);
                     Jvalue.push(jsonObj[i].jValue);
+
+
 
 
                     if (i == 1) {
@@ -126,9 +166,9 @@
 
 
                     spj.push(jsonObj[i].spj);    //挨个取出类别并填入类别数组
+                    cci.push(jsonObj[i].cci);
 
                     if (i==1){
-
                         minspj=jsonObj[i].spj;
                         maxspj=jsonObj[i].spj;
                     } else {
@@ -141,6 +181,51 @@
                             maxspj =jsonObj[i].spj;
                         }
                     }
+
+                    if (i==1){
+                        mincci=jsonObj[i].cci;
+                        maxcci=jsonObj[i].cci;
+                    } else {
+
+                        if (jsonObj[i].cci<mincci) {
+                            mincci =jsonObj[i].cci;
+                        }
+
+                        if (jsonObj[i].cci>maxcci) {
+                            maxcci =jsonObj[i].cci;
+                        }
+                    }
+
+                    if (i==1){
+                        minrsi=jsonObj[i].RSI06;
+                        maxrsi=jsonObj[i].RSI06;
+                    } else {
+                        if (jsonObj[i].RSI06<minrsi) {
+                            minrsi =jsonObj[i].RSI06;
+                        }
+                        if (jsonObj[i].RSI06>maxrsi) {
+                            maxrsi =jsonObj[i].RSI06;
+                        }
+
+                        if (jsonObj[i].RSI12<minrsi) {
+                            minrsi =jsonObj[i].RSI12;
+                        }
+                        if (jsonObj[i].RSI12>maxrsi) {
+                            maxrsi =jsonObj[i].RSI12;
+                        }
+
+                        if (jsonObj[i].RSI24<minrsi) {
+                            minrsi =jsonObj[i].RSI24;
+                        }
+                        if (jsonObj[i].RSI24>maxrsi) {
+                            maxrsi =jsonObj[i].RSI24;
+                        }
+                    }
+
+
+                    RSI06.push(jsonObj[i].rSI06);    //挨个取出类别并填入类别数组
+                    RSI12.push(jsonObj[i].rSI12);
+                    RSI24.push(jsonObj[i].rSI24);
 
 
                 }
@@ -159,7 +244,7 @@
                             // dataView : {show: true, readOnly: false},
                             // magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
                             // restore : {show: true},
-                            saveAsImage: {show: true}
+                            // saveAsImage: {show: true}
                         }
                     },
                     // calculable : true,  //是否可拖动
@@ -172,9 +257,15 @@
                     ],
                     yAxis: [
                         {
+                            position:'right',
                             min: minvalue,
                             max: maxvalue,
-                            splitNumber: 15
+                            splitNumber: 10,
+                            axisLabel: {
+                                formatter: function (v) {
+                                    return v.toFixed(2);
+                                }
+                            }
                         }
                     ],
                     series: [
@@ -211,7 +302,7 @@
                             // dataView : {show: true, readOnly: false},
                             // magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
                             // restore : {show: true},
-                            saveAsImage: {show: true}
+                            // saveAsImage: {show: true}
                         }
                     },
                     // calculable : true,  //是否可拖动
@@ -224,9 +315,10 @@
                     ],
                     yAxis: [
                         {
+                            position:'right',
                             min: -10,
                             max: 110,
-                            splitNumber: 20
+                            splitNumber: 10
                         }
                     ],
 
@@ -260,11 +352,11 @@
                     toolbox: {
                         show : true,
                         feature : {
-                            mark : {show: true},
-                            dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-                            restore : {show: true},
-                            saveAsImage : {show: true}
+                            // mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            // magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            // restore : {show: true},
+                            // saveAsImage : {show: true}
                         }
                     },
                     calculable : true,
@@ -277,9 +369,16 @@
                     ],
                     yAxis : [
                         {
+                            position:'right',
                             min:minspj,
                             max:maxspj,
-                            splitNumber:30
+                            splitNumber:10,
+                            axisLabel: {
+                                formatter: function (v) {
+                                    return v.toFixed(2);
+                                }
+                            }
+
                         }
                     ],
                     series : [{
@@ -290,6 +389,108 @@
                     ]
                 };
 
+                var option4 = {
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['CCI']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            // mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            // magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            // restore : {show: true},
+                            // saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            boundaryGap : false,
+                            data :date
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            position:'right',
+                            min:mincci,
+                            max:maxcci,
+                            splitNumber:10,
+                            axisLabel: {
+                                formatter: function (v) {
+                                    return v.toFixed(2);
+                                }
+                            }
+                        }
+                    ],
+                    series : [{
+                        name:'CCI',
+                        type:'line',
+                        data:cci
+                    }]
+                };
+
+
+                var option5 = {
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['RSI06','RSI12','RSI24']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            // mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            // magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            // restore : {show: true},
+                            // saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            boundaryGap : false,
+                            data :date
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            position:'right',
+                            min:0,
+                            max:100,
+                            splitNumber:10,
+                            axisLabel: {
+                                formatter: function (v) {
+                                    return v.toFixed(2);
+                                }
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'RSI06',
+                            type: 'line',
+                            data: RSI06
+                        },
+                        {
+                            name: 'RSI12',
+                            type: 'line',
+                            data: RSI12
+                        },
+                        {
+                            name: 'RSI24',
+                            type: 'line',
+                            data: RSI24
+                        }
+                    ]
+                };
 
 
                 // 为echarts对象加载数据
@@ -299,6 +500,13 @@
 
                 // 为echarts对象加载数据
                 myChart3.setOption(option3);
+
+                // 为echarts对象加载数据
+                myChart4.setOption(option4);
+
+                // 为echarts对象加载数据
+                myChart5.setOption(option5);
+
 
             },
             error: function (errorMsg) {

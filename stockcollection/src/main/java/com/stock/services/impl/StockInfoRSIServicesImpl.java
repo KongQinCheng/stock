@@ -109,6 +109,12 @@ public class StockInfoRSIServicesImpl implements IStockAnalyzeRSIservices {
             rsi3[i] = RSI3;
             prepp_24 = pp_24;
             prenp_24 = np_24;
+
+
+            if((list.get(i).getRSI06() == 0)  && (list.get(i).getRSI12() == 0) && (list.get(i).getRSI24() == 0)){
+
+
+            }
         }
 
         for (int i = 0; i <list.size() ; i++) {
