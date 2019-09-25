@@ -49,4 +49,6 @@ public interface IStockNewDataDao {
 
     List<StockNewData>  getStockKdjValueRegion( StockNewDataVo stockNewDataVo);
 
+    List<StockNewData>  getStockHslValueRegion( StockNewDataVo stockNewDataVo);
+
 }

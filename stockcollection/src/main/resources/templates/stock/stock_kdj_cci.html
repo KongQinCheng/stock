@@ -80,6 +80,10 @@
 
 
 
+
+
+
+
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
                         <input name="ccivaluemin" type="text" class="form-control" id="ccivaluemin" placeholder="最低CCI值..."  value="-1000">
@@ -93,10 +97,18 @@
                 </div>
 
 
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
+                    <select  class="form-control" id="crossType">
+                        <option value="-1" selected="selected">KDJ金叉+KDJ死叉</option>
+                        <option value="11">KDJ金叉</option>
+                        <option value="00">KDJ死叉 </option>
+                    </select>
+                </div>
 
 
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="form-group margin-b-0">
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="padding-left: 0px !important;">
+                        <div class="form-group margin-b-0">
                         <button type="button" id="form-submit" class="btn no-bg btn-contact" onclick="getNominate()">查询</button>
                     </div>
                 </div>
@@ -115,13 +127,14 @@
                     <th>stockCode</th>
                     <th>收盘价</th>
                     <th>涨跌幅</th>
-                    <th>涨幅</th>
-                    <th>涨幅影响</th>
-                    <th>金叉后最高价范围</th>
+                    <th>换手率</th>
+                    <!--<th>涨幅</th>-->
+                    <!--<th>涨幅影响</th>-->
+                    <!--<th>金叉后最高价范围</th>-->
                     <th>时间</th>
                     <th>综合</th>
                     <th>MACD</th>
-                    <th>价格</th>
+                    <th>CCI</th>
                     <th>影响</th>
                 </tr>
                 </thead>
@@ -187,7 +200,7 @@
         }
 
 
-        var str = {"spjmin": $("#spjmin").val(), "spjmax": $("#spjmax").val(),"ccivaluemax": $("#ccivaluemax").val(), "ccivaluemin": $("#ccivaluemin").val(), "kvaluemin": $("#kvaluemin").val(), "kvaluemax": $("#kvaluemax").val(), "dvaluemin": $("#dvaluemin").val(), "dvaluemax": $("#dvaluemax").val(), "jvaluemin": $("#jvaluemin").val(), "jvaluemax": $("#jvaluemax").val()}
+        var str = {  "crossType": $("#crossType").val(),  "spjmin": $("#spjmin").val(), "spjmax": $("#spjmax").val(),"ccivaluemax": $("#ccivaluemax").val(), "ccivaluemin": $("#ccivaluemin").val(), "kvaluemin": $("#kvaluemin").val(), "kvaluemax": $("#kvaluemax").val(), "dvaluemin": $("#dvaluemin").val(), "dvaluemax": $("#dvaluemax").val(), "jvaluemin": $("#jvaluemin").val(), "jvaluemax": $("#jvaluemax").val()}
 
 
         $.ajax({
@@ -199,7 +212,7 @@
             contentType: "application/json",
             success: function (result) {
 
-                console.log(result)
+                // console.log(result)
 
                 var jsonObj = JSON.parse(result);//转换为json对象
 
@@ -212,13 +225,14 @@
                     temphtml += "<td><a target='_blank' href='/stock/toStockInfoList?stockCode="+jsonObj[i].stockCode+"'>" + jsonObj[i].stockCode + "</a></td>";
                     temphtml += "<td>" + jsonObj[i].spj + "</td>";
                     temphtml += "<td>" + jsonObj[i].zdf + "</td>";
-                    temphtml += "<td><a target='_blank' href='/stock/toStockCrossIncreaseEffectNew?stockCode="+jsonObj[i].stockCode+"'>当前涨幅对后续的影响</a></td>";
-                    temphtml += "<td><a target='_blank' href='/stock/toStockCrossIncreaseEffectNew2?stockCode="+jsonObj[i].stockCode+"'>金叉后会涨吗</a></td>";
-                    temphtml += "<td><a target='_blank' href='/stock/toStockCrossDistributeMaxval?stockCode="+jsonObj[i].stockCode+"'>金叉后最高价的范围</a></td>";
+                    temphtml += "<td><a target='_blank' href='/stock/toStockCrossIncreaseEffectNew?stockCode="+jsonObj[i].hsl+"'>"+jsonObj[i].hsl+"</a></td>";
+                    // temphtml += "<td><a target='_blank' href='/stock/toStockCrossIncreaseEffectNew?stockCode="+jsonObj[i].stockCode+"'>当前涨幅对后续的影响</a></td>";
+                    // temphtml += "<td><a target='_blank' href='/stock/toStockCrossIncreaseEffectNew2?stockCode="+jsonObj[i].stockCode+"'>金叉后会涨吗</a></td>";
+                    // temphtml += "<td><a target='_blank' href='/stock/toStockCrossDistributeMaxval?stockCode="+jsonObj[i].stockCode+"'>金叉后最高价的范围</a></td>";
                     temphtml += "<td>" + tempdate + "</td>";
                     temphtml += "<td><a target='_blank' href='/stock/toStockInfoList?stockCode="+jsonObj[i].stockCode+"'>综合</a></td>";
                     temphtml += "<td><a target='_blank' href='/stock/toStockMacd?stockCode="+jsonObj[i].stockCode+"'>MACD</a></td>";
-                    temphtml += "<td><a target='_blank' href='/stock/toStockPrice?stockCode="+jsonObj[i].stockCode+"'>价格</a></td>";
+                    temphtml += "<td><a target='_blank' href='/stock/toStockPrice?stockCode="+jsonObj[i].stockCode+"'>"+jsonObj[i].cci+"</a></td>";
                     temphtml += "<td><a target='_blank' href='/stock/toStockCrossEffect?stockCode="+jsonObj[i].stockCode+"'>影响</a></td>";
                     temphtml += "</tr>";
                 }

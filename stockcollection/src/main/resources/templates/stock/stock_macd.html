@@ -39,6 +39,8 @@
     <div id="main4" style="height:300px;width: 100%;float: left"></div>
 
     <div id="main5" style="height:300px;width: 100%;float: left"></div>
+
+    <div id="main6" style="height:300px;width: 100%;float: left"></div>
 </div>
 
 <div class="text-center footer">
@@ -65,6 +67,7 @@
         $("#main3").width(widthval);
         $("#main4").width(widthval);
         $("#main5").width(widthval);
+        $("#main6").width(widthval);
 
 
         init()
@@ -83,6 +86,7 @@
         var myChart3 = echarts.init(document.getElementById('main3'));
         var myChart4 = echarts.init(document.getElementById('main4'));
         var myChart5 = echarts.init(document.getElementById('main5'));
+        var myChart6 = echarts.init(document.getElementById('main6'));
 
         var date = [];    //类别数组（实际用来盛放X轴坐标值）
         var DIF = [];
@@ -90,7 +94,7 @@
         var MACD = [];
 
         var minvalue = 0;
-        var maxvalue = 0
+        var maxvalue = 0;
 
         var Kvalue = [];
         var Dvalue = [];
@@ -99,7 +103,7 @@
         var spj=[];
         var cci=[];
         var minspj=0;
-        var maxspj=0
+        var maxspj=0;
 
         var mincci=0;
         var maxcci=0;
@@ -110,6 +114,9 @@
 
         var minrsi=0;
         var maxrsi=0;
+
+
+        var HSL = [];
 
 
         $.ajax({
@@ -133,6 +140,8 @@
                     Kvalue.push(jsonObj[i].kValue);
                     Dvalue.push(jsonObj[i].dValue);
                     Jvalue.push(jsonObj[i].jValue);
+
+                    HSL.push(jsonObj[i].hsl);
 
 
 
@@ -492,6 +501,52 @@
                     ]
                 };
 
+                var option6 = {
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['HSL']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            // mark : {show: true},
+                            // dataView : {show: true, readOnly: false},
+                            // magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            // restore : {show: true},
+                            // saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            boundaryGap : false,
+                            data :date
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            position:'right',
+                            min:0,
+                            max:1,
+                            splitNumber:10,
+                            axisLabel: {
+                                formatter: function (v) {
+                                    return v.toFixed(2);
+                                }
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'HSL',
+                            type: 'line',
+                            data: HSL
+                        }
+                    ]
+                };
 
                 // 为echarts对象加载数据
                 myChart.setOption(option);
@@ -506,6 +561,9 @@
 
                 // 为echarts对象加载数据
                 myChart5.setOption(option5);
+
+                // 为echarts对象加载数据
+                myChart6.setOption(option6);
 
 
             },

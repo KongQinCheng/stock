@@ -168,19 +168,26 @@ public class StockInfoServicesImpl implements IStockInfoServices {
 
         // 进行相关处理
         String crossStockCode = insertStockInfoActualTime(stockCode, html,maxValue,minValue);
-        if (!"".equals(crossStockCode)) {
-            //删除 推荐表中的数据
-            iStockInfoActualtimeDao.deleteByStockCodeAndStockDate(stockCode, stockDate);
-            //插入新数据
-            StockInfoActualtime stockInfoActualtime = new StockInfoActualtime();
-            stockInfoActualtime.setSpj(html);
-            stockInfoActualtime.setStockCode(stockCode);
-            stockInfoActualtime.setStockDate(stockDate);
-            iStockInfoActualtimeDao.insert(stockInfoActualtime);
-        } else {
-            //删除 推荐表中的数据
-            iStockInfoActualtimeDao.deleteByStockCodeAndStockDate(stockCode, stockDate);
-        }
+
+
+        //拷贝到新数据表中
+        List<StockInfo> newStockListByStockCode = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 1);
+        iStockNewDataDao.insert(newStockListByStockCode.get(0));
+
+
+//        if (!"".equals(crossStockCode)) {
+//            //删除 推荐表中的数据
+//            iStockInfoActualtimeDao.deleteByStockCodeAndStockDate(stockCode, stockDate);
+//            //插入新数据
+//            StockInfoActualtime stockInfoActualtime = new StockInfoActualtime();
+//            stockInfoActualtime.setSpj(html);
+//            stockInfoActualtime.setStockCode(stockCode);
+//            stockInfoActualtime.setStockDate(stockDate);
+//            iStockInfoActualtimeDao.insert(stockInfoActualtime);
+//        } else {
+//            //删除 推荐表中的数据
+//            iStockInfoActualtimeDao.deleteByStockCodeAndStockDate(stockCode, stockDate);
+//        }
         System.out.println("实时金叉查询 查询完成  stockCode=" + stockCode);
     }
 
@@ -214,22 +221,6 @@ public class StockInfoServicesImpl implements IStockInfoServices {
         stockInfo.setSpj(Double.parseDouble(price));
         iStockInfoDao.addStockInfo(stockInfo);
 
-        //计算MACD值
-        iStockInfoMacdServices.getStockInfoMacd(stockCode, 1);
-
-        //拷贝到新数据表中
-        List<StockInfo> newStockListByStockCode = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 1);
-        iStockNewDataDao.insert(newStockListByStockCode.get(0));
-
-        //判断是否存在交叉
-        List<StockInfo> newStockListByStockCodelist = iStockInfoServices.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 2);
-
-        Map<String, Object> checkResult = iStockInfoMacdServices.isExistCross(newStockListByStockCodelist, 2, "11");
-        if (!checkResult.isEmpty()) {
-            if ((boolean) checkResult.get("result")) {
-                return stockCode;
-            }
-        }
         return "";
     }
 
@@ -293,7 +284,7 @@ public class StockInfoServicesImpl implements IStockInfoServices {
                     stockInfo.setStockDate(tempStr);
                     break;
                 case 1:
-                    stockInfo.setKpj(Double.valueOf(tempStr));
+                    stockInfo.setKpj(Double.valueOf(tempStr.replaceAll(",","")));
                     break;
                 case 2:
                     stockInfo.setZgj(Double.valueOf(tempStr));

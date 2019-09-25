@@ -87,4 +87,10 @@ public interface StockNewDataMapper {
     public List<StockNewData> getStockKdjValueRegion(StockNewDataVo stockNewDataVo);
 
 
+    @SelectProvider(type = StockNewDataSqlProvider.class,method = "getStockHslValueRegionByVo")
+    @ResultMap("stockNewDataResults")
+    public List<StockNewData> getStockHslValueRegion(StockNewDataVo stockNewDataVo);
+
+
+
 }

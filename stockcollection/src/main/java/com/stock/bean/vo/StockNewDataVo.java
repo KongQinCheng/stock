@@ -53,4 +53,8 @@ public class StockNewDataVo {
     private double zdf_15 ;
     private double zdf_30 ;
 
+    private double hslmin ;
+    private double hslmax ;
+
+
 }

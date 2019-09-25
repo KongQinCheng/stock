@@ -104,12 +104,45 @@ public class StockNewDataSqlProvider {
                     WHERE(" a.cci <= "+stockNewDataVo.getCcivaluemax());
                 }
 
+            }
+        }.toString();
+    }
+
+
+    public String getStockHslValueRegionByVo(StockNewDataVo stockNewDataVo) {
+        return new SQL() {
+            {
+                SELECT(" a.* ");
+
+                FROM(" stock_new_data a ");
+                WHERE(" a.stockDate = (SELECT MAX(stockDate) FROM stock_new_data )  ");
+
+                if (!("".equals(stockNewDataVo.getStockCode())||stockNewDataVo.getStockCode()==null)) {
+                    WHERE(" a.stockCode = '"+ stockNewDataVo.getStockCode() +"'" );
+                }
+
+
+                if (stockNewDataVo.getSpjmin() != 0.0) {
+                    WHERE(" a.spj >= "+ stockNewDataVo.getSpjmin());
+                }
+                if (stockNewDataVo.getSpjmax() != 0.0) {
+                    WHERE(" a.spj <= "+ stockNewDataVo.getSpjmax());
+                }
+
+                if (stockNewDataVo.getHslmin() != 0.0) {
+                    WHERE(" a.hsl >= "+ stockNewDataVo.getHslmin());
+                }
+                if (stockNewDataVo.getHslmax() != 0.0) {
+                    WHERE(" a.hsl <= "+ stockNewDataVo.getHslmax());
+                }
 
 
 
             }
         }.toString();
     }
+
+
 
     
 }

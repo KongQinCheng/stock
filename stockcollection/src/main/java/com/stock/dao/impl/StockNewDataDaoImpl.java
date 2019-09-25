@@ -52,4 +52,10 @@ public class StockNewDataDaoImpl implements IStockNewDataDao {
     public List<StockNewData> getStockKdjValueRegion(StockNewDataVo stockNewDataVo) {
         return stockNewDataMapper.getStockKdjValueRegion(stockNewDataVo);
     }
+
+    @Override
+    public List<StockNewData> getStockHslValueRegion(StockNewDataVo stockNewDataVo) {
+        return stockNewDataMapper.getStockHslValueRegion(stockNewDataVo);
+    }
+
 }

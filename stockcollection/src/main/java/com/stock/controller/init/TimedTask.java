@@ -60,7 +60,7 @@ public class TimedTask {
 
 
 
-    @Scheduled(cron = "0 0 16 * * ?")
+//    @Scheduled(cron = "0 0 16 * * ?")
     public void getStockInfo() throws Exception {
         //获取新上市的新股票
 //        iStockListServices.getStockNewList();
@@ -77,7 +77,7 @@ public class TimedTask {
     }
 
 
-    @Scheduled(cron = "0 30-59/10 14 * * ?")
+    @Scheduled(cron = "0 40-59/10 14 * * ?")
     public void getStockMACDActualTime() throws Exception {
 //        StockMACDActualTime();
     }
@@ -153,7 +153,7 @@ public class TimedTask {
 //
                     try {
                         //删除表中当天的数据（计算实时的MACD的时候，添加进去的，数据不准）
-//                        iStockInfoServices.delEmptyStockInfo(listInput.get(i).getStockCode().replaceAll("\t", ""));
+                        iStockInfoServices.delEmptyStockInfo(listInput.get(i).getStockCode().replaceAll("\t", ""));
 
                         //获取股票的最新信息
                         iStockInfoServices.getStockInfoHistory(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
@@ -294,14 +294,13 @@ public class TimedTask {
         }
 
         public void run() {
-            try {
                 for (int i = 0; i < listInput.size(); i++) {
+                    try {
                     iStockInfoServices.getStockInfoActualTime(listInput.get(i).getStockCode().replaceAll("\t", ""));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
     }
-
 }

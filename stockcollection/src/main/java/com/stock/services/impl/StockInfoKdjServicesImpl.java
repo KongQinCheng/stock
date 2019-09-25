@@ -12,6 +12,7 @@ import com.stock.dao.IStockNewDataDao;
 import com.stock.mapper.StockInfoMapper;
 import com.stock.services.IStockInfoKdjServices;
 import com.stock.util.SpringUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -120,8 +121,29 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
 
     @Override
     public List<StockNewData> getStockKdjValueRegion(StockNewDataVo stockNewDataVo) {
-        return iStockNewDataDao.getStockKdjValueRegion(stockNewDataVo);
+        List<StockNewData>  list= iStockNewDataDao.getStockKdjValueRegion(stockNewDataVo);
+        //判断KDJ 交叉类型
+        List<StockNewData>  outlist= new ArrayList<>();
+
+        if ( !"-1".equals(stockNewDataVo.getCrossType())){
+            List<StockInfo> ll=new ArrayList<>();
+            for (int i = 0; i <list.size() ; i++) {
+                List<StockInfo> stockInfoList = iStockInfoDao.getNewStockListByStockCode( list.get(i).getStockCode(), SortType.ASC.toString(), stockNewDataVo.getDayNum()+2);
+                Map<String, Object> existCross = isExistCross(stockInfoList, stockNewDataVo.getDayNum(), stockNewDataVo.getCrossType());
+                if ((boolean)existCross.get("result")){
+                    outlist.add(list.get(i)) ;
+                }
+            }
+        }else {
+            outlist=list;
+        }
+
+
+        return outlist;
     }
+
+
+
 
     private Map<String, Object> isExistCross(List<StockInfo> list, int dayNum, String crossType) {
 
@@ -142,14 +164,14 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
             beforeK = list.get(i).getKValue();
             beforeD = list.get(i).getDValue();
 
-            if (crossType.equals(map.get("type"))) {
+//            if (crossType.equals(map.get("type"))) {
                 resultMap.put("result", true);
                 resultMap.put("stockCode",stockCode );
                 resultMap.put("spj",list.get(list.size()-1).getSpj());
                 resultMap.put("zdf",list.get(list.size()-1).getZdf());
                 resultMap.put("stockDate", list.get(i).getStockDate());
                 return resultMap;
-            }
+//            }
 
         }
         return resultMap;
