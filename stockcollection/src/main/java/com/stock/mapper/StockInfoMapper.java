@@ -169,6 +169,9 @@ public interface StockInfoMapper {
     public void alterTable(@Param("stockCode") String stockCode);
 
 
+    @Update("update stock_info_${stockCode} set cci='${cci}' ")
+    public void updateStockInfoCCItemp(StockInfo stockInfo);
+
 
 
 

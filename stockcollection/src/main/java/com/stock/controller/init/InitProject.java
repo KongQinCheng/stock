@@ -92,7 +92,7 @@ public class InitProject implements ApplicationRunner {
 //
 //        iStockAnalyzeRSIservices.getRSI("600206");
 //
-//        iStockInfoCciServices.getCciValue("603383", 14);
+//        iStockInfoCciServices.getCciValue("000001", 14);
 //
 //
 //        iStockInfoServices.getStockInfoHistory("603838");

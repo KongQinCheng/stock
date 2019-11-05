@@ -4,6 +4,7 @@ import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockList;
 import com.stock.dao.IStockInfoDao;
 import com.stock.dao.IStockListDao;
+import com.stock.mapper.StockInfoMapper;
 import com.stock.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -58,9 +59,12 @@ public class TimedTask {
     @Autowired
     IStockAllTargetUpdateServices iStockAllTargetUpdateServices;
 
+    @Autowired
+    StockInfoMapper stockInfoMapper;
 
 
-//    @Scheduled(cron = "0 0 16 * * ?")
+
+    @Scheduled(cron = "0 0 16 * * ?")
     public void getStockInfo() throws Exception {
         //获取新上市的新股票
 //        iStockListServices.getStockNewList();

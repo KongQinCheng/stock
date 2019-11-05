@@ -50,7 +50,7 @@
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="kValueMax" type="text" class="form-control" id="kvaluemax" placeholder="最高K值..."  value="20" >
+                        <input name="kValueMax" type="text" class="form-control" id="kvaluemax" placeholder="最高K值..."  value="30" >
                     </div>
                 </div>
 
@@ -62,7 +62,7 @@
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="dvaluemax" type="text" class="form-control" id="dvaluemax" placeholder="最高D值..."  value="20" >
+                        <input name="dvaluemax" type="text" class="form-control" id="dvaluemax" placeholder="最高D值..."  value="30" >
                     </div>
                 </div>
 
@@ -74,27 +74,37 @@
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="jvaluemax" type="text" class="form-control" id="jvaluemax" placeholder="最高J值..."  value="20">
+                        <input name="jvaluemax" type="text" class="form-control" id="jvaluemax" placeholder="最高J值..."  value="30">
                     </div>
                 </div>
-
-
-
 
 
 
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
-                    <div class="form-group contact-field">
-                        <input name="ccivaluemin" type="text" class="form-control" id="ccivaluemin" placeholder="最低CCI值..."  value="-1000">
-                    </div>
+                <div class="form-group contact-field">
+                    <input name="ccivaluemin" type="text" class="form-control" id="ccivaluemin" placeholder="最低CCI值..."  value="-1000">
                 </div>
+            </div>
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
                         <input name="ccivaluemax" type="text" class="form-control" id="ccivaluemax" placeholder="最高CCI值..."  value="-100">
                     </div>
                 </div>
+
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <input name="hslmin" type="text" class="form-control" id="hslmin" placeholder="最低换手率..." value="3">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
+                    <div class="form-group contact-field">
+                        <input name="hslmax" type="text" class="form-control" id="hslmax" placeholder="最高换手率..." value="100">
+                    </div>
+                </div>
+
 
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
@@ -200,7 +210,7 @@
         }
 
 
-        var str = {  "crossType": $("#crossType").val(),  "spjmin": $("#spjmin").val(), "spjmax": $("#spjmax").val(),"ccivaluemax": $("#ccivaluemax").val(), "ccivaluemin": $("#ccivaluemin").val(), "kvaluemin": $("#kvaluemin").val(), "kvaluemax": $("#kvaluemax").val(), "dvaluemin": $("#dvaluemin").val(), "dvaluemax": $("#dvaluemax").val(), "jvaluemin": $("#jvaluemin").val(), "jvaluemax": $("#jvaluemax").val()}
+        var str = {  "crossType": $("#crossType").val(),  "spjmin": $("#spjmin").val(), "spjmax": $("#spjmax").val(),"ccivaluemax": $("#ccivaluemax").val(), "ccivaluemin": $("#ccivaluemin").val(), "kvaluemin": $("#kvaluemin").val(), "kvaluemax": $("#kvaluemax").val(), "dvaluemin": $("#dvaluemin").val(), "dvaluemax": $("#dvaluemax").val(), "jvaluemin": $("#jvaluemin").val(), "jvaluemax": $("#jvaluemax").val(), "hslmin": $("#hslmin").val(),  "hslmax": $("#hslmax").val()}
 
 
         $.ajax({
@@ -232,7 +242,7 @@
                     temphtml += "<td>" + tempdate + "</td>";
                     temphtml += "<td><a target='_blank' href='/stock/toStockInfoList?stockCode="+jsonObj[i].stockCode+"'>综合</a></td>";
                     temphtml += "<td><a target='_blank' href='/stock/toStockMacd?stockCode="+jsonObj[i].stockCode+"'>MACD</a></td>";
-                    temphtml += "<td><a target='_blank' href='/stock/toStockPrice?stockCode="+jsonObj[i].stockCode+"'>"+jsonObj[i].cci+"</a></td>";
+                    temphtml += "<td><a target='_blank' href='/stock/toStockPrice?stockCode="+jsonObj[i].stockCode+"'>"+parseInt(jsonObj[i].cci)+"</a></td>";
                     temphtml += "<td><a target='_blank' href='/stock/toStockCrossEffect?stockCode="+jsonObj[i].stockCode+"'>影响</a></td>";
                     temphtml += "</tr>";
                 }

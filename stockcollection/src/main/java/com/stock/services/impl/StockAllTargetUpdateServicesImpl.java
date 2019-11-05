@@ -26,7 +26,7 @@ public class StockAllTargetUpdateServicesImpl implements IStockAllTargetUpdateSe
     public void allTargetUpdate(String stockCode) throws Exception {
 
         //根据股票代码查询历史数据
-        List<StockInfo> stockInfoListAll = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 150);
+        List<StockInfo> stockInfoListAll = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 80);
 
         //MACD的 初始化
         double lastDayEma12 = 0;

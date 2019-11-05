@@ -80,7 +80,6 @@ public class StockInfoCciServicesImpl implements IStockInfoCciServices {
             stockInfo.setCci(cci);
             stockInfo.setStockCode(stockCode);
             iStockInfoDao.updateStockInfoCCI(stockInfo);
-
         }
         System.out.println("CCI  更新完毕stockCode=" + stockCode);
     }

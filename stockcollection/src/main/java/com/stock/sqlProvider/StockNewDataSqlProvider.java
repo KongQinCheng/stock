@@ -104,6 +104,15 @@ public class StockNewDataSqlProvider {
                     WHERE(" a.cci <= "+stockNewDataVo.getCcivaluemax());
                 }
 
+                if (stockNewDataVo.getHslmin() != 0.0) {
+                    WHERE(" a.hsl >= "+stockNewDataVo.getHslmin());
+                }
+                if (stockNewDataVo.getHslmax() != 0.0) {
+                    WHERE(" a.hsl <= "+stockNewDataVo.getHslmax());
+                }
+
+                ORDER_BY("a.cci");
+
             }
         }.toString();
     }
