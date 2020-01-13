@@ -160,8 +160,10 @@ public class WebDiaryServicesImpl implements IWebDiaryServices {
                                 befor_day = c.getTime();
                             }
                             created_at=sdf2.format(befor_day);
+                        }else if(created_at.indexOf("2019")>-1){
+
                         }else{
-                            created_at="2019-"+created_at;
+                            created_at="2020-"+created_at;
                         }
 
                         created_at=created_at.substring(0,10);

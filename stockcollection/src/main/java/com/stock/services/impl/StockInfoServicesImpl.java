@@ -247,7 +247,7 @@ public class StockInfoServicesImpl implements IStockInfoServices {
 
         String tempURL = "";
         List<String> urlList = new ArrayList<>();
-        for (int year = 2019; year > 2001; year--) {
+        for (int year = 2020; year > 2001; year--) {
             for (int season = 4; season > 0; season--) {
                 tempURL = "http://quotes.money.163.com/trade/lsjysj_" + StockCode + ".html?year=" + year + "&season=" + season;
                 urlList.add(tempURL);

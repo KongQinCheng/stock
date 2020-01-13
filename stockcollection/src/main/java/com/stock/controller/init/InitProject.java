@@ -53,9 +53,17 @@ public class InitProject implements ApplicationRunner {
     IStockAllTargetUpdateServices iStockAllTargetUpdateServices;
 
 
+
+    @Autowired
+    IWebDiaryServices iWebDiaryServices;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         //项目初始化执行
+
+
+
+        iWebDiaryServices.getWeiBoByUser();
 
 //        String html = getHtmlByURL("http://stockpage.10jqka.com.cn/603380/", "UTF-8");
 //
@@ -85,7 +93,7 @@ public class InitProject implements ApplicationRunner {
 //                continue;
 //            } finally {
 //            }
-////                iStockInfoCciServices.getCciValue("603383",14);
+//                iStockInfoCciServices.getCciValue("603383",14);
 //        }
 //
 //        System.out.println("全部处理完成");
