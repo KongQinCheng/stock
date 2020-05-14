@@ -38,7 +38,19 @@ public class StockListDaoImpl implements IStockListDao {
     }
 
     @Override
-    public void addStockList(String stockCode, String stockName) {
-         stockListMapper.addStockList(stockCode,stockName);
+    public void addStockList(String stockCode, String stockName , String StockDate, String status) {
+         stockListMapper.addStockList(stockCode,stockName  ,  StockDate,  status);
     }
+
+    @Override
+    public void updateStockList(String stockCode, String stockName) {
+        stockListMapper.updateStockList(stockCode,stockName);
+    }
+
+    @Override
+    public void updateStockListStatus(String stockCode, String status) {
+        stockListMapper.updateStockListStatus(stockCode,status);
+    }
+
+
 }

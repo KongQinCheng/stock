@@ -7,6 +7,7 @@ public class StockNewData {
 
     private int id;
     private String  stockCode ;  //代码
+    private String  stockName ;  //代码
     private String stockDate;  //时间
     private double  kpj ;  //开盘价
     private double  zgj ;  //最高价

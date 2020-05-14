@@ -65,4 +65,5 @@ public interface IStockInfoServices {
     void getStockInfoActualTime(String stockCode) throws Exception ;
 
 
+
 }

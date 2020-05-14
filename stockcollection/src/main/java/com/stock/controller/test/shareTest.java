@@ -22,19 +22,26 @@ public class shareTest{
         List<String> urLbyStockCode = getURLbyStockCode("600036");
         for (int i = 0; i <urLbyStockCode.size() ; i++) {
 
-            String html= getHtmlByURL("http://quotes.money.163.com/trade/lsjysj_600036.html?year=2017&season=1");
+            try{
+                String html= getHtmlByURL("http://quotes.money.163.com/trade/lsjysj_600036.html?year=2017&season=1");
 
-            //获取需要的正文
-            html= getHtmlByExpression("</thead[\\s\\S]*</tr>    </table>",html);
+                //获取需要的正文
+                html= getHtmlByExpression("</thead[\\s\\S]*</tr>    </table>",html);
 
-            html= replaceHtml(" class='cGreen'",html);
-            html= replaceHtml(" class='cRed'",html);
+                html= replaceHtml(" class='cGreen'",html);
+                html= replaceHtml(" class='cRed'",html);
 
-            html= getHtmlByExpression("<td>(.*?)</td>",html);
+                html= getHtmlByExpression("<td>(.*?)</td>",html);
 
-            String[] strings = splitByExpression("</td>", html);
+                String[] strings = splitByExpression("</td>", html);
 
-            getBean(strings);
+                getBean(strings);
+            }
+            catch (Exception e){
+                System.out.println("异常");
+                continue;
+            }
+
         }
 
 

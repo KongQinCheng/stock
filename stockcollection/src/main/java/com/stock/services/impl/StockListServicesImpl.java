@@ -2,6 +2,7 @@ package com.stock.services.impl;
 
 import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockList;
+import com.stock.controller.test.shareTest;
 import com.stock.dao.IStockInfoDao;
 import com.stock.dao.IStockListDao;
 import com.stock.services.IStockInfoServices;
@@ -11,10 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.HTML;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class StockListServicesImpl implements IStockListServices {
@@ -49,7 +49,7 @@ public class StockListServicesImpl implements IStockListServices {
                 tempStockCode = tempStockCode.replaceAll("\\<.*?>", "").replaceAll("\t","").replaceAll(" ","");  //去掉所有HTML标签
                 tempStockName = tempStockName.replaceAll("\\<.*?>", "");  //去掉所有HTML标签
                 try {
-                    iStockListDao.addStockList(tempStockCode, tempStockName);
+                    iStockListDao.addStockList(tempStockCode, tempStockName,"","1");
                 }catch (Exception e){
                     continue;
                 }
@@ -63,10 +63,16 @@ public class StockListServicesImpl implements IStockListServices {
         for (int i = 0; i <stockNewList.size() ; i++) {
             if(!iStockListDao.isExitStockList(stockNewList.get(i).get("stockCode").toString())){
                 //保存到列表中
-                iStockListDao.addStockList(stockNewList.get(i).get("stockCode").toString(),stockNewList.get(i).get("stockName").toString());
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String cc = df.format(new Date().getTime());
+
+                iStockListDao.addStockList(stockNewList.get(i).get("stockCode").toString(),stockNewList.get(i).get("stockName").toString(),cc,"1");
 
                 //查询股票相关的历史数据保存到新表中。
-                iStockInfoServices.getStockInfoHistory(stockNewList.get(i).get("stockCode").toString());
+//                iStockInfoServices.getStockInfoHistory(stockNewList.get(i).get("stockCode").toString());
+            }else {
+                //保存到列表中
+                iStockListDao.updateStockList(stockNewList.get(i).get("stockCode").toString(),stockNewList.get(i).get("stockName").toString());
             }
         }
     }
@@ -88,7 +94,7 @@ public class StockListServicesImpl implements IStockListServices {
 
     @Override
     public void addStockList(String stockCode, String stockName) {
-         iStockListDao.addStockList(stockCode,stockName);
+         iStockListDao.addStockList(stockCode,stockName,"","1");
     }
 
 

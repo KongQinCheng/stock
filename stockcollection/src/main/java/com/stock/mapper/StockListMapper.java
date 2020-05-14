@@ -16,23 +16,33 @@ import java.util.List;
 @Mapper
 public interface StockListMapper {
 
-    @Select("select * from stock_list where 1=1 ")
+    @Select("select * from stock_list where 1=1    and  status=1")
     @Results(id = "stockListResults", value = {
             @Result(column = "stockCode", property = "stockCode")})
     public List<StockList> getStockList();
 
-    @Select("select * from stock_list where 1=1 order by stockCode desc")
+    @Select("select * from stock_list where 1=1   and  status=1 order by stockCode desc")
     @ResultMap("stockListResults")
     public List<StockList> getStockListDesc();
 
 
 
-    @Select("select * from stock_list where 1=1 limit #{limitNum}")
+    @Select("select * from stock_list where 1=1   and  status=1 limit #{limitNum}")
     @ResultMap("stockListResults")
     public List<StockList> getStockListLimit(@Param("limitNum") int limitNum);
 
-    @Insert("insert into stock_list(stockCode,stockName) values (#{stockCode},#{stockName})")
-    public void addStockList(@Param("stockCode") String stockCode, @Param("stockName") String stockName);
+    @Insert("insert into stock_list(stockCode,stockName,status) values (#{stockCode},#{stockName},#{status})")
+    public void addStockList(@Param("stockCode") String stockCode, @Param("stockName") String stockName   ,  @Param("StockDate") String StockDate,  @Param("status") String status);
+
+
+    @Update("update stock_list set stockName=#{stockName}  where stockCode= #{stockCode}")
+    public void updateStockList(@Param("stockCode") String stockCode, @Param("stockName") String stockName);
+
+
+
+    @Update("update stock_list set status=#{status}  where stockCode= #{stockCode}")
+    public void updateStockListStatus(@Param("stockCode") String stockCode, @Param("status") String status);
+
 
 
     @Delete("DELETE from stock_list WHERE stockCode =#{stockCode}")

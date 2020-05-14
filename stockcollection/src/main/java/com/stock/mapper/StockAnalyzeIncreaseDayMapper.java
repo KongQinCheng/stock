@@ -9,13 +9,6 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 
-/**
- * moduleInfo的持久层接口
- *
- * @author chenzuyi
- * @version Revision 1.0.0
- * *修改时间         | 修改内容
- */
 
 @Mapper
 public interface StockAnalyzeIncreaseDayMapper {

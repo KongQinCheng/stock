@@ -32,12 +32,12 @@
             <form method="post" name="contact-form" class="contact-form">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="spjmin" type="text" class="form-control" id="spjmin" placeholder="最低收盘价..." value="0">
+                        <input name="spjmin" type="text" class="form-control" id="spjmin" placeholder="最低收盘价..." value="5">
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="spjmax" type="text" class="form-control" id="spjmax" placeholder="最高收盘价..." value="2000">
+                        <input name="spjmax" type="text" class="form-control" id="spjmax" placeholder="最高收盘价..." value="1400">
                     </div>
                 </div>
 
@@ -49,7 +49,7 @@
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="kValueMax" type="text" class="form-control" id="kvaluemax" placeholder="最高K值..."  value="25" >
+                        <input name="kValueMax" type="text" class="form-control" id="kvaluemax" placeholder="最高K值..."  value="40" >
                     </div>
                 </div>
 
@@ -61,7 +61,7 @@
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="dvaluemax" type="text" class="form-control" id="dvaluemax" placeholder="最高D值..."  value="25" >
+                        <input name="dvaluemax" type="text" class="form-control" id="dvaluemax" placeholder="最高D值..."  value="40" >
                     </div>
                 </div>
 
@@ -73,7 +73,7 @@
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="jvaluemax" type="text" class="form-control" id="jvaluemax" placeholder="最高J值..."  value="25">
+                        <input name="jvaluemax" type="text" class="form-control" id="jvaluemax" placeholder="最高J值..."  value="40">
                     </div>
                 </div>
 
@@ -88,19 +88,19 @@
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="ccivaluemax" type="text" class="form-control" id="ccivaluemax" placeholder="最高CCI值..."  value="-100">
+                        <input name="ccivaluemax" type="text" class="form-control" id="ccivaluemax" placeholder="最高CCI值..."  value="-70">
                     </div>
                 </div>
 
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="hslmin" type="text" class="form-control" id="hslmin" placeholder="最低换手率..." value="3">
+                        <input name="hslmin" type="text" class="form-control" id="hslmin" placeholder="前5天平均换手率最低值..." value="2">
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-l-3">
                     <div class="form-group contact-field">
-                        <input name="hslmax" type="text" class="form-control" id="hslmax" placeholder="最高换手率..." value="100">
+                        <input name="hslmax" type="text" class="form-control" id="hslmax" placeholder="前5天换手率最高值..." value="100">
                     </div>
                 </div>
 
@@ -231,7 +231,7 @@
         $.ajax({
             type: "post",
             async: true,
-            url: "/stock/getStockKdjCciValueRegion",
+            url: "/stock/getStockKdjCciValueRegionActualtime",
             data: JSON.stringify(str),
             dataType: "text",        //返回数据形式为json
             contentType: "application/json",

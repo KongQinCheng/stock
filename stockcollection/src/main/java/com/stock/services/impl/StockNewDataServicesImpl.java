@@ -22,14 +22,26 @@ public class StockNewDataServicesImpl implements IStockNewDataServices  {
     IStockInfoDao iStockInfoDao;
 
     @Override
-    public void getNewDataToTable(String stockCode) {
+    public void getNewDataToTable(String stockCode,int limitNum,String insertType) {
         //清空表的内容
         iStockNewDataDao.deleteByStockCode(stockCode);
-        List<StockInfo> newStockListByStockCode = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 5);
+        List<StockInfo> newStockListByStockCode = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), limitNum);
+
+        double hsl =0;
+
         for (int j = 0; j < newStockListByStockCode.size(); j++) {
             StockInfo stockInfo=newStockListByStockCode.get(j);
             stockInfo.setStockCode(stockCode);
-            iStockNewDataDao.insert(stockInfo);
+            hsl+=stockInfo.getHsl();
+            if ("1".equals(insertType) && j==newStockListByStockCode.size()-1) {
+                double d =hsl/newStockListByStockCode.size();
+                d = (double) Math.round(d * 100) / 100;
+                stockInfo.setHsl(d);
+                iStockNewDataDao.insert(stockInfo);
+            }
+            if ("0".equals(insertType) ){
+                iStockNewDataDao.insert(stockInfo);
+            }
         }
 
         System.out.println("拷贝最新的数据保存的数据库中成功stockCode= "+stockCode);

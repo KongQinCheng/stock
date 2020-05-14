@@ -1,5 +1,6 @@
 package com.stock.services.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.stock.Enum.CrossType;
 import com.stock.Enum.SortType;
 import com.stock.bean.po.StockInfo;
@@ -11,10 +12,7 @@ import com.stock.dao.IStockInfoActualtimeDao;
 import com.stock.dao.IStockInfoDao;
 import com.stock.dao.IStockListDao;
 import com.stock.dao.IStockNewDataDao;
-import com.stock.services.IStockInfoMacdServices;
-import com.stock.services.IStockInfoServices;
-import com.stock.services.IStockListServices;
-import com.stock.services.IStockNewDataServices;
+import com.stock.services.*;
 import com.stock.util.HtmlUtil;
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static com.stock.controller.test.shareTest.insertDb;
 import static com.stock.controller.test.shareTest.splitByExpression;
 import static com.stock.util.HtmlUtil.getHtmlByExpression;
 import static com.stock.util.HtmlUtil.getHtmlByURL;
@@ -60,6 +59,13 @@ public class StockInfoServicesImpl implements IStockInfoServices {
 
     @Autowired
     IStockNewDataServices iStockNewDataServices;
+
+    @Autowired
+    IStockAllTargetUpdateServices iStockAllTargetUpdateServices;
+
+    @Autowired
+    IStockKdjCciTargetUpdateServices iStockKdjCciTargetUpdateServices;
+
 
 
     @Override
@@ -107,20 +113,26 @@ public class StockInfoServicesImpl implements IStockInfoServices {
         List<String> urlList = getURLbyStockCode(stockCode);
 
         for (int i = 0; i < urlList.size(); i++) {
-            String html = getHtmlByURL(urlList.get(i), "UTF-8");
-            //获取需要的正文
-            html = getHtmlByExpression("</thead[\\s\\S]*</tr>    </table>", html);
-            html = htmlUtil.replaceHtml(" class='cGreen'", html);
-            html = htmlUtil.replaceHtml(" class='cRed'", html);
-            html = getHtmlByExpression("<td>(.*?)</td>", html);
-            String[] strings = htmlUtil.splitByExpression("</td>", html);
-            if ("".equals(strings[0])) {
-                continue;
+            try {
+                String html = getHtmlByURL(urlList.get(i), "UTF-8");
+                //获取需要的正文
+                html = getHtmlByExpression("</thead[\\s\\S]*</tr>    </table>", html);
+                html = htmlUtil.replaceHtml(" class='cGreen'", html);
+                html = htmlUtil.replaceHtml(" class='cRed'", html);
+                html = getHtmlByExpression("<td>(.*?)</td>", html);
+                String[] strings = htmlUtil.splitByExpression("</td>", html);
+                if ("".equals(strings[0])) {
+                    continue;
+                }
+                boolean returnResult = getBean(strings, stockCode);
+                if (returnResult) {
+                    break;
+                }
+            }catch (Exception e){
+                System.out.println("获取数据异常，股票编号为：" + stockCode);
+                 continue;
             }
-            boolean returnResult = getBean(strings, stockCode);
-            if (returnResult) {
-                break;
-            }
+
         }
         System.out.println("获取数据成功，股票编号为：" + stockCode);
     }
@@ -137,12 +149,75 @@ public class StockInfoServicesImpl implements IStockInfoServices {
 
 
     /***
-     * 获取 单个 股票的 实时信息
+     * 获取 单个 股票的 实时信息--通过 http://q.stock.sohu.com/cn/603308/index.shtml 来获取
      */
     @Override
     public void getStockInfoActualTime(String stockCode) throws Exception {
 
+
+        String url = "http://hq.stock.sohu.com/cn/"+stockCode.substring(3,stockCode.length())+"/cn_"+stockCode+"-1.html?_="+(int) (System.currentTimeMillis() / 1000);
+        String htmlAll = getHtmlByURL(url, "GBK");
+
+        int price_a1 = htmlAll.indexOf("price_A1");
+        int price_a3 = htmlAll.indexOf("price_A3");
+
+        int time = htmlAll.indexOf("time");
+        String[]  timeStrArry =htmlAll.substring(time+7,time+39).replaceAll("'","").split(",");
+        String stockDate=timeStrArry[0]+"-"+timeStrArry[1]+"-"+timeStrArry[2];
+
+        String getStr ="";
+        if (price_a1>0 && price_a3>0){
+            getStr = htmlAll.substring(price_a1, price_a3-2);
+        }else {
+            System.out.println("实时数据获取异常，异常股票为："+stockCode);
+        }
+
+        getStr="{\""+getStr.replaceAll("'","\"").replaceAll("%","")+"}";
+
+//        System.out.println(getStr);
+        JSONObject jsonObject = JSONObject.parseObject(getStr);
+        String str_price_a1 = jsonObject.get("price_A1").toString().replaceAll("\"","");
+        String str_price_a2 = jsonObject.get("price_A2").toString().replaceAll("\"","");
+        String[] arr_al = str_price_a1.split(",");
+        String[] arr_a2 = str_price_a2.split(",");
+
+
+        String zdf = arr_al[4];
+        String spj = arr_al[2];
+        String kpj = arr_a2[3];
+        String maxValue = arr_a2[5];
+        String minValue = arr_a2[7];
+        String hsl = arr_a2[6];
+
+
+        // 进行相关处理
+        insertStockInfoActualTime(stockCode,stockDate, spj,maxValue,minValue,hsl,kpj,zdf);
+
+        //计算最新的KDJ 和 CCI
+        iStockKdjCciTargetUpdateServices.allTargetUpdate(stockCode);
+
+
+//        //拷贝到新数据表中
+        iStockNewDataServices.getNewDataToTable(stockCode,5,"1");
+
+        System.out.println("实时数据 查询完成  stockCode=" + stockCode);
+    }
+
+
+
+    /***
+     * 获取 单个 股票的 实时信息 --通过百度来获取
+     */
+
+    public void getStockInfoActualTime2(String stockCode) throws Exception {
+
+        //http://q.stock.sohu.com/cn/603308/index.shtml
+        //http://hq.stock.sohu.com/cn/506/cn_002506-1.html?_=1585464759666
         String url = "http://www.baidu.com/s?wd=" + stockCode;
+
+        //String url = "ttp://hq.stock.sohu.com/cn/"+stockCode.substring(3,stockCode.length()-1)+"/cn_"+stockCode+"-1.html?_="+(int) (System.currentTimeMillis() / 1000);
+
+
         String htmlAll = getHtmlByURL(url, "UTF-8");
         String html ="";
         html = getHtmlByExpression("<span class=\"op-stockdynamic-moretab-cur-num c-gap-right-small\">(.*?)</span>", htmlAll);
@@ -167,7 +242,7 @@ public class StockInfoServicesImpl implements IStockInfoServices {
         String stockDate = sdf2.format(day);
 
         // 进行相关处理
-        String crossStockCode = insertStockInfoActualTime(stockCode, html,maxValue,minValue);
+        String crossStockCode = insertStockInfoActualTime(stockCode,stockDate, html,maxValue,minValue,"0","","");
 
 
         //拷贝到新数据表中
@@ -191,26 +266,25 @@ public class StockInfoServicesImpl implements IStockInfoServices {
         System.out.println("实时金叉查询 查询完成  stockCode=" + stockCode);
     }
 
+    public String insertStockInfoActualTime(String stockCode, String stockDate, String price, String maxValue, String minValue,String hsl,String kpj,String zdf) {
 
-    public String insertStockInfoActualTime(String stockCode, String price, String maxValue, String minValue) {
 
         try {
             Double.parseDouble(price);
             Double.parseDouble(maxValue);
             Double.parseDouble(minValue);
+            Double.parseDouble(hsl);
+            Double.parseDouble(kpj);
+            Double.parseDouble(zdf);
         } catch (Exception e) {
             System.out.println("Double.parseDouble(price)= " + stockCode);
             return "";
         }
 
-        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-        Date day = new Date();
-        String stockDate = sdf2.format(day);
-
 
         //删除今天的数据，现在的数据到保存到数据库中。
         iStockInfoDao.delStockInfo(stockCode, stockDate);
-        iStockNewDataDao.deleteByStockCodeAndStockDate(stockCode, stockDate);
+//        iStockNewDataDao.deleteByStockCodeAndStockDate(stockCode, stockDate);
 
         //添加数据到数据库
         StockInfo stockInfo = new StockInfo();
@@ -219,6 +293,10 @@ public class StockInfoServicesImpl implements IStockInfoServices {
         stockInfo.setStockCode(stockCode);
         stockInfo.setStockDate(stockDate);
         stockInfo.setSpj(Double.parseDouble(price));
+        stockInfo.setHsl(Double.parseDouble(hsl));
+        stockInfo.setKpj(Double.parseDouble(kpj));
+        stockInfo.setZdf(Double.parseDouble(zdf));
+        stockInfo.setCjl(999999);
         iStockInfoDao.addStockInfo(stockInfo);
 
         return "";
@@ -287,19 +365,19 @@ public class StockInfoServicesImpl implements IStockInfoServices {
                     stockInfo.setKpj(Double.valueOf(tempStr.replaceAll(",","")));
                     break;
                 case 2:
-                    stockInfo.setZgj(Double.valueOf(tempStr));
+                    stockInfo.setZgj(Double.valueOf(tempStr.replaceAll(",","")));
                     break;
                 case 3:
-                    stockInfo.setZdj(Double.valueOf(tempStr));
+                    stockInfo.setZdj(Double.valueOf(tempStr.replaceAll(",","")));
                     break;
                 case 4:
-                    stockInfo.setSpj(Double.valueOf(tempStr));
+                    stockInfo.setSpj(Double.valueOf(tempStr.replaceAll(",","")));
                     break;
                 case 5:
-                    stockInfo.setZde(Double.valueOf(tempStr));
+                    stockInfo.setZde(Double.valueOf(tempStr.replaceAll(",","")));
                     break;
                 case 6:
-                    stockInfo.setZdf(Double.valueOf(tempStr));
+                    stockInfo.setZdf(Double.valueOf(tempStr.replaceAll(",","")));
                     break;
                 case 7:
                     stockInfo.setCjl(Double.valueOf(tempStr.replace(",", "")));
@@ -308,11 +386,11 @@ public class StockInfoServicesImpl implements IStockInfoServices {
                     stockInfo.setCjje(Double.valueOf(tempStr.replace(",", "")));
                     break;
                 case 9:
-                    stockInfo.setZf(Double.valueOf(tempStr));
+                    stockInfo.setZf(Double.valueOf(tempStr.replaceAll(",","")));
                     break;
                 case 10:
                     stockInfo.setStockCode(StockCode);
-                    stockInfo.setHsl(Double.valueOf(tempStr));
+                    stockInfo.setHsl(Double.valueOf(tempStr.replaceAll(",","")));
 
                     stockInfo.setKValue(0);
                     stockInfo.setDValue(0);
@@ -324,7 +402,16 @@ public class StockInfoServicesImpl implements IStockInfoServices {
                     if (tableExist) {
                         FailNum++;
                     } else {
-                        iStockInfoDao.addStockInfo(stockInfo);
+                        try {
+                            iStockInfoDao.addStockInfo(stockInfo);
+                        }catch (Exception e){
+                            System.out.println("异常");
+                            iStockInfoDao.delTableByStockCode(stockInfo.getStockCode());
+                            createTableByTableName(stockInfo.getStockCode());
+                            iStockInfoDao.addStockInfo(stockInfo);
+                            throw  e;
+                        }
+
                     }
             }
         }
@@ -391,7 +478,7 @@ public class StockInfoServicesImpl implements IStockInfoServices {
         //System.out.println(rrrr);
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main2(String[] args) throws Exception {
 
         String stockCode="603383";
         String url = "http://www.baidu.com/s?wd=" + stockCode;
@@ -417,8 +504,50 @@ public class StockInfoServicesImpl implements IStockInfoServices {
         minValue = minValue.replaceAll("<span class=\"op-stockdynamic-moretab-info-value\"style=\"color:#0f990f\">", "");
         minValue = minValue.replaceAll("</span>", "");
         System.out.println(minValue);
+    }
+
+
+
+    public static void main(String[] args) throws Exception {
+
+
+       String  stockCode ="000001";
+
+    String url = "http://hq.stock.sohu.com/cn/"+stockCode.substring(3,stockCode.length())+"/cn_"+stockCode+"-1.html?_="+(int) (System.currentTimeMillis() / 1000);
+    String htmlAll = getHtmlByURL(url, "GBK");
+
+//        int price_a1 = htmlAll.indexOf("price_A1");
+//        int price_a3 = htmlAll.indexOf("price_A3");
+
+
+
+        int time = htmlAll.indexOf("time");
+        String[]  timeStrArry =htmlAll.substring(time+7,time+39).replaceAll("'","").split(",");
+        String stockDate=timeStrArry[0]+"-"+timeStrArry[1]+"-"+timeStrArry[2];
+
+        System.out.println(stockDate);
+
+//        String getStr ="";
+//        if (price_a1>0 && price_a3>0){
+//            getStr = htmlAll.substring(price_a1, price_a3-2);
+//        }
+//
+//        getStr="{\""+getStr.replaceAll("'","\"").replaceAll("%","")+"}";
+//
+//        System.out.println(getStr);
+//        JSONObject jsonObject = JSONObject.parseObject(getStr);
+//        String str_price_a1 = jsonObject.get("price_A1").toString().replaceAll("\"","");
+//        String str_price_a2 = jsonObject.get("price_A2").toString().replaceAll("\"","");
+//        String[] arr_al = str_price_a1.split(",");
+//        String[] arr_a2 = str_price_a2.split(",");
+//
+//
+//        String spj = arr_al[2];
+//        String kpj = arr_a2[3];
+//        String maxValue = arr_a2[5];
+//        String minValue = arr_a2[7];
+//        String hsl = arr_al[6];
 
 
     }
-
 }

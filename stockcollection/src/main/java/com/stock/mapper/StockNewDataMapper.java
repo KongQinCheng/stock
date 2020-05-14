@@ -39,6 +39,7 @@ public interface StockNewDataMapper {
     @Results(id = "stockNewDataResults", value = {
             @Result(column = "id", property = "id"),
             @Result(column = "stockCode", property = "stockCode"),
+            @Result(column = "stockName", property = "stockName"),
             @Result(column = "kpj", property = "kpj"),
             @Result(column = "zgj", property = "zgj"),
             @Result(column = "zdj", property = "zdj"),

@@ -7,9 +7,9 @@ public class StockNewDataSqlProvider {
     public String getStockNewDataListByVo(StockNewDataVo stockNewDataVo) {
         return new SQL() {
             {
-                SELECT(" a.* ");
+                SELECT(" a.*,b.stockName ");
 
-                FROM(" stock_new_data a ");
+                FROM(" stock_new_data a left join stock_list b on a.stockCode=b.stockCode ");
                 WHERE(" a.stockDate = (SELECT MAX(stockDate) FROM stock_new_data )  ");
 
                 if (!("".equals(stockNewDataVo.getStockCode())||stockNewDataVo.getStockCode()==null)) {
@@ -36,9 +36,9 @@ public class StockNewDataSqlProvider {
     public String getStockKdjValueRegionByVo(StockNewDataVo stockNewDataVo) {
         return new SQL() {
             {
-                SELECT(" a.* ");
+                SELECT("a.*,b.stockName ");
 
-                FROM(" stock_new_data a ");
+                FROM(" stock_new_data a left join stock_list b on a.stockCode=b.stockCode ");
                 WHERE(" a.stockDate = (SELECT MAX(stockDate) FROM stock_new_data )  ");
 
                 if (!("".equals(stockNewDataVo.getStockCode())||stockNewDataVo.getStockCode()==null)) {
@@ -121,9 +121,9 @@ public class StockNewDataSqlProvider {
     public String getStockHslValueRegionByVo(StockNewDataVo stockNewDataVo) {
         return new SQL() {
             {
-                SELECT(" a.* ");
+                SELECT(" a.*,b.stockName ");
 
-                FROM(" stock_new_data a ");
+                FROM(" stock_new_data a left join stock_list b on a.stockCode=b.stockCode ");
                 WHERE(" a.stockDate = (SELECT MAX(stockDate) FROM stock_new_data )  ");
 
                 if (!("".equals(stockNewDataVo.getStockCode())||stockNewDataVo.getStockCode()==null)) {

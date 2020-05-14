@@ -1,7 +1,9 @@
 package com.stock.controller.init;
 
+import com.alibaba.fastjson.JSONException;
 import com.stock.bean.po.StockInfo;
 import com.stock.bean.po.StockList;
+import com.stock.bean.vo.StockNewDataVo;
 import com.stock.dao.IStockInfoDao;
 import com.stock.dao.IStockListDao;
 import com.stock.mapper.StockInfoMapper;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,31 +62,48 @@ public class TimedTask {
     @Autowired
     IStockAllTargetUpdateServices iStockAllTargetUpdateServices;
 
+
+
     @Autowired
     StockInfoMapper stockInfoMapper;
 
+    @Autowired
+    IStockInfoDao iStockInfoDao;
 
 
     @Scheduled(cron = "0 0 16 * * ?")
-    public void getStockInfo() throws Exception {
+    public void getStockInfo() {
+        try {
+
+
         //获取新上市的新股票
-//        iStockListServices.getStockNewList();
+        iStockListServices.getStockNewList();
 
         //获取每一只最新的股票信息
         getStockNewData();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
     @Scheduled(cron = "0 0 0/2 * * ?")   //1分钟获取一次微博的信息
     public void getWeiBo() throws Exception {
-        iWebDiaryServices.getWeiBoByUser();
-        System.out.println("微博采集完成");
+        try {
+            iWebDiaryServices.getWeiBoByUser();
+            System.out.println("微博采集完成");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 
-    @Scheduled(cron = "0 40-59/10 14 * * ?")
+//    @Scheduled(cron = "0 30-59/10 14 * * ?")
+
+    @Scheduled(cron = "0 0/5 9,10,11,13,14 * * ?")   //5分钟获取最新的数据
     public void getStockMACDActualTime() throws Exception {
-//        StockMACDActualTime();
+        StockMACDActualTime();
     }
 
 
@@ -91,6 +111,8 @@ public class TimedTask {
 
     public void getStockNewData() {
 
+
+        try {
 //        List<StockList> stockList2 = iStockListServices.getStockList();
 //        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 //        Date day = new Date();
@@ -129,9 +151,12 @@ public class TimedTask {
             }
         }
 
-        try {
+
             CountDownLatch_getStockNewData.await();
             System.out.println("getStockNewData 执行结束。开始继续执行主线程");
+
+
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -156,6 +181,12 @@ public class TimedTask {
 //                    List<StockInfo> list = iStockInfoServices.getStockListByStockCode(listInput.get(i).getStockCode().replaceAll("\t", "") + "",10000000);
 //
                     try {
+                        //判断表是否存在 进行数据库表的新增
+                        String tableName = "stock_info_" + listInput.get(i).getStockCode().replaceAll("\t", "");
+                        if (!iStockInfoDao.isTableExist(tableName)) {
+                            iStockInfoDao.createTableByTableName(tableName);
+                        }
+
                         //删除表中当天的数据（计算实时的MACD的时候，添加进去的，数据不准）
                         iStockInfoServices.delEmptyStockInfo(listInput.get(i).getStockCode().replaceAll("\t", ""));
 
@@ -214,7 +245,7 @@ public class TimedTask {
 
                     try {
                         //保存最新的数据到表中。
-                        iStockNewDataServices.getNewDataToTable(listInput.get(i).getStockCode().replaceAll("\t", "") + "");
+                        iStockNewDataServices.getNewDataToTable(listInput.get(i).getStockCode().replaceAll("\t", "") + "",5,"0");
                     } catch (Exception e) {
                         e.printStackTrace();
                         System.out.println("iStockNewDataServices.getNewDataToTable 失败 stockCode=" + listInput.get(i).getStockCode().replaceAll("\t", ""));
@@ -301,6 +332,14 @@ public class TimedTask {
                 for (int i = 0; i < listInput.size(); i++) {
                     try {
                     iStockInfoServices.getStockInfoActualTime(listInput.get(i).getStockCode().replaceAll("\t", ""));
+                    }  catch (FileNotFoundException e) {
+                        //设置状态为退市的状态:3
+                        iStockListDao.updateStockListStatus(listInput.get(i).getStockCode().replaceAll("\t", ""),"3");
+                        System.out.println("设置退市状态,股票编号为"+listInput.get(i).getStockCode().replaceAll("\t", ""));
+                    }  catch (JSONException e) {
+                        iStockListDao.updateStockListStatus(listInput.get(i).getStockCode().replaceAll("\t", ""),"3");
+                        System.out.println("实时信息获取 JSON数据异常："+listInput.get(i).getStockCode().replaceAll("\t", ""));
+                        e.printStackTrace();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

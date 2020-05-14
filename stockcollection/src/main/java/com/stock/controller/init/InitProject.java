@@ -62,14 +62,16 @@ public class InitProject implements ApplicationRunner {
         //项目初始化执行
 
 
-
-        iWebDiaryServices.getWeiBoByUser();
+//        iStockInfoServices.getStockInfoActualTime("000001");
+//        iWebDiaryServices.getWeiBoByUser();
 
 //        String html = getHtmlByURL("http://stockpage.10jqka.com.cn/603380/", "UTF-8");
 //
 //        System.out.println(html);
 
 //        List<StockList> stockList = iStockListServices.getStockList();
+
+
 //        List<StockList> returnlist = new ArrayList<>();
 //        int count = 1;
 //        for (int i = 0; i < stockList.size(); i++) {

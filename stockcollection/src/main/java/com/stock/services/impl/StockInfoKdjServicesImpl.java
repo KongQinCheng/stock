@@ -142,7 +142,39 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
         return outlist;
     }
 
+    @Override
+    public List<StockNewData> getStockKdjValueRegionActualtime(StockNewDataVo stockNewDataVo) {
+        List<StockNewData>  list= iStockNewDataDao.getStockKdjValueRegion(stockNewDataVo);
+        //判断KDJ 交叉类型
+        List<StockNewData>  outlist= new ArrayList<>();
 
+
+            List<StockInfo> ll=new ArrayList<>();
+            for (int i = 0; i <list.size() ; i++) {
+                List<StockInfo> stockInfoList = iStockInfoDao.getNewStockListByStockCode( list.get(i).getStockCode(), SortType.ASC.toString(), 2);
+                Map<String, Object> existCross = isExistCrossKDJ(stockInfoList, stockNewDataVo.getDayNum(), stockNewDataVo.getCrossType());
+                if ((boolean)existCross.get("result")){
+                    outlist.add(list.get(i)) ;
+                }
+            }
+
+
+        return outlist;
+    }
+
+
+
+    @Override
+    public void getStockKdjValueRegionAnalysis(StockNewDataVo stockNewDataVo) {
+
+        //查询上涨幅度为空的数据的上涨幅度
+
+        //统计出今天KDJ和CCI区间的数据
+
+        //预计上涨空间
+
+
+    }
 
 
     private Map<String, Object> isExistCross(List<StockInfo> list, int dayNum, String crossType) {
@@ -177,6 +209,37 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
         return resultMap;
     }
 
+    private Map<String, Object> isExistCrossKDJ(List<StockInfo> list, int dayNum, String crossType) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("result", false);
+        if (list.size() < 1) {
+            return resultMap;
+        }
+
+        double beforeK = list.get(0).getKValue();
+        double beforeD = list.get(0).getDValue();
+        double beforeJ = list.get(0).getJValue();
+
+        //查找 K 值和 D 值 最后的值
+        String stockCode =list.get(0).getStockCode();
+        for (int i = 1; i < list.size(); i++) {
+            Map<String, String> map = haveCrossKDJ(list.get(i).getStockDate(), beforeK, beforeD,beforeJ, list.get(i).getKValue(), list.get(i).getDValue(),list.get(i).getJValue());
+
+            if ("11".equals(map.get("type"))) {
+            resultMap.put("result", true);
+            resultMap.put("stockCode",stockCode );
+            resultMap.put("spj",list.get(list.size()-1).getSpj());
+            resultMap.put("zdf",list.get(list.size()-1).getZdf());
+            resultMap.put("stockDate", list.get(i).getStockDate());
+            return resultMap;
+            }
+
+        }
+        return resultMap;
+    }
+
+
     private Map<String, String> haveCross(String day, double beforeK , double beforeD, double todayK , double todayD) {
 
 
@@ -205,6 +268,21 @@ public class StockInfoKdjServicesImpl implements IStockInfoKdjServices {
     }
 
 
+    private Map<String, String> haveCrossKDJ(String day, double beforeK , double beforeD,  double beforeJ, double todayK , double todayD, double todayJ) {
+
+
+        Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("type", "-1");
+
+        //1. J值  后一天需要比前一天高
+        if (todayJ>beforeJ){
+            resultMap.put("type", "11");
+            resultMap.put("time", day);
+            resultMap.put("desc", "上升趋势");
+        }
+
+        return resultMap;
+    }
 
     /***
      *

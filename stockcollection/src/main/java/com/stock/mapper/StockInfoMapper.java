@@ -20,6 +20,7 @@ public interface StockInfoMapper {
     @Select("select * from stock_info_${stockCode} where 1=1  ORDER BY stockDate ASC limit ${limitNum} ")
     @Results(id = "stockBeanResults", value = {
             @Result(column = "stockCode", property = "stockCode"),
+            @Result(column = "stockName", property = "stockName"),
             @Result(column = "kpj", property = "kpj"),
             @Result(column = "zgj", property = "zgj"),
             @Result(column = "zdj", property = "zdj"),
@@ -51,7 +52,7 @@ public interface StockInfoMapper {
 
 
 
-    @Select("select b.* from (select * from stock_info_${stockCode} where 1=1  ORDER BY stockDate DESC limit ${limitNum}) b ORDER BY b.stockDate ${sortType} ")
+    @Select("select b.*,a.stockName from (select * from stock_info_${stockCode} where 1=1  ORDER BY stockDate DESC limit ${limitNum}) b left join stock_list a on b.stockCode=a.stockCode ORDER BY b.stockDate ${sortType} ")
     @ResultMap("stockBeanResults")
     public List<StockInfo> getNewStockListByStockCode(@Param("stockCode") String stockCode, @Param("sortType") String sortType, @Param("limitNum") int limitNum);
 
@@ -93,6 +94,10 @@ public interface StockInfoMapper {
             "`DIF`  double NULL DEFAULT NULL ,\n" +
             "`EMAMACD`  double NULL DEFAULT NULL ,\n" +
             "`BAR`  double NULL DEFAULT NULL ," +
+            "`cci`  double NULL DEFAULT NULL ,\n" +
+            "`RSI06`  double NULL DEFAULT NULL ,\n" +
+            "`RSI12`  double NULL DEFAULT NULL ,\n" +
+            "`RSI24`  double NULL DEFAULT NULL ,\n" +
             " PRIMARY KEY (`stockDate`)" +
             ") " +
             "ENGINE=InnoDB " +
@@ -135,8 +140,14 @@ public interface StockInfoMapper {
 
 
 
+    @Update("update stock_info_${stockCode} set EMA12=#{EMA12},EMA26=#{EMA26},DIF=#{DIF} ,EMAMACD=#{EMAMACD} ,BAR=#{BAR} ")
+    public void updateStockMacdCciKdj(StockInfo stockInfo);
+
+
+
+
     @Update("DROP TABLE  stock_info_${stockCode}")
-    public void delTableByStockCode(StockInfo stockInfo);
+    public void delTableByStockCode(@Param("stockCode") String stockCode);
 
 
 
@@ -161,7 +172,8 @@ public interface StockInfoMapper {
     public void delStockInfo(@Param("stockCode") String stockCode,@Param("stockDate") String stockDate);
 
 
-    @Delete("delete from  stock_info_${stockCode} where kpj='0.0' ")
+    @Delete("delete from  stock_info_${stockCode} where cjl='999999'")
+//    @Delete("delete from  stock_info_${stockCode} where stockDate='2020-03-30'")
     public void delEmptyStockInfo(@Param("stockCode") String stockCode);
 
 

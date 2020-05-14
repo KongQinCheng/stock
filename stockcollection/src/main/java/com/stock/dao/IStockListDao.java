@@ -34,10 +34,24 @@ public interface IStockListDao {
     public  boolean isExitStockList(String stockCode);
 
     /***
-     * 现在股票编号
+     *
      * @param stockCode
      * @param StockName
+     * @param StockDate  数据插入时间
+     * @param status   1是正常状态   2 ST状态  3 退市状态
+     */
+
+    void addStockList(String stockCode, String StockName , String StockDate, String status);
+
+
+    /***
+     * 现在股票编号
+     * @param stockCode
+     * @param status
      * @return
      */
-    void addStockList(String stockCode, String StockName);
+
+    void updateStockList(String stockCode, String stockName);
+
+    void updateStockListStatus(String stockCode, String status);
 }

@@ -66,6 +66,12 @@ public class StockKdjController {
     }
 
 
+    @RequestMapping("/toStockKdjCciRegionActualtime")
+    public String toStockKdjCciRegionActualtime(){
+        return "stock/stock_kdj_cci_actualtime";
+    }
+
+
 
     @PostMapping(value = "/getStockKdjCross", consumes = "application/json")
     @ResponseBody
@@ -101,6 +107,16 @@ public class StockKdjController {
         String jsonStr = JSON.toJSONString(stockListByStockCode);
         return jsonStr.toString();
     }
+
+    @PostMapping(value = "/getStockKdjCciValueRegionActualtime", consumes = "application/json")
+    @ResponseBody
+    public String getStockKdjCciValueRegionActualtime(@RequestBody StockNewDataVo stockNewDataVo) {
+        List<StockNewData> stockListByStockCode = iStockInfoKdjServices.getStockKdjValueRegionActualtime(stockNewDataVo);
+        String jsonStr = JSON.toJSONString(stockListByStockCode);
+        return jsonStr.toString();
+    }
+
+
 
 
 

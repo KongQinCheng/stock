@@ -2,6 +2,7 @@ package com.stock.controller.controller;
 
 
 import com.stock.controller.init.TimedTask;
+import com.stock.services.IStockListServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,9 @@ public class WebController {
 
     @Autowired
     TimedTask timedTask;
+
+    @Autowired
+    IStockListServices iStockListServices;
 
     //首页
     @RequestMapping("/toIndex")
@@ -41,8 +45,14 @@ public class WebController {
     //初始化失败的时候执行
     @RequestMapping("/web/init")
     public void init() throws Exception {
+        iStockListServices.getStockNewList();
         timedTask.getStockInfo();
     }
 
 
+    //初始化失败的时候执行
+    @RequestMapping("/web/stockListInit")
+    public void stockListInit() throws Exception {
+        iStockListServices.getStockNewList();
+    }
 }

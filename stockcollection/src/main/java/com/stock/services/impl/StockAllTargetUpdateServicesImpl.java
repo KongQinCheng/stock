@@ -25,6 +25,8 @@ public class StockAllTargetUpdateServicesImpl implements IStockAllTargetUpdateSe
     @Override
     public void allTargetUpdate(String stockCode) throws Exception {
 
+        //重置数据 --删除最近半年的数据
+
         //根据股票代码查询历史数据
         List<StockInfo> stockInfoListAll = iStockInfoDao.getNewStockListByStockCode(stockCode, SortType.ASC.toString(), 80);
 

@@ -18,4 +18,8 @@ public interface IStockInfoKdjServices {
 
     List<StockNewData> getStockKdjValueRegion(StockNewDataVo stockNewDataVo);
 
+    List<StockNewData> getStockKdjValueRegionActualtime(StockNewDataVo stockNewDataVo);
+
+    void getStockKdjValueRegionAnalysis(StockNewDataVo stockNewDataVo);
+
 }

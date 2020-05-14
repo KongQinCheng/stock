@@ -55,6 +55,7 @@ public interface IStockInfoDao {
     void updateStockInfoMacdNoDate(StockInfo stockInfo);
 
 
+    void updateStockMacdCciKdj(StockInfo stockInfo);
 
     /**
      *  判断数据库表 是否存在
@@ -95,6 +96,9 @@ public interface IStockInfoDao {
 
 
     void alterTable(String stockCode);
+
+
+    void delTableByStockCode(String stockCode);
 
 
 }
